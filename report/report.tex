@@ -56,12 +56,16 @@ There are a number of hobbyist solutions to deal with SMD parts:
 		\end{itemize}
 \end{itemize}
 
-\section{Mechanics}
+\section{Design}
 
 \subsection{X/Y axes}
 
 The X/Y axes have the same requirements. ~0.5mm pitch smd devices common - 0.05mm repeatability reasonable
-target?
+target? Choice between stationary "bed" and moving tools, or vice-versa. Stationary bed reduces likelihood
+of jolting parts around, but tools are bulkier and heavier than the bed, which increases demands on driving
+mechanism. I quite like the idea 
+
+Driving mechanisms:
 
 \begin{itemize}
 	\item	Toothed belts + pulleys + stepper motors: Simple, as used in repraps. Can be run open loop
@@ -70,8 +74,16 @@ target?
 		to motor shafts (http://www.thingiverse.com/thing:9622).
 	\item	Closed loop: dc motors + feedback. Linear potentiometers: relatively expensive, and potential
 		issues with electrical noise. Rotary encoders: cheap, accurate (m4 pitch is ~0.5mm, not much
-		travel/turn.)
+		travel/turn, might only need 10 slot encoder)
 
+\end{itemize}
+
+Linear slides:
+
+\begin{itemize}
+	\item	Drawer slides: cheap, surprisingly high precision.
+	\item	3d printed bushings + steel rod. If 3d printer existance assumed, then very cheap solution.
+	\item	LM8UUs (or smaller): About £1 each, so probably too expensive.
 \end{itemize}
 
 \subsection{Z axis}
@@ -81,5 +93,33 @@ The Z axis will not require as much precision as the X and Y. Potential mechanis
 	\item	Micro servos: cheap (£2 on ebay). Require no drivers, and simple to drive. Z axis potentially
 		does not need to be linear (UP/DOWN only?) so rotary->linear mechanism simpler. If not linear,
 		then hinging out of the way is a cheaper mechanism than slides.
+\end{itemize}
+
+\subsection{Part placement}
+
+\begin{itemize}
+	\item	Manual placement. Much more of a problem for a large number of SMD resistors/capacitors etc, than
+		larger components. 
+	\item	Vacuum "tweezers". Mechanically relatively simple, but problems of intelligent control, as well
+		as well as storing the components before placement.
+\end{itemize}
+
+\subsection{Heated Bed}
+Soldering to a hot board is easier (smaller temperature difference). Probably not worth the cost/complexity.
+
+\subsection{Flux application}
+Flux application may be a significant problem, unless a manual brush with a solder pen is sufficient.
+
+\subsection{Soldering iron}
+Designing a mount for a cheap and widely available soldering iron may well be cheapest. 
+
+\subsection{Electronics/Firmware}
+
+
+\section{Tools}
+I have a small mill, a 3d printer and a lathe. It may be worth considering that a lot of people/schools have
+access to a laser cutter and perhaps mill/lathe, so if possible all custom components could be 3d printed or 
+lasercut.
+
 
 \end{document}
