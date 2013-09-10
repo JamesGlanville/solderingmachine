@@ -63,7 +63,7 @@ There are a number of hobbyist solutions to deal with SMD parts:
 The X/Y axes have the same requirements. ~0.5mm pitch smd devices common - 0.05mm repeatability reasonable
 target? Choice between stationary "bed" and moving tools, or vice-versa. Stationary bed reduces likelihood
 of jolting parts around, but tools are bulkier and heavier than the bed, which increases demands on driving
-mechanism.
+mechanism. I quite like the idea 
 
 Driving mechanisms:
 

@@ -1,13 +1,11 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.5.24)  11 JUN 2013 16:25
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.5.24)  10 SEP 2013 21:00
 entering extended mode
  restricted \write18 enabled.
+ file:line:error style messages enabled.
  %&-line parsing enabled.
-**report.tex
-(./report.tex
-LaTeX2e <2011/06/27>
-Babel <v3.8m> and hyphenation patterns for english, dumylang, nohyphenation, lo
-aded.
-(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+**\catcode126=12 \def\normaltilde{~}\catcode126=13 \let~\normaltilde  \input ./
+report.tex
+(./report.tex (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
 (/usr/share/texlive/texmf-dist/tex/latex/base/size11.clo
 File: size11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
@@ -252,13 +250,13 @@ Missing character: There is no Â in font cmr10!
 Missing character: There is no £ in font cmr10!
  [2] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 3616 strings out of 495059
- 49683 string characters out of 3182030
- 113227 words of memory out of 3000000
- 6763 multiletter control sequences out of 15000+200000
+ 3617 strings out of 495059
+ 49696 string characters out of 3182030
+ 113225 words of memory out of 3000000
+ 6764 multiletter control sequences out of 15000+200000
  9126 words of font info for 33 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,6n,32p,232b,219s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 38i,6n,32p,309b,219s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 bx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pf
