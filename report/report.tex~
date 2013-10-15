@@ -50,11 +50,22 @@ There are a number of hobbyist solutions to deal with SMD parts:
 	\item	Soldering by hand:
 		\begin{itemize}
 			\item	Dragging a bead of solder along pins, then cleaning up with solder sucker/wick.
-				Too much feedback required to automate?
+				This requires a lot of feedback, which is difficult to automate.
 			\item	Some devices (SOIC?) have slightly bendy pins. A small amount of downwards 
 				pressure on the pin onto a tinned pad works.
 		\end{itemize}
 \end{itemize}
+
+\section{Requirements}
+
+\subsection{X/Y axes}
+A device pitch of 0.4mm (distance from centre of one pin to the next) is on the lower end of SMD ICs. Using solder paste,
+devices will shift slightly upon heating to self-align. A requirement is that the device should be placed to a
+small fraction of its pitch, so there is no danger of incorrect connections. I have decided to aim for an accuracy of +-0.05mm
+in placement. This should be sufficient, but may be difficult to achieve in practice.
+
+\subsection{Board size}
+
 
 \section{Design}
 
@@ -101,7 +112,9 @@ The Z axis will not require as much precision as the X and Y. Potential mechanis
 	\item	Manual placement. Much more of a problem for a large number of SMD resistors/capacitors etc, than
 		larger components. 
 	\item	Vacuum "tweezers". Mechanically relatively simple, but problems of intelligent control, as well
-		as well as storing the components before placement.
+		as well as storing the components before placement. As an experiment, I tried using an aquarium pump
+		in reverse (by attaching the silicone tubing to the inlet instead of the outlet) connected to a fairly
+		large diameter needle (ID: Xmm).
 \end{itemize}
 
 \subsection{Heated Bed}
@@ -114,6 +127,12 @@ Flux application may be a significant problem, unless a manual brush with a sold
 Designing a mount for a cheap and widely available soldering iron may well be cheapest. 
 
 \subsection{Electronics/Firmware}
+I have decided to use an avr chip to translate GCODE to stepper motor commands for the following reasons:
+\begin{itemize} \itemsep0em
+	\item	Cost: an atmega328 is £2-3, a usb-serial chip is <£2, which is not much.
+	\item	Mature open source firmware (GRBL, https://github.com/grbl/grbl) is available for gcode->stepper
+		conversion, which leaves more time to focus on other parts of this project.
+\end{itemize}
 
 
 \section{Tools}
@@ -121,5 +140,48 @@ I have a small mill, a 3d printer and a lathe. It may be worth considering that 
 access to a laser cutter and perhaps mill/lathe, so if possible all custom components could be 3d printed or 
 lasercut.
 
+\section{Vacuum Placing}
+\subsection{Prototype}
+To test how effectively small parts could be placed with a vacuum, I made a simple test setup:
 
+\begin{itemize} \itemsep0em
+	\item	12V diaphragm air pump (£8.89 - ebay)
+	\item	6mm OD/4mm ID silicone tube (£2.69/m - ebay)
+	\item	various needles (need more info here)
+	\item	MOSFET
+	\item	gate resistor
+\end{itemize}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/pump_and_hose.jpg}
+\caption{Pump with hose and needle.}
+\label{hose and needle}
+\end{figure}
+
+The pump draws ~200mA at 12V, which is easily controlled with a MOSFET. Using a 1.8mm ID needle, SOIC-20 parts were picked up, and had significant friction against the needle - essential to avoid slipping or rotating. It was important to place the needle as centrally as possible on the part to avoid generating any imbalance that allowed the part to fall. 
+
+\subsection{Conclusions}
+A vacuum needle solution is workable, and a good choice for this project. Things that need to be considered for use in the final project:
+
+\begin{itemize}
+	\item	The pump takes a certain time to generate a vacuum because of the relatively large internal volume of the pump
+		and silicon tube. It will be important to measure this, and add a margin of error so that full suction is applied
+		to each device before any movement takes place. Similarly, when turning off the pump, the pressure must return to
+		atmospheric before the device can be considered to have been placed succesfully. In testing, the pump I used took
+		less than a second to leak sufficiently for this to occur, but if another pump were to be used, it may be necessary
+		to place a tiny hole in the air line so that pressure drops quickly.
+	\item	It is important to place the needle very near to the centre of mass of the device. The majority of devices will be
+		symmetrical, which will make this easier.
+	\item	The needle must be able to be raised and lowered to the correct heights. It may be possible to push the needle down
+		with a weak spring, with a micro servo that raises it - this would remove any need to know the exact height of each
+		device. This will need to be tested.
+\end{itemize}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/needle_with_resistor.jpg}
+\caption{SMD resistor being picked up.}
+\label{overflow}
+\end{figure}
 \end{document}

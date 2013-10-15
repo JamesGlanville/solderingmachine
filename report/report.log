@@ -1,11 +1,13 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.5.24)  10 SEP 2013 21:00
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012/Debian) (format=pdflatex 2013.5.24)  15 OCT 2013 19:34
 entering extended mode
  restricted \write18 enabled.
- file:line:error style messages enabled.
  %&-line parsing enabled.
-**\catcode126=12 \def\normaltilde{~}\catcode126=13 \let~\normaltilde  \input ./
-report.tex
-(./report.tex (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
+**report.tex
+(./report.tex
+LaTeX2e <2011/06/27>
+Babel <v3.8m> and hyphenation patterns for english, dumylang, nohyphenation, lo
+aded.
+(/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
 (/usr/share/texlive/texmf-dist/tex/latex/base/size11.clo
 File: size11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
@@ -248,25 +250,58 @@ Missing character: There is no £ in font cmr10!
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 Missing character: There is no Â in font cmr10!
 Missing character: There is no £ in font cmr10!
- [2] (./report.aux) ) 
+Missing character: There is no Â in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Â in font cmr10!
+Missing character: There is no £ in font cmr10!
+
+Overfull \hbox (1.4729pt too wide) in paragraph at lines 122--124
+[]\OT1/cmr/m/n/10.95 Mature open source firmware (GRBL, https://github.com/grbl
+/grbl) is avail-able for gcode-
+ []
+
+[2]
+Missing character: There is no Â in font cmr10!
+Missing character: There is no £ in font cmr10!
+Missing character: There is no Â in font cmr10!
+Missing character: There is no £ in font cmr10!
+ <resources/pump_and_hose.jpg, id=15, 1300.86pt x 971.63pt>
+File: resources/pump_and_hose.jpg Graphic file (type jpg)
+
+<use resources/pump_and_hose.jpg>
+Package pdftex.def Info: resources/pump_and_hose.jpg used on input line 146.
+(pdftex.def)             Requested size: 256.0748pt x 191.2536pt.
+ [3 <./resources/pump_and_hose.jpg>]
+<resources/needle_with_resistor.jpg, id=19, 338.26375pt x 331.2375pt>
+File: resources/needle_with_resistor.jpg Graphic file (type jpg)
+
+<use resources/needle_with_resistor.jpg>
+Package pdftex.def Info: resources/needle_with_resistor.jpg used on input line 
+172.
+(pdftex.def)             Requested size: 256.0748pt x 250.76257pt.
+ [4 <./resources/needle_with_resistor.jpg>] (./report.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
 Here is how much of TeX's memory you used:
- 3617 strings out of 495059
- 49696 string characters out of 3182030
- 113225 words of memory out of 3000000
- 6764 multiletter control sequences out of 15000+200000
+ 3630 strings out of 495059
+ 50047 string characters out of 3182030
+ 113227 words of memory out of 3000000
+ 6773 multiletter control sequences out of 15000+200000
  9126 words of font info for 33 fonts, out of 3000000 for 9000
  14 hyphenation exceptions out of 8191
- 38i,6n,32p,309b,219s stack positions out of 5000i,500n,10000p,200000b,50000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-bx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr
-/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/
-texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on report.pdf (2 pages, 76836 bytes).
+ 38i,6n,32p,386b,225s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on report.pdf (4 pages, 514675 bytes).
 PDF statistics:
- 35 PDF objects out of 1000 (max. 8388607)
- 24 compressed objects within 1 object stream
+ 43 PDF objects out of 1000 (max. 8388607)
+ 28 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
