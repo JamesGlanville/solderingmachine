@@ -73,15 +73,15 @@ that use the maximum size, and it would be useful if this project allowed those 
 
 \subsection{X/Y axes}
 
-The X/Y axes have the same requirements. ~0.5mm pitch smd devices common - 0.05mm repeatability reasonable
-target? Choice between stationary "bed" and moving tools, or vice-versa. Stationary bed reduces likelihood
-of jolting parts around, but tools are bulkier and heavier than the bed, which increases demands on driving
-mechanism. I quite like the idea 
+The X/Y axes have the same requirements: +-0.05mm accuracy. There is the choice between moving the various tools over a stationary
+bed, or keeping the tools stationary and moving the bed. I have decided to move only the bed, because it means that the pick
+and place functionality does not have to move the parts, simply lift and lower them. This should reduce the risk of the parts
+shifting on the needle, or falling off. It also allows for the use of more tools since weight is no longer a concern.
 
 Driving mechanisms:
 
 \begin{itemize}
-	\item	Toothed belts + pulleys + stepper motors: Simple, as used in repraps. Can be run open loop
+	\item	Toothed belts + pulleys + stepper motors: Simple, as used in reprap 3d printers. Can be run open loop
 		very easily. Requires: stepper motor + driver, belt, pulley.
 	\item	Threaded rod + stepper motors: Cheap, slower but probably fast enough. M3-5 easy to couple
 		to motor shafts (http://www.thingiverse.com/thing:9622).
@@ -104,7 +104,7 @@ The Z axis will not require as much precision as the X and Y. Potential mechanis
 
 \begin{itemize}
 	\item	Micro servos: cheap (£2 on ebay). Require no drivers, and simple to drive. Z axis potentially
-		does not need to be linear (UP/DOWN only?) so rotary->linear mechanism simpler. If not linear,
+		does not need to be linear (UP/DOWN only?) so rotary-\textgreater linear mechanism simpler. If not linear,
 		then hinging out of the way is a cheaper mechanism than slides.
 \end{itemize}
 
@@ -132,7 +132,7 @@ Designing a mount for a cheap and widely available soldering iron may well be ch
 I have decided to use an avr chip to translate GCODE to stepper motor commands for the following reasons:
 \begin{itemize} \itemsep0em
 	\item	Cost: an atmega328 is £2-3, a usb-serial chip is <£2, which is not much.
-	\item	Mature open source firmware (GRBL, https://github.com/grbl/grbl) is available for gcode->stepper
+	\item	Mature open source firmware (GRBL, https://github.com/grbl/grbl) is available for gcode-\textgreater stepper
 		conversion, which leaves more time to focus on other parts of this project.
 \end{itemize}
 
