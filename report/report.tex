@@ -57,7 +57,8 @@ There are a number of hobbyist solutions to deal with SMD parts:
 \end{itemize}
 
 \section{Project Idea}
-
+When finished, the machine should be able to be connected to a computer via a USB port. A custom GUI will load the necessary 
+design files (for example the holes to be drilled, pads to be soldered), generate the necessary GCODE, and send it to the printer.
 
 \section{Requirements}
 
@@ -127,6 +128,12 @@ Soldering to a hot board is easier (smaller temperature difference). Probably no
 
 \subsection{Flux application}
 Flux application may be a significant problem, unless a manual brush with a solder pen is sufficient.
+
+\subsection{Drill}
+Drilling holes in pcbs is a time-consuming process to do by hand. If this machine could drill the holes automatically,
+it would reduce the total time taken significantly. A small brushless motor with a collet would be enough. The biggest challenge
+will be mechanically coupling the motor to the drill bit. This is not intrinsically difficult, but it should be made in a way that
+is accessable to people without the use of a lathe (?)
 
 \subsection{Soldering iron}
 Designing a mount for a cheap and widely available soldering iron may well be cheapest. 
