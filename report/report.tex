@@ -141,6 +141,9 @@ is accessable to people without the use of a lathe (?)
 A 25 Amp ESC (Turnigy plush 25A, £9) powering a small brushless motor (Turnigy 2217 20turn 860kv 22A outrunner, £10) is capable of milling
 steel easily, so smaller, cheaper motors should be fine for routing/drilling copper.
 
+The imodela cnc appears to use a small ball bearing for the shaft, with custom machined shafts. The milling bits fit inside the shaft, and
+are secured with a single grub screw. 
+
 An alternative design would be to use a low cost rotary tool, which already has the bearings, collet and spindle motor. 
 
 \subsection{Soldering iron}
@@ -154,6 +157,7 @@ I have decided to use an avr chip to translate GCODE to stepper motor commands f
 		conversion, which leaves more time to focus on other parts of this project.
 \end{itemize}
 
+On the host pc, custom software will have to be written to translate the design into a gcode file to be sent to the machine.
 
 \section{Tools}
 I have a small mill, a 3d printer and a lathe. It may be worth considering that a lot of people/schools have
