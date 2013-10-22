@@ -129,11 +129,19 @@ Soldering to a hot board is easier (smaller temperature difference). Probably no
 \subsection{Flux application}
 Flux application may be a significant problem, unless a manual brush with a solder pen is sufficient.
 
-\subsection{Drill}
+\subsection{Drilling and isolation routing}
+Isolation routing is a method to mill traces from copper-clad pcb. A conical engraving bit is used to cut very narrow tracks through
+the copper, to leave disconnected pads as required. 
+
 Drilling holes in pcbs is a time-consuming process to do by hand. If this machine could drill the holes automatically,
 it would reduce the total time taken significantly. A small brushless motor with a collet would be enough. The biggest challenge
 will be mechanically coupling the motor to the drill bit. This is not intrinsically difficult, but it should be made in a way that
 is accessable to people without the use of a lathe (?)
+
+A 25 Amp ESC (Turnigy plush 25A, £9) powering a small brushless motor (Turnigy 2217 20turn 860kv 22A outrunner, £10) is capable of milling
+steel easily, so smaller, cheaper motors should be fine for routing/drilling copper.
+
+An alternative design would be to use a low cost rotary tool, which already has the bearings, collet and spindle motor. 
 
 \subsection{Soldering iron}
 Designing a mount for a cheap and widely available soldering iron may well be cheapest. 
