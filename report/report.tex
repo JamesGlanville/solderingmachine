@@ -1,4 +1,4 @@
-% File name: report/repord.tex
+% File name: report/report.tex
 
 \documentclass[a4paper,11pt]{article}  % Standard document class
 \usepackage[english]{babel}            % Set document language
@@ -41,8 +41,9 @@ There are a number of hobbyist solutions to deal with SMD parts:
 	\item	Solder paste + heat:
 		\begin{itemize}
 			\item	Solder stencils: Expensive setup costs, very quick to use. Not suitable for
-				this project.
+				this project due to cost.
 			\item	Manual solder paste application: Mostly expensive dispenser, or with a syringe.
+					Requires high accuracy while placing paste and is time consuming.
 			\item	Hot air gun: Can be relatively difficult to get the right temperature profile.
 			\item	Converted toaster over: seems quite common.
 		\end{itemize}
@@ -50,13 +51,19 @@ There are a number of hobbyist solutions to deal with SMD parts:
 	\item	Soldering by hand:
 		\begin{itemize}
 			\item	Dragging a bead of solder along pins, then cleaning up with solder sucker/wick.
-				This requires a lot of feedback, which is difficult to automate.
+				This requires a lot of feedback, which seems difficult to automate.
 			\item	Some devices (SOIC?) have slightly bendy pins. A small amount of downwards 
-				pressure on the pin onto a tinned pad works.
+				pressure on the pin onto a tinned pad can work.
 		\end{itemize}
 \end{itemize}
 
 \section{Project Idea}
+I have decided to approach the project by building a machine which can place solder paste accurately, and then place
+the surface mount devices on top. It should achieve this with minimal human interaction. The machine should also be able to
+drill holes for through-hole devices, as well as be equiped with a milling bit for isolation routing through copper-clad pcbs.
+
+\parskip 0.18in
+
 When finished, the machine should be able to be connected to a computer via a USB port. A custom GUI will load the necessary 
 design files (for example the holes to be drilled, pads to be soldered), generate the necessary GCODE, and send it to the printer.
 
@@ -82,11 +89,16 @@ bed, or keeping the tools stationary and moving the bed. I have decided to move 
 and place functionality does not have to move the parts, simply lift and lower them. This should reduce the risk of the parts
 shifting on the needle, or falling off. It also allows for the use of more tools since weight is no longer a concern.
 
-Driving mechanisms:
+The bed will need travel distances of at least 100mm in both directions so that the entire bed can be accessed by tools. However,
+there should also be space to place devices before they are automatically placed. This should need no more than 20-30mm in one axis
+direction only.
+
+Possible driving mechanisms:
 
 \begin{itemize}
 	\item	Toothed belts + pulleys + stepper motors: Simple, as used in reprap 3d printers. Can be run open loop
-		very easily. Requires: stepper motor + driver, belt, pulley.
+		very easily. The toothed belts stretch under load, and for the milling/drilling functionality are likely to deflect too much under loading.
+		Requires: stepper motor + driver, belt, pulley.
 	\item	Threaded rod + stepper motors: Cheap, slower but probably fast enough. M3-5 easy to couple
 		to motor shafts (http://www.thingiverse.com/thing:9622).
 	\item	Closed loop: dc motors + feedback. Linear potentiometers: relatively expensive, and potential
@@ -95,13 +107,24 @@ Driving mechanisms:
 
 \end{itemize}
 
+I have decided to utilise M6 threaded rod coupled to small stepper motors.
+
 Linear slides:
 
 \begin{itemize}
 	\item	Drawer slides: cheap, surprisingly high precision.
 	\item	3d printed bushings + steel rod. If 3d printer existance assumed, then very cheap solution.
-	\item	LM8UUs (or smaller): About £1 each, so probably too expensive.
+	\item	LM8UUs (or smaller): About 50p each, relatively simple to use.
 \end{itemize}
+
+I have decided to use LM8UU bearings with steel rod. 
+
+Motor selection:
+
+Having chosen to use small stepper motors to control the axes, the choice of stepper motor is now important. I had
+some NEMA17 motors, which claim a 2.2Kg/cm holding torque. I decided to run some tests to see what the maximum
+speed I could run them at without skipping steps, and found a result of 8mm/s. This is sufficient for use in the
+project (where speed is not a great concern), but I felt it would not be beneficial to use a smaller motor. 
 
 \subsection{Z axis}
 The Z axis will not require as much precision as the X and Y. Potential mechanisms:
@@ -127,7 +150,8 @@ The Z axis will not require as much precision as the X and Y. Potential mechanis
 Soldering to a hot board is easier (smaller temperature difference). Probably not worth the cost/complexity.
 
 \subsection{Flux application}
-Flux application may be a significant problem, unless a manual brush with a solder pen is sufficient.
+Solder paste includes flux, so this does not need an extra step. This is a useful consequence of using solder paste as opposed to solder,
+where it would involve an additional placement step
 
 \subsection{Drilling and isolation routing}
 Isolation routing is a method to mill traces from copper-clad pcb. A conical engraving bit is used to cut very narrow tracks through
@@ -142,12 +166,35 @@ A 25 Amp ESC (Turnigy plush 25A, £9) powering a small brushless motor (Turnigy 
 steel easily, so smaller, cheaper motors should be fine for routing/drilling copper.
 
 The imodela cnc appears to use a small ball bearing for the shaft, with custom machined shafts. The milling bits fit inside the shaft, and
-are secured with a single grub screw. 
+are secured with a single grub screw. This seems to work, though it would need a very carefully machined shaft so that axial misalignment
+did not shear the end of the milling bit.
 
 An alternative design would be to use a low cost rotary tool, which already has the bearings, collet and spindle motor. 
 
 \subsection{Soldering iron}
-Designing a mount for a cheap and widely available soldering iron may well be cheapest. 
+Designing a mount for a cheap and widely available soldering iron may well have been the simplest approach. However, using solder paste, 
+this part of the design is not needed.
+
+\subsection{Melting solder paste}
+Once the board has been pasted and the parts deposited, the solder paste needs to be heated up so that it will melt and form good connections.
+There are a few possibilities for this process:
+
+\begin{itemize} \itemsep0em
+	\item	Oven: a small over can be used to heat the entire board (see: http://www.openhardware.net/Misc\_Stuff/ToasterSMD/). This appears to
+			work well, however the oven should not be used for food after that, since the components of solder paste are toxic. As a result,
+			it can be an expensive method since it requires dedicated, expensive hardware.
+	\item:	Hand-held hot air gun: A small hot air gun can be used to gradually melt the solder for the components. There is a requirement
+			for the hot air gun that it emits sufficiently hot air at a sufficiently low velocity that the solder will melt, but also that
+			the devices will not shift under the force. I use a hot air attachment with a butane-powered soldering iron which works nicely.
+			This does require the most human interaction (since it is less likely that the flow of hot air will cover the board uniformly, but it
+			is not a particularly precise process.
+	\item:	Hot-plate. A small hot-plate can be used to heat the board from underneath (see http://www.hobbytronics.co.uk/hotplate-smd-soldering).
+			An advantage compared to the oven method is that a piece of thermally conductive metal can be used between a hotplate and the board, so
+			that the hot plate will not become food-unsafe. 
+\end{itemize}
+			
+The choice of method to heat the solder paste may well depend on the end-user - one solution is not clearly superior to the others. During the
+course of this project I am likely to use the hand-held hot air gun since I possess the equipment.
 
 \subsection{Electronics/Firmware}
 I have decided to use an avr chip to translate GCODE to stepper motor commands for the following reasons:
@@ -208,4 +255,8 @@ A vacuum needle solution is workable, and a good choice for this project. Things
 \caption{SMD resistor being picked up.}
 \label{overflow}
 \end{figure}
+
+\section{Measuring Accuracy}
+It is important to measure the accuracy of the axes to ensure that they can reach the specified +-0.05mm
+
 \end{document}
