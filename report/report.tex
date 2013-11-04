@@ -53,7 +53,7 @@ There are a number of hobbyist solutions to deal with SMD parts:
 			\item	Dragging a bead of solder along pins, then cleaning up with solder sucker/wick.
 				This requires a lot of feedback, which seems difficult to automate.
 			\item	Some devices (SOIC?) have slightly bendy pins. A small amount of downwards 
-				pressure on the pin onto a tinned pad can work.
+				pressure on the pin onto a tinned pad can work, but this method will not work for leadless packages.
 		\end{itemize}
 \end{itemize}
 
@@ -147,7 +147,7 @@ The Z axis will not require as much precision as the X and Y. Potential mechanis
 \end{itemize}
 
 \subsection{Heated Bed}
-Soldering to a hot board is easier (smaller temperature difference). Probably not worth the cost/complexity.
+Soldering to a hot board is easier (smaller temperature difference). This is now irrelevant as I shall not be soldering pin-by-pin.
 
 \subsection{Flux application}
 Solder paste includes flux, so this does not need an extra step. This is a useful consequence of using solder paste as opposed to solder,
@@ -183,12 +183,12 @@ There are a few possibilities for this process:
 	\item	Oven: a small over can be used to heat the entire board (see: http://www.openhardware.net/Misc\_Stuff/ToasterSMD/). This appears to
 			work well, however the oven should not be used for food after that, since the components of solder paste are toxic. As a result,
 			it can be an expensive method since it requires dedicated, expensive hardware.
-	\item:	Hand-held hot air gun: A small hot air gun can be used to gradually melt the solder for the components. There is a requirement
+	\item	Hand-held hot air gun: A small hot air gun can be used to gradually melt the solder for the components. There is a requirement
 			for the hot air gun that it emits sufficiently hot air at a sufficiently low velocity that the solder will melt, but also that
 			the devices will not shift under the force. I use a hot air attachment with a butane-powered soldering iron which works nicely.
 			This does require the most human interaction (since it is less likely that the flow of hot air will cover the board uniformly, but it
 			is not a particularly precise process.
-	\item:	Hot-plate. A small hot-plate can be used to heat the board from underneath (see http://www.hobbytronics.co.uk/hotplate-smd-soldering).
+	\item	Hot-plate. A small hot-plate can be used to heat the board from underneath (see http://www.hobbytronics.co.uk/hotplate-smd-soldering).
 			An advantage compared to the oven method is that a piece of thermally conductive metal can be used between a hotplate and the board, so
 			that the hot plate will not become food-unsafe. 
 \end{itemize}
@@ -204,7 +204,30 @@ I have decided to use an avr chip to translate GCODE to stepper motor commands f
 		conversion, which leaves more time to focus on other parts of this project.
 \end{itemize}
 
-On the host pc, custom software will have to be written to translate the design into a gcode file to be sent to the machine.
+On the host pc, custom software will have to be written to translate the design into a gcode file to be sent to the machine. Usefully however,
+the machine's firmware will not need to be written or modified.
+
+\section{Host computer software}
+Software will have to be written to translate board cad data to gcode. Some of this already exists in the public domain, some will have to be made
+as part of this project.
+
+Isolation milling and drilling: pcb2gcode (https://github.com/festlv/pcb2gcode-metric). Takes gerber designs and generates isolation routing/drilling
+gcode. It is also capable of voronai isolation (functionally equivalent routing that cuts the least amount of material). The only configuration
+will be to generate a millproject file with the correct cutting depths.
+
+Solder paste placement: No freely available software (as far as I am aware).
+
+Device placement: No freely available software (as far as I am aware).
+
+The solder paste placement should be relatively straightforward. The program will simply need to find the locations of the pads, calculate their
+area, and then apply a suitable amount of paste to them. For ICs, the paste will not need to be separately applied to each pin (due to the high
+surface tension of molten solder), so some method of detecting ICs on the board layout will be needed.
+
+The code to place devices will be the most challenging. However, provided there is a sensible area in which to hand-deposit the devices, it should
+not be too hard to calculate how to transport them to the required location.
+
+In my opinion, the most challenging part of writing the conversion code will simply be to extract the necessary data from the cad files. Once this
+has been obtained, the gcode should be easy to create.
 
 \section{Tools}
 I have a small mill, a 3d printer and a lathe. It may be worth considering that a lot of people/schools have
@@ -230,7 +253,9 @@ To test how effectively small parts could be placed with a vacuum, I made a simp
 \label{hose and needle}
 \end{figure}
 
-The pump draws ~200mA at 12V, which is easily controlled with a MOSFET. Using a 1.8mm ID needle, SOIC-20 parts were picked up, and had significant friction against the needle - essential to avoid slipping or rotating. It was important to place the needle as centrally as possible on the part to avoid generating any imbalance that allowed the part to fall. 
+The pump draws ~200mA at 12V, which is easily controlled with a MOSFET. Using a 1.8mm ID needle, SOIC-20 parts were picked up, 
+and had significant friction against the needle - essential to avoid slipping or rotating. It was important to place the needle 
+as centrally as possible on the part to avoid generating any imbalance that allowed the part to fall. 
 
 \subsection{Conclusions}
 A vacuum needle solution is workable, and a good choice for this project. Things that need to be considered for use in the final project:
