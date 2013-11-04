@@ -282,6 +282,11 @@ A vacuum needle solution is workable, and a good choice for this project. Things
 \end{figure}
 
 \section{Measuring Accuracy}
-It is important to measure the accuracy of the axes to ensure that they can reach the specified +-0.05mm
+It is important to measure the accuracy of the axes to ensure that they can reach the specified +-0.05mm. This will need to be measured
+at all points on the bed (as the accuracy will worsen when the bed is central due to increased rod deflection.). Of particular concern will be
+the deflection under the load of the isolation routing bit. The solder paste and device placement will not involve any significant force. The 
+drilling will generate a force, but the tolerance required of a 1mm hole is not nearly as demanding as that of the isolation routing cutter.
+I have not yet measured the exact forces exerted by the routing bit, but I estimate that they are 5-10N. This means that the anti-backlash nut
+will need to exert the same or greater force to ensure that the board does not move. This in turn places extra resistance on the motor movement.
 
 \end{document}
