@@ -3,7 +3,7 @@
 \documentclass[a4paper,11pt]{article}  % Standard document class
 \usepackage[english]{babel}            % Set document language
 \usepackage{fullpage}                  % Set up page for small margins etc
-
+\usepackage{listings}
 \usepackage{graphicx}                  % For including images in document
 %\usepackage{placeins}                  % Allows use of \FloatBarrier
 % to avoid images or tables
@@ -234,6 +234,51 @@ I have a small mill, a 3d printer and a lathe. It may be worth considering that 
 access to a laser cutter and perhaps mill/lathe, so if possible all custom components could be 3d printed or 
 lasercut.
 
+\section{Solder paste extrusion}
+I have decided to use the design here: http://www.thingiverse.com/thing:20733
+
+The extruder works by applying pressure to the top of the solder paste syringe. Pressure is applied by tightening a pulley made
+of T5 timing belt with a geared stepper motor. I chose this design because the extruder is compact, and the design allows for
+fast reduction of pressure, important for clean extrusion and to avoid the solder paste dribbling. 
+
+To calibrate the extruder, two parameters are needed: steps/volume extruded and retraction steps. The first is easy to calculate:
+
+(All dimensions in mm,mm\textsuperscript{2},mm\textsuperscript{3})
+\begin{align}
+	Volume extruded per step &= (cross-sectional area of syringe * T5 pitch * number of teeth of T5 pulley) \\&/ (number of microsteps/step * steps/rotation of motor * gear reduction ratio)\\
+	&= (66.1276*5*10)/(16*200*12)\\
+	&= 0.0861 mm\textsuperscript{3}\\
+\end{align}
+
+\begin{align}					 
+	Steps/mm\textsuperscript{3} &= 1 / volume extruded per step\\
+	&= 1 / 0.0861\\
+	&= 11.61\\
+\end{align}
+
+The retraction steps must be experimentally determined. The choice is a tradeoff between minimising solder paste dribble (large number
+of retraction steps) and reducing total process time (small number of retraction steps). It must be enough that negligible pressure is
+exerted on the syringe when retracted.
+
+Some method to "prime" the extruder will be needed. Assuming the extruder is initially hand-tightened so that the belt has little slack,
+a possible method is to repeatedly advance the extruder and then retract by a slightly smaller amount, until the user notifies the machine
+that solder paste has been extruded. At this point, the extruder should pause after retracting. The solder paste deposition process can
+then commence since the exact point of extrusion has been established. Assuming that x is the required granularity of calibration (the 
+maximum amount of solder paste that will be wasted), and y is the retraction distance, the following example gcode will carry out this calibration:
+
+\begin{lstlisting}[frame=single]
+//values in braces {} are to be evaluated on the host
+
+//Start loop here:
+G92 E{y} //Set extruder position in firmware to be y
+G1 E{x+y} //Extrude x amount of paste
+G1 E{y} //Retract
+//if user has not indicated extrusion then loop again
+
+//when the user has indicated extrusion:
+G92 E{y}
+\end{lstlisting}
+	   
 \section{Vacuum Placing}
 \subsection{Prototype}
 To test how effectively small parts could be placed with a vacuum, I made a simple test setup:
