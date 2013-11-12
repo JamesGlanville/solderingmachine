@@ -278,6 +278,31 @@ G1 E{y} //Retract
 //when the user has indicated extrusion:
 G92 E{y}
 \end{lstlisting}
+	  
+\section{Managing devices prior to placement}
+There will need to be a way to place the devices in a known position, so they can then be picked up and placed in their final locations.
+Commercial pick and place machines take the parts directly from the reels they are supplied in. While this is optimal for that application in that
+it is a very fast way to operate, the cost of reel dispensers is prohibitive for this machine. Instead, the parts will have to be roughly placed
+by hand. There are a number of ways this could be done:
+
+\begin{itemize} \itemsep0em
+	\item	Embossed outlines of all necessary device footprints.
+	\item	Rectangular embossed outline, devices to be located in one corner.
+\end{itemize}
+
+I have decided that the latter will be easiest to implement. A rectangular hole will be milled into the bed. Each part can then
+be manually placed inside, then pushed to one corner. A consistent system will be needed to ensure correct orientation. I have decided to use
+the following set of rules:
+
+\begin{itemize} \itemsep0em
+	\item	ICs will be placed with pin1 touching the datum corner.
+	\item	Devices will always be placed with the longest side (if applicable) touching the long side of the rectangle.
+	\item	Devices such as mosfets will be placed with the corner between the longest side and side with most pins touching the datum corner.
+	\item	Polar 2-lead devices with always have the anode nearest the datum corner.
+\end{itemize}
+
+Given the current component to be placed, and the device footprint, it will be trivial to find the coordinates of the centre of the part. Some
+consideration will have to be given as to how to determine the centre of mass of parts which are not symmetrical in two directions (eg mosfets).
 	   
 \section{Vacuum Placing}
 \subsection{Prototype}
