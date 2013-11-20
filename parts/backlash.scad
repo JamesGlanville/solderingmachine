@@ -1,3 +1,4 @@
+scale([1,1,5]){
 difference()
 {
 	union()
@@ -8,4 +9,4 @@ difference()
 	translate([-50,0,-1])cube(100);
 	translate([0,0,-1])cylinder(r=12,h=10);
 	translate([-5,-68,-3])cube([10,50,20]);
-}
+}}
