@@ -8,6 +8,8 @@
 
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows}
+
+\usepackage{appendix}
 %\usepackage{placeins}                  % Allows use of \FloatBarrier
 % to avoid images or tables
 % moving into next section
@@ -36,6 +38,8 @@
 
 % generate title
 \maketitle
+
+\tableofcontents
 
 \section{Introduction}
 The aim of this project is to develop ways to assist electronics hobbyists in working with SMD electronic components
@@ -90,7 +94,7 @@ Once the solder paste has been placed and the devices placed on top, it must be 
 \end{itemize}
 			
 \section{Project Idea}
-I have decided to approach the project by building a machine which can place solder paste accurately, and then place
+I have decided to approach the project by building a machine which can extrude solder paste accurately, and then place
 the surface mount devices on top. It should achieve this with minimal human interaction. The machine should also be able to
 drill holes for through-hole devices, as well as be equiped with a milling bit for isolation routing through copper-clad pcbs.
 
@@ -505,5 +509,36 @@ hack appwindow.c
 create config.h
 create demo-config.h
 \end{verbatim}
+
+\newpage
+\appendix
+\appendixpage
+\addappheadtotoc
+\section{Servo tester}
+
+The ESC used to control the brushless spindle motor is controlled with standard "servo" control. This consists of variable length pulses sent approximately 20ms apart.
+The length of pulses corresponds to the position of the servo, or in this case the desired operation speed of the brushless motor. The pulses are specified to be 1-2ms,
+which correspond to the minimum and maximum desired speeds.
+
+During testing it because apparent that it would be useful to have manual control of spindle speed. I designed a simple circuit to provide the necessary pulses.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=150mm]{resources/servoexerciser.png}
+\caption{Servo tester schematic.}
+\label{overflow}
+\end{figure}
+
+The circuit works by using one 555 timer to generate a square wave of approximately 50Hz. This triggers a second 555 timer, which operates in monostable mode, with a pulse length
+that is dependent on the position of a potentiometer. The 50Hz wave satisfies the condition of pulses that should be sent every ~20ms, and the pulses are varied between 1-2ms. The speed controllers
+contain a 5V linear regulator which is connected to one pin of the servo connection. This powers the 555 timers so that no other power supply is required for operation. The circuit performed as expected and 
+has been useful in project development.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/servotester.jpg}
+\caption{Servo tester board (front and back).}
+\label{overflow}
+\end{figure}
 
 \end{document}
