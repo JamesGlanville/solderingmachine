@@ -37,29 +37,58 @@
 % generate title
 \maketitle
 
+\section{Introduction}
+The aim of this project is to develop ways to assist electronics hobbyists in working with SMD electronic components
+and circuit boards. SMD (Surface Mount Devices) are electronic components which are designed to be soldered to PCBs
+(Printed Circuit Boards) without requiring holes to be drilled in the board. Compared to through-hole devices, SMD parts 
+are usually smaller and cheaper and as a result are becoming ubiquitous in many applications. Even when hobbyist users do
+not require the size or cost advantages, many modern devices are only available in SMD packages. Using SMD parts require
+smaller board features (A manufacturing challenge) as well as more advanced soldering techniques. For this project, a machine
+is envisioned which solves some or all of the challenges involved to ease the process of SMD board development.
+
 \section{Existing Solutions}
 There are a number of hobbyist solutions to deal with SMD parts:
 
-\begin{itemize}
-	\item	Solder paste + heat:
-		\begin{itemize}
-			\item	Solder stencils: Expensive setup costs, very quick to use. Not suitable for
-				this project due to cost.
-			\item	Manual solder paste application: Mostly expensive dispenser, or with a syringe.
-					Requires high accuracy while placing paste and is time consuming.
-			\item	Hot air gun: Can be relatively difficult to get the right temperature profile.
-			\item	Converted toaster over: seems quite common.
-		\end{itemize}
+\subsection{Hand soldering}
+Despite the increased complexity, many SMD parts can be soldered by hand. There are two main methodologies for this process:
 
-	\item	Soldering by hand:
-		\begin{itemize}
-			\item	Dragging a bead of solder along pins, then cleaning up with solder sucker/wick.
-				This requires a lot of feedback, which seems difficult to automate.
-			\item	Some devices (SOIC?) have slightly bendy pins. A small amount of downwards 
-				pressure on the pin onto a tinned pad can work, but this method will not work for leadless packages.
-		\end{itemize}
+\begin{itemize}
+	\item	The pins are soldered individually. This is mainly suitable for larger SMD parts. A steady hand is required, as well as good eyesight.
+			Binocular microscopes are often used to assist this process.
+			
+	\item	The process of "drag soldering" is used. The device is placed on the board, and a small amount of solder is placed on the tip of a soldering iron.
+			The iron is slowly "dragged" along the pins. If done correctly, surface tension effects cause the majority of the solder to remain on the tip of the iron,
+			while the necessary electrical connections are soldered.
 \end{itemize}
 
+These methods are imprecise, and will often neccesitate the use of solder wick or a solder sucker to remove solder bridges. More importantly, they are wholly unsuitable
+for use with "leadless" packages. Instead of metal pins, these devices only have metal pads on their bases. Without exposed metal when the device is placed, it is not possible
+to solder the connections by hand.
+
+\subsection{Solder paste}
+
+Solder paste consists of powdered metal solder suspended in flux. It is used commercially to manufacture boards with SMD compenents. The solder paste is applied to the board where
+connections are to be made. The devices are then placed on top (the paste has slight adhesive properties which limits undesirable component movement). Finally the paste is heated either directly
+or indirectly which causes it to melt and form solder joints. The paste is placed in a number of ways:
+
+\begin{itemize}
+			\item	Solder stencils: A thin stencil is manufactured from plastic or metal. It has holes which correspond to locations on the board that require solder.
+					Solder paste is then roughly applied to the top of the stencil before being scraped off. This forces controlled volumes of paste into the holes.
+					This a very quick process, and suitable for production quantities, but has the expensive setup costs of stencil manufacture.
+			\item	Solder paste can be applied by hand using a syringe. However, this requires high accuracy while placing paste and is time consuming.
+			\item	Automated solder paste extrusion uses a CNC (Computer Numerical Control) platform to manoeuvre a solder paste extruder around the board. Small amounts of paste
+					are extruded where necessary. This is not the fastest method of manufacture, but is suitable when only small numbers of boards are required.
+\end{itemize}
+
+Once the solder paste has been placed and the devices placed on top, it must be heated to form solder connections. This can be achieved in several ways:
+
+\begin{itemize}
+			\item	A hot air gun can be used manually to locally heat the required areas of the board. Hot air guns are inexpensive, but the process requires care so as not to overheat any
+					components. It can also be relatively difficult to get the correct temperature profile - some solder joints may be overheated while some may not fully form.
+			\item	Entire board heating involves placing the board in an oven which is heated to the correct temperature. This can vary from large commercial equipment to the use of a
+					converted toaster oven.
+\end{itemize}
+			
 \section{Project Idea}
 I have decided to approach the project by building a machine which can place solder paste accurately, and then place
 the surface mount devices on top. It should achieve this with minimal human interaction. The machine should also be able to
