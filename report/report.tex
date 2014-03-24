@@ -508,6 +508,24 @@ has been useful in project development.
 \end{figure}
 
 \newpage
+\section{Calliper serial output modification}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=150mm]{resources/callipermod.jpg}
+\caption{Modified callipers (Data port highlighted in red).}
+\label{overflow}
+\end{figure}
+
+During the testing of accuracy it was necessary to take a large number of positional measurements in all directions. 
+To speed up this process, I modified an inexpensive pair of callipers to output a serial data stream which could be logged
+against the position according to the firmware. Instructions located at http://www.robotroom.com/Caliper-Digital-Data-Port.html
+
+The positional data can be read from four traces on the calliper internal PCB. For convenience, I brought out the +V, ground, data and clock lines
+on to four 2.54" pin headers. As the callipers are powered by a 1.5V battery, NPN transistors are used to amplify the signals to 5V. An ATTINY2313
+decodes the data stream and converts it to a serial stream, sent via a USB-serial cable to the PC.
+
+\newpage
 \section{SMD component types}
 
 \begin{figure}[ht!]
