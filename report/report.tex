@@ -476,6 +476,32 @@ will need to exert the same or greater force to ensure that the board does not m
 
 \end{tikzpicture}
 
+\section{Zeroing the axes}
+
+When the machine is used it is necessary to "zero" the axes to a known datum point on the board. This is particularly important when swapping tools, as there may
+be a small amount of slop in the tool mounts which will vary between tools.
+
+\subsection{X and Y axes}
+
+In order to zero the machine in the X and Y directions, an "L-shaped" piece of metal has been added to the bed (insert pictures/diagrams). All of the tools are metal,
+and therefore conductive. The axes are first manually moved to be near-zero. The tips of the tools are all electrically connected to an input pin on the AVR, with a weak (10K) pullup to 5V.
+The "L-shaped" piece of metal is connected to ground. When instructed, the firmware slowly moves the X or Y axis in the negative direction until a contact is made, and the input goes LOW. At this point,
+the exact position of the tool is known. For convenience it is important that the location of the centre of the tool is known, this can simply be calculated as the diameters of all of the tools are known and fixed.
+
+\subsection{Z axis}
+
+Slightly different mechanisms are used for the zeroing of the Z axis when used for different tools:
+
+\subsubsection{Vacuum needle}
+
+A small microswitch is part of the vacuum needle assembly. It is triggered when the needle is touching either the bed or the top of a component. As a result, zeroing can be carried out simply by 
+moving the tool downwards until it is triggered.
+
+\subsubsection{All other tools}
+
+The other tools are zeroing electrically using the same mechanism as for the X and Y axes. The tools are lowered until contact is made between the PCB and the tool. A temporary contact must be made from ground
+to the copper pcb, this is achieved with an alligator clip.
+
 \newpage
 \appendix
 \appendixpage
