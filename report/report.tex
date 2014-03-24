@@ -243,6 +243,34 @@ I have decided to use an avr chip to translate GCODE to stepper motor commands f
 On the host pc, custom software will have to be written to translate the design into a gcode file to be sent to the machine. Usefully however,
 the machine's firmware will not need to be written or modified.
 
+\section{Improved designs}
+
+\subsection{Solder paste extruder}
+
+The solder paste extruder design that was initially used was unnecessarily bulky and complex. This made it both harder to fit to the tool mounting mechanism, and increased the
+distance between the mount and the tool, amplifying any wobble in the mount. It was therefore deemed necessary to redesign it, optimising for size. Operation and performance
+is similar between all designs however.
+
+\subsubsection{Paste extruder using bevel gears}
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/extruder_bevel.png}
+\caption{Placeholder image of bevel extruder}
+\label{overflow}
+\end{figure}
+
+The first attempt to reduce the size of the extruder used bevel gears to shrink the size of the gearbox. 
+
+\subsubsection{Paste extruder using worm gears}
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/extruder_worm.png}
+\caption{Placeholder image of worm extruder}
+\label{overflow}
+\end{figure}
+
+I realised that using worm gears would give the same gear ratio in a smaller gearbox. The improved design is as small as possible and performs as well as the much larger extruder I started with.
+
 \section{Serial interface}
 For simplicity, the communication between the PC and the electronics board is implemented as a serial link. An arbitrary baud rate of 57600 has been
 chosen, this is sufficiently fast so that the electronics board is not slowed by waiting for instructions (as the firmware buffers incoming commands in
