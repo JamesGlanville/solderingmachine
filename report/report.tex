@@ -5,6 +5,9 @@
 \usepackage{fullpage}                  % Set up page for small margins etc
 \usepackage{listings}
 \usepackage{graphicx}                  % For including images in document
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
 %\usepackage{placeins}                  % Allows use of \FloatBarrier
 % to avoid images or tables
 % moving into next section
@@ -180,7 +183,7 @@ Once the board has been pasted and the parts deposited, the solder paste needs t
 There are a few possibilities for this process:
 
 \begin{itemize} \itemsep0em
-	\item	Oven: a small over can be used to heat the entire board (see: http://www.openhardware.net/Misc\_Stuff/ToasterSMD/). This appears to
+	\item	Oven: a small oven can be used to heat the entire board (see: http://www.openhardware.net/Misc\_Stuff/ToasterSMD/). This appears to
 			work well, however the oven should not be used for food after that, since the components of solder paste are toxic. As a result,
 			it can be an expensive method since it requires dedicated, expensive hardware.
 	\item	Hand-held hot air gun: A small hot air gun can be used to gradually melt the solder for the components. There is a requirement
@@ -206,6 +209,33 @@ I have decided to use an avr chip to translate GCODE to stepper motor commands f
 
 On the host pc, custom software will have to be written to translate the design into a gcode file to be sent to the machine. Usefully however,
 the machine's firmware will not need to be written or modified.
+
+\section{Serial interface}
+For simplicity, the communication between the PC and the electronics board is implemented as a serial link. An arbitrary baud rate of 57600 has been
+chosen, this is sufficiently fast so that the electronics board is not slowed by waiting for instructions (as the firmware buffers incoming commands in
+a small buffer in RAM), and sufficiently slow that the error rate is assumed to be zero.
+
+\subsection{USB-serial cable}
+A usb-serial cable based on the FTDI ft232r chipset can be plugged into the serial header on the electronics board. This is a cheap (<£5) device that is 
+a complete solution. Driver support for the FT232R is available for all platforms that have been considered (Windows/OSX/Linux/Android).
+
+\subsection{Bluetooth serial link}
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/bluetoothmodule.jpg}
+\caption{Bluetooth module mounted on breakout board.}
+\label{overflow}
+\end{figure}
+
+As an alternative to a USB-serial cable, a bluetooth link can be used. Depending on the end user, this may be more convenient. The HC-05 bluetooth module was
+chosen because of its low cost (£3.50) and simplicity. The board requires a 3.3V supply, which is not present on the electronics board. I made a small
+breakout board for the module, including an AMS1117-3.3 3.3V linear regulator (£0.10) and link status LEDs. The 3.3V TX output from the module is sufficient
+for the AVR despite its higher 5V supply. To avoid damage to the bluetooth module, a potential divider consisting of two 1k resistors is used. This 2.5V output is
+again sufficient for the bluetooth module.
+
+To configure the baud rate for the bluetooth module, it was connected to a pc using a usb-serial cable. The bluetooth module is powered up whilst the "KEY" pin is held high (3.3V).
+This starts the module in AT configuration mode. The baud rate was then set by sending the string "AT+UART=57600,1,0" at 38400 baud. This configuration is only required once,
+the module stores all configuration in non-volatile storage.
 
 \section{Host computer software}
 Software will have to be written to translate board cad data to gcode. Some of this already exists in the public domain, some will have to be made
@@ -358,5 +388,93 @@ the deflection under the load of the isolation routing bit. The solder paste and
 drilling will generate a force, but the tolerance required of a 1mm hole is not nearly as demanding as that of the isolation routing cutter.
 I have not yet measured the exact forces exerted by the routing bit, but I estimate that they are 5-10N. This means that the anti-backlash nut
 will need to exert the same or greater force to ensure that the board does not move. This in turn places extra resistance on the motor movement.
+
+\section{Operating Steps}
+
+% Define block styles
+\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+    text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=14em, text centered, rounded corners, minimum height=3em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=7cm,
+    minimum height=2em]
+    
+\begin{tikzpicture}[align=center,node distance = 1.6cm,auto]
+    % Place nodes
+    \node [block] (pcb2gcode) {run pcb2gcode to generate GCODE};
+    \node [cloud, left of=pcb2gcode, align=center] (designfiles) {PCB designs exported\\ from design package\\ in GERBER format};
+    
+    \node [block, below of=pcb2gcode] (isolationinit) {attach spindle, load isolation milling bit, zero};
+    \node [block, below of=isolationinit] (isolation) {send routing GCODE to machine};
+    \node [block, below of=isolation, fill=orange!70] (isolationcheck) {visually check board for errors};
+    
+    \node [block, below of=isolationcheck] (drillinit) {load drill bit, zero};
+    \node [block, below of=drillinit] (drill) {send drilling GCODE to machine};
+    \node [block, below of=drill, fill=orange!70] (drillcheck) {visually check board for errors};
+    
+    \node [block, below of=drillcheck] (pasteinit) {load paste extruder};
+    \node [block, below of=pasteinit] (paste) {send solder paste GCODE to machine};
+    \node [block, below of=paste, fill=orange!70] (pastecheck) {visually check board for errors};
+    
+    \node [block, below of=pastecheck] (vacuuminit) {load vacuum needle};
+    \node [block, below of=vacuuminit] (vacuum) {send pick and place GCODE to machine};
+    \node [block, below of=vacuum, fill=orange!70] (vacuumcheck) {visually check board for errors};
+    
+    \node [block, below of=vacuumcheck] (reflow) {Heat board to melt solder paste};
+    % Draw edges
+    \path [line,dashed] (designfiles) -- (pcb2gcode);
+    \path [line] (pcb2gcode) -- (isolationinit);
+    \path [line] (isolationinit) -- (isolation);
+    \path [line] (isolation) -- (isolationcheck);
+    \path [line] (isolationcheck) -- (drillinit);
+    \path [line] (drillinit) -- (drill);
+    \path [line] (drill) -- (drillcheck);
+    \path [line] (drillcheck) -- (pasteinit);
+    \path [line] (pasteinit) -- (paste);
+    \path [line] (paste) -- (pastecheck);
+    \path [line] (pastecheck) -- (vacuuminit);
+    \path [line] (vacuuminit) -- (vacuum);
+    \path [line] (vacuum) -- (vacuumcheck);
+
+    \path [line] (vacuumcheck) -- (reflow);
+ %   \path [line] (isolation) -- (isolationcheck);
+ %   \path [line] (isolationcheck) -- (drillinit);
+
+\end{tikzpicture}
+
+\section{Building pcb2gcode from source in windows}
+
+get pcb2gcode source:
+git clone git@github.com:JamesGlanville/pcb2gcode-metric.git
+
+install VS 2012 PRO
+
+Download \begin{verbatim}http://ftp.gnome.org/pub/gnome/binaries/win32/gtk+/2.24/gtk+-bundle_2.24.10-20120208_win32.zip
+from http://www.gtk.org/download/win32.php
+place in pcbgcode-metric folder
+
+download gerbv from http://sourceforge.net/projects/gerbv/
+gerbvinst-2.6.1.exe and install
+
+download boost_1_55_0.zip from http://sourceforge.net/projects/boost/
+unzip contents to c:\\boost155
+open VS2012 x86 Native Tools Command Prompt, from C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Microsoft Visual Studio 2012\\Visual Studio Tools
+AS ADMINISTRATOR
+cd c:\\boost155
+bootstrap.bat
+bjam.exe
+
+download http://ftp.gnome.org/pub/GNOME/binaries/win32/gtkmm/2.22/gtkmm-win32-devel-2.22.0-2.exe
+from http://ftp.gnome.org/pub/GNOME/binaries/win32/gtkmm/2.22/
+and install.
+
+download gerbv-2.6.1.tar.gz from http://sourceforge.net/projects/gerbv/files/gerbv/gerbv-2.6.1/
+and extract to c:\\gerbv-2.6.1
+
+hack appwindow.c
+create config.h
+create demo-config.h
+\end{verbatim}
 
 \end{document}
