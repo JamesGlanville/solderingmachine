@@ -476,40 +476,6 @@ will need to exert the same or greater force to ensure that the board does not m
 
 \end{tikzpicture}
 
-\section{Building pcb2gcode from source in windows}
-
-get pcb2gcode source:
-git clone git@github.com:JamesGlanville/pcb2gcode-metric.git
-
-install VS 2012 PRO
-
-Download \begin{verbatim}http://ftp.gnome.org/pub/gnome/binaries/win32/gtk+/2.24/gtk+-bundle_2.24.10-20120208_win32.zip
-from http://www.gtk.org/download/win32.php
-place in pcbgcode-metric folder
-
-download gerbv from http://sourceforge.net/projects/gerbv/
-gerbvinst-2.6.1.exe and install
-
-download boost_1_55_0.zip from http://sourceforge.net/projects/boost/
-unzip contents to c:\\boost155
-open VS2012 x86 Native Tools Command Prompt, from C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Microsoft Visual Studio 2012\\Visual Studio Tools
-AS ADMINISTRATOR
-cd c:\\boost155
-bootstrap.bat
-bjam.exe
-
-download http://ftp.gnome.org/pub/GNOME/binaries/win32/gtkmm/2.22/gtkmm-win32-devel-2.22.0-2.exe
-from http://ftp.gnome.org/pub/GNOME/binaries/win32/gtkmm/2.22/
-and install.
-
-download gerbv-2.6.1.tar.gz from http://sourceforge.net/projects/gerbv/files/gerbv/gerbv-2.6.1/
-and extract to c:\\gerbv-2.6.1
-
-hack appwindow.c
-create config.h
-create demo-config.h
-\end{verbatim}
-
 \newpage
 \appendix
 \appendixpage
@@ -530,7 +496,7 @@ During testing it because apparent that it would be useful to have manual contro
 \end{figure}
 
 The circuit works by using one 555 timer to generate a square wave of approximately 50Hz. This triggers a second 555 timer, which operates in monostable mode, with a pulse length
-that is dependent on the position of a potentiometer. The 50Hz wave satisfies the condition of pulses that should be sent every ~20ms, and the pulses are varied between 1-2ms. The speed controllers
+that is dependent on the position of a potentiometer. The 50Hz wave satisfies the condition of pulses that should be sent approximately every 20ms, and the pulses are varied between 1-2ms. The speed controllers
 contain a 5V linear regulator which is connected to one pin of the servo connection. This powers the 555 timers so that no other power supply is required for operation. The circuit performed as expected and 
 has been useful in project development.
 
@@ -540,5 +506,112 @@ has been useful in project development.
 \caption{Servo tester board (front and back).}
 \label{overflow}
 \end{figure}
+
+\newpage
+\section{SMD component types}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=150mm]{resources/SMDsizes.jpg}
+\caption{Example SMD components (From fpga4fun.com)}
+\label{overflow}
+\end{figure}
+
+A large variety of SMD types and sizes are available. A selection is described here (from wikipedia, cite?)
+
+\subsection{Two-terminal passive components (mostly resistors and capacitors)}
+Package types are given a four digit code, which describes the length and width in mm.
+
+Example:
+
+0603 is a 0.6 x 0.3mm rectangular package.
+
+\subsection{SOT: Small-Outline Transistor}
+Despite the name, these devices are not limited to single transistors, other types (eg linear regulators) are
+common in the same packages.
+
+Example:
+
+SOT-223 is a 6.7x3.7x1.8mm body, three terminals plus a heat transfer pad.
+
+\subsection{SOIC: Small-Outline Integrated Circuit}
+Dual-in-line devices with 8 or more gull-wing lead form pins, spacing of 1.27mm
+
+\newpage
+\section{Building pcb2gcode from source}
+
+The pcb2gcode source should first be obtained:
+\begin{lstlisting}[frame=single]
+git clone git@github.com:JamesGlanville/pcb2gcode-metric.git
+\end{lstlisting}
+
+\subsection{Compilation in Linux}
+For these instructions the use of Ubuntu/Debian is assumed, although other distributions should be similar.
+
+To install prerequisites:
+\begin{lstlisting}[frame=single,breaklines=true]
+sudo apt-get install build-essential automake autoconf libtool libboost-all-dev libgtkmm-2.4-dev gerbv
+\end{lstlisting}
+
+To compile pcb2gcode:
+\begin{lstlisting}[frame=single]
+cd pcb2gcode-metric
+./git-build.sh
+\end{lstlisting}
+
+(Optional) To install pcb2gcode:
+\begin{lstlisting}[frame=single]
+sudo make install
+\end{lstlisting}
+
+\subsection{Compilation in Windows}
+Installing prerequisites is more complex in Windows:
+
+\subsubsection{Visual Studio}
+Install Visual Studio 2012 Professional from:
+\begin{lstlisting}[frame=single]
+www.visualstudio.com
+\end{lstlisting}
+
+\subsubsection{GTK+ development files}
+Download:
+\begin{lstlisting}[frame=single,breaklines=true]
+http://ftp.gnome.org/pub/gnome/binaries/win32/gtk+/2.24/gtk+-bundle_2.24.10-20120208_win32.zip
+\end{lstlisting}
+and extract to pcb2gcode-metric folder.
+
+\subsubsection{Gerbv}
+download gerbv from http://sourceforge.net/projects/gerbv/
+gerbvinst-2.6.1.exe and install
+TODO: add instructions for generating .lib file
+
+\subsubsection{Boost libraries}
+\begin{lstlisting}[frame=single,breaklines=true]
+download boost_1_55_0.zip from http://sourceforge.net/projects/boost/
+\end{lstlisting}
+unzip contents to c:\\boost155
+open VS2012 x86 Native Tools Command Prompt, from C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Microsoft Visual Studio 2012\\Visual Studio Tools
+AS ADMINISTRATOR
+cd c:\\boost155
+bootstrap.bat
+bjam.exe
+
+\subsubsection{GTKMM}
+\begin{lstlisting}[frame=single,breaklines=true]
+download http://ftp.gnome.org/pub/GNOME/binaries/win32/gtkmm/2.22/gtkmm-win32-devel-2.22.0-2.exe
+\end{lstlisting}
+from http://ftp.gnome.org/pub/GNOME/binaries/win32/gtkmm/2.22/
+and install.
+
+\subsubsection{gerbv?}
+\begin{lstlisting}[frame=single,breaklines=true]
+download gerbv-2.6.1.tar.gz from http://sourceforge.net/projects/gerbv/files/gerbv/gerbv-2.6.1/
+\end{lstlisting}
+and extract to c:\\gerbv-2.6.1
+
+hack appwindow.c
+create config.h
+create demo-config.h
+%\end{verbatim}
 
 \end{document}
