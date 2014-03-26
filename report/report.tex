@@ -614,7 +614,40 @@ to the copper pcb, this is achieved with an alligator clip.
 This section contains envisioned improvements to the machine that were not implemented due to time constraints.
 
 \subsection{Double-sided boards}
+It is common to use double sided PCBs in order to achieve more compact circuits. The machine will not currently have the ability to process such boards, although this would be possible in a later version.
 
+\subsubsection{Challenges}
+There are a number of challenges associated with working with dual sided boards:
+
+\begin{enumerate}
+	\item	Clamping the PCB to the bed of the machine is more complex with the second side of a double sided board. The components that have
+			already been populated will not allow the board to sit flat and level.
+	\item	The PCB material is a moderately good conductor of heat. When the second side of the board is heated to melt the solder paste, there
+			is a danger that components on the bottom will be loosened and fall off.
+	\item	Both sides of the board must be precisely aligned so that any through-holes or vias line up.
+	\item	Any vias that are required will add considerable complexity. Commercially they are manufactured in a multi-stage chemical process
+			which is not feasible for the hobbyist.
+\end{enumerate}
+
+\subsubsection{Envisioned solutions}
+
+\begin{enumerate}
+	\item	As isolation routing places the greatest stresses on the board mounts, it is unlikely that the reverse side of the board can be manufactured
+			after the first side has been populated with components. Therefore the isolation routing should be carried out on both sides first. Any holes
+			through the board should also be drilled, and cutting the board out also (leaving tabs to hold it in place). When this has been done, the
+			rest of the manufacturing process can be continued with less secure mounting from the board edges.
+	\item	Melting solder on one side of the board while leaving the other side solid will require active cooling of the bottom of the board. Commercially
+			components are often glued so that all the solder paste can be reflowed in one process, but the application of adhesive adds a complex extra
+			process to the machine which should be avoided.
+	\item	Alignment may be achieved by the use of a small USB microscope. The user would be able to see an image of the board, and select datum points (for
+			example the center of a pad). Once the board was flipped, the same datum points could be located. From this, a transformation matrix can simply
+			be computed and applied to the coordinates of the GCODE.
+	\item	A reasonable substitute for vias is to drill a hole through the board, place a short piece of wire into it and solder both sides to the copper.
+			It is likely that the only practical way to achieve this is manually once the board has been manufactured. The ability to perform light milling
+			operations with the machine could be used to mill the ends of the wire much closer to the surface of the PCB than could be achieved with wire cutters.
+			In this way it is likely that thermal vias under components could be achieved (Vias used for the purpose of heatsinking are placed under the thermal
+			tab of an SMD component to conduct heat to copper on the reverse side of the board).
+\end{enumerate}
 
 \newpage
 \appendix
