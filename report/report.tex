@@ -10,6 +10,9 @@
 \usetikzlibrary{shapes,arrows}
 
 \usepackage{appendix}
+\usepackage{color}
+\usepackage{hyperref}
+
 %\usepackage{placeins}                  % Allows use of \FloatBarrier
 % to avoid images or tables
 % moving into next section
@@ -34,10 +37,17 @@
 \author{James Glanville}
 \date{11th June 2013}
 
+\hypersetup{
+    colorlinks,
+    allcolors=blue,
+    linktoc=all,
+}
+
 \begin{document}
 
 % generate title
 \maketitle
+
 
 \tableofcontents
 
@@ -450,6 +460,76 @@ drilling will generate a force, but the tolerance required of a 1mm hole is not 
 I have not yet measured the exact forces exerted by the routing bit, but I estimate that they are 5-10N. This means that the anti-backlash nut
 will need to exert the same or greater force to ensure that the board does not move. This in turn places extra resistance on the motor movement.
 
+\section{Hot air tool}
+Ideally the heating of the solder paste should be carried out automatically by the machine. This section describes a prototype hot air tool.
+
+A hot air tool used for soldering has the following requirements:
+
+\begin{itemize} \itemsep0em
+	\item	Ability to heat solder paste up to $240\,^{\circ}\mathrm{C}$
+	\item	Slow, steady airflow
+	\item	Controllable temperature (ie not open-loop)
+\end{itemize}
+
+Calculations:
+
+Assumptions:
+Specific heat capacity of dry air is not significantly affected by temperature for estimates of power required.
+50\% of energy into heater is used to heat hot air stream (other radiative losses)
+
+Flow rate of air pump = 18 cm\textsuperscript{3} / s
+Specific heat capacity of dry air = 1.006 J/gK
+Delta T = 240 - 20 = 220K
+Density of air = 0.001225 g / cm\textsuperscript{3}
+Power required to heat air (ideal) = (18*0.001225)*220*1.006 = 4.88W
+Power required to heat air (assuming losses) = 4.88*2 = 9.76W
+
+For simplicity, it is assumed that the heater requires 10W of input power.
+
+The design is based on a small coil of nichrome resistance wire as a heating element. Calculations must be made to find
+the size of wire reqired:
+
+Size of coil (Chosen to be similar in diameter to the air tube with 6mm OD/4mm ID)
+
+Diameter = 5mm
+Length = 12mm
+Wire spacing = 2mm
+Angle of wire = tan\textsuperscript{-1} (2/(5* pi )) = 7.26 \textsuperscript{0}
+Turns of wire = 12/2 + 1 = 7
+Length of wire = 7 * sqrt ((5 * pi )\textsuperscript{2}  * 2\textsuperscript{2}) =  110.84mm
+
+Resistivity of nichrome at room temperature = 1.0 * 10E-6 ohm m 
+Power supply voltage = 12V
+Current draw = 10 / 12 = 0.83 A 
+Resistance required = 12\textsuperscript{2} / 10 = 14.4 ohms
+Cross sectional area of wire = 1.0 * 10\textsuperscript{-6} * 110.84 * 10\textsuperscript{-3} / 14.4 = 7.70 * 10\textsuperscript{-9} m\textsuperscript{2} = 7.70 * 10\textsuperscript{-3} mm\textsuperscript{2}
+Diameter of wire = sqrt(7.70E-3/pi) * 2 = 0.099mm
+
+This is the minimum diameter of wire. Next the maximum diameter of wire is calculated, assuming a maximum current draw of 10A.
+
+Resistance required = 12 / 10 = 1.2 ohms
+Cross sectional area of wire = 7.70 * 10\textsuperscript{-3} * (14.4/1.2) = 0.092 mm \textsuperscript{2}
+Diameter of wire = sqrt(0.092/pi) * 2 = 0.34mm
+
+Therefore wire diameter is between 0.099mm and 0.34mm
+The most commonly available suitable wire is sold as 30 SWG, equivalent to 0.315mm diameter.
+
+Resistance of 110.84mm of 0.315mm diameter nichrome wire:
+
+\begin{displaymath}
+\text{Resistance} = \frac{\rho L}{A}
+= \frac{1.0*10^-6*110.84*10^-3}{\pi*(\frac{0.315*10^-3}{2})^2}
+= 1.42 \Omega
+\end{displaymath}
+
+
+
+\begin{displaymath}
+\text{Maximum current draw} = \frac{\text{V}}{\text{R}}
+= \frac{12}{1.42}
+= 8.45 \text{A}
+\end{displaymath}
+
 \section{Operating Steps}
 
 % Define block styles
@@ -529,6 +609,12 @@ moving the tool downwards until it is triggered.
 
 The other tools are zeroing electrically using the same mechanism as for the X and Y axes. The tools are lowered until contact is made between the PCB and the tool. A temporary contact must be made from ground
 to the copper pcb, this is achieved with an alligator clip.
+
+\section{Future Work}
+This section contains envisioned improvements to the machine that were not implemented due to time constraints.
+
+\subsection{Double-sided boards}
+
 
 \newpage
 \appendix
