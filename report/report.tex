@@ -330,6 +330,56 @@ not be too hard to calculate how to transport them to the required location.
 In my opinion, the most challenging part of writing the conversion code will simply be to extract the necessary data from the cad files. Once this
 has been obtained, the gcode should be easy to create.
 
+\subsection{Improvements to pcb2gcode}
+I have forked pcb2gcode on github, and my improvements are available at https://github.com/JamesGlanville/pcb2gcode-metric
+To demonstrate the effects of the improvements, I have included pictures of a soic-20 breakout board being processed.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/breakout_copper.png}
+\caption{Input to pcb2gcode, showing the copper traces in white.}
+\label{overflow}
+\end{figure}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/breakout_isolation.png}
+\caption{Output from pcb2gcode, showing isolation routing pattern (milling to be run between coloured sections).}
+\label{overflow}
+\end{figure}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/breakout_paste.png}
+\caption{Solder paste output from pcb2gcode, showing where paste is to be deposited.}
+\label{overflow}
+\end{figure}
+
+\subsubsection{Adding solder paste support}
+Solder paste information is contained in the GTP (gerber top paste) file. I decided to extend pcb2gcode to read this file, and output GCODE suitable for solder paste extrusion.
+
+The GTP file is in the same RS-274X extended Gerber format as the other files that pcb2gcode can already read. For simplicity, I decided to use the existing Gerber processing.
+This is retrieved in \begin{verbatim}NGC_Exporter::export_layer(see ngc_exporter.cpp)\end{verbatim}. The data is stored as a vector of vertices of each pad to be filled with solder paste.
+
+An assumption is currently made that all pads are rectangular, and that the paste can be suitably applied in a single place. This may need to be improved in the future if large areas
+of solder paste are required.
+
+Process of determining where to deposit paste:
+
+\begin{enumerate}
+	\item	Vertices of pad stored in array.
+	\item	Area of pad calculated.
+	\item	Center of pad calculated.
+	\item	From the area of the pad, the diameter of the needle, and the required paste thickness, the extrusion distance is calculated.
+	\item	GCODE is written to extrude paste at the center of the pad.
+\end{enumerate}
+
+Retraction:
+
+The belt on the paste extruder is slightly springy. This results in the extruder continuing to extrude a small amount of solder paste after the motor has stopped moving.
+This has an adverse effect on board quality. To counter this, the extruder should be retracted slightly to remove all pressure from the syringe. The distance to retract
+as well as speed of retraction should be experimentally determined for optimum results. I have added retraction support to the solder paste output of pcb2gcode.
+
 \section{Tools}
 I have a small mill, a 3d printer and a lathe. It may be worth considering that a lot of people/schools have
 access to a laser cutter and perhaps mill/lathe, so if possible all custom components could be 3d printed or 
@@ -537,6 +587,48 @@ Resistance of 110.84mm of 0.315mm diameter nichrome wire:
 = \frac{12}{1.42}
 = 8.45 \text{A}
 \end{displaymath}
+
+\section{Standalone Operation}
+It may be useful to operate the machine without a connected PC. In the case of manufacturing a large number of boards, it may be impractical to dedicate a PC simply to sending GCODE.
+In addition, some functions of the machine produce dust, and are noisy. Allowing the machine to operate in a more remote location could be convenient. 
+
+The steps taken to produce GCODE (eg running pcb2gcode) will always need a PC, but once the GCODE has been produced it is possible for the machine to read this from connected storage.
+
+\subsection{SD card reading}
+SD cards are ideal for use with microcontrollers, as they have a simple protocol (SPI), and are inexpensive. They also have wide compatibility with other devices. It would be useful if 
+the GCODE could be stored on an SD card and read by the machine.
+
+\subsubsection {Hardware}
+SD cards can operate in SPI mode, using only four connections (MISO, MOSI, CLK, CS). However, they operate at 3.3V, and the AVR operates at 5V. To power the card, an AMS1117-3.3 linear regulator
+is used. Level translation must be used to convert the four connections to the required voltages. There are three options for this process:
+
+\begin{itemize} \itemsep0em
+	\item	Potential dividers. This is the simplest option, using only resistors. The CS, MOSI and CLK connections send data to the SD card. A potential divider is used to reduce the voltages
+			from 5V to 3.3V. The MISO connection receives data from the SD card. The AVR has a high input threshold of above 2.6V. MISO can therefore be connected as it operates up to 3.3V. 
+			Although this is the simplest option, the high impedance output from the potential divider can cause problems at fast SPI speeds, as the SD card presents a relatively high
+			capacative loading.
+	\item	Discrete transistors can be used to translate between 3.3V and 5V. This has the advantage of faster operation, and increasing the noise margins (reduced when using 3.3V with a 5V chip).
+			Two transistors are needed for each connection to ensure the signal is not inverted.
+	\item	A level translation IC can be used. This needs no additional components (except from a decoupling capacitor).
+\end{itemize}
+
+\subsubsection {Firmware}
+The Marlin firmware used in the machine has full support for SD cards, provided they are formatted with the FAT filesystem.
+
+\subsection{LCD + User interface}
+If the machine is to be used in a standalone capacity, there must be a way for the user to choose which GCODE file to send.
+
+\subsubsection{Hardware}
+A 4x20 LCD is used to display information about the current job, as well as allow the user to select GCODE files. This is an inexpensive part based on the ubiquitous HD44780 controller chip.
+It is operated in 4-bit mode (as opposed to 8-bit mode, which requires four additional microcontroller pins). Six connections are required to the microcontroller: RS, EN, D4, D5, D6, D7. These
+are connected to a spare header on the driver board. 
+
+A rotary encoder is used to provide input. This uses quadrature outputs to determine motion. The encoder also has a push switch inside for selecting options. This therefore require three microcontroller
+pins in total.
+
+\subsubsection{Firmware}
+Marlin has support for the LCD and encoder, requiring only a change to Configuration.h and pins.h
+
 
 \section{Milling}
 The spindle on the machine is quite capable of light milling, with some limitations:
