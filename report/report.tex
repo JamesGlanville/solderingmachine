@@ -461,6 +461,14 @@ I have not yet measured the exact forces exerted by the routing bit, but I estim
 will need to exert the same or greater force to ensure that the board does not move. This in turn places extra resistance on the motor movement.
 
 \section{Hot air tool}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/hotair.png}
+\caption{Simplified diagram of hot air tool.}
+\label{overflow}
+\end{figure}
+
 Ideally the heating of the solder paste should be carried out automatically by the machine. This section describes a prototype hot air tool.
 
 A hot air tool used for soldering has the following requirements:
@@ -471,7 +479,7 @@ A hot air tool used for soldering has the following requirements:
 	\item	Controllable temperature (ie not open-loop)
 \end{itemize}
 
-Calculations:
+\subsection{Calculations}
 
 Assumptions:
 Specific heat capacity of dry air is not significantly affected by temperature for estimates of power required.
@@ -529,6 +537,42 @@ Resistance of 110.84mm of 0.315mm diameter nichrome wire:
 = \frac{12}{1.42}
 = 8.45 \text{A}
 \end{displaymath}
+
+\section{Milling}
+The spindle on the machine is quite capable of light milling, with some limitations:
+
+\begin{itemize} \itemsep0em
+	\item	Milling bits only protrude from the spindle by approximately 8mm (depending on the bit). This means that this is the deepest cut the machine is capable of making.
+	\item	The axes do not have the rigidity required for milling tough materials. Plastics and wood are possible, while metals are not.
+	\item	The spindle only supports parts with a 3mm shank.
+\end{itemize}
+
+As this functionality is not a central focus of this project, only a simple demonstration of milling ability was done. The spur gear used in the gear extruder is cut from 6mm acrylic:
+
+\subsubsection {Gear CAD}
+The gear design was copied into a CamBam project. Ideally the Creo design could have been exported as a .DXF file, but errors were encountered while attempting this. CamBam was used to 
+generate GCODE for milling the gear, taking into account the machine's slow travel speeds. The firmware used in the machine does not handle parentheses in the GCODE, so the CamBam 
+output must be checked for them, and the lines removed.
+
+\subsubsection {Envisioned uses for milling}
+{
+There are a number of uses for a machine capable of light milling:
+
+\begin{itemize} \itemsep0em
+	\item	Manufacturing PCBs with arbitrary shapes. For example, It is possible to build connecters from PCBs that lie on the circuit board if they can be milled to the correct shape.
+			For example, USB connectors. This reduces part cost.
+	\item	Improving the finish of 3d printed components. In cases where the rough edges of 3d printed parts are not satisfactory, a milling pass over the piece can increase the flatness
+			of edges.
+	
+\end{itemize}
+}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/gear_cambam.png}
+\caption{Gear outline shown in red. Toolpath shown in green/blue.}
+\label{overflow}
+\end{figure}
 
 \section{Operating Steps}
 
