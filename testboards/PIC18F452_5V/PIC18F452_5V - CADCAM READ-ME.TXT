@@ -1,0 +1,72 @@
+LABCENTER PROTEUS TOOL INFORMATION FILE
+=======================================
+
+In case of difficulty, please e-mail support@labcenter.co.uk
+
+Tool set up for Proteus layout 'PIC18F452_5V.LYT'.
+CADCAM generated at 12:49:42 PM on Thursday, March 27, 2014.
+
+File List
+---------
+Top Copper              : PIC18F452_5V - CADCAM Top Copper.TXT
+Bottom Copper           : PIC18F452_5V - CADCAM Bottom Copper.TXT
+Top Silk Screen         : PIC18F452_5V - CADCAM Top Silk Screen.TXT
+Bottom Silk Screen      : PIC18F452_5V - CADCAM Bottom Silk Screen.TXT
+Top Solder Resist       : PIC18F452_5V - CADCAM Top Solder Resist.TXT
+Bottom Solder Resist    : PIC18F452_5V - CADCAM Bottom Solder Resist.TXT
+Top SMT Paste Mask      : PIC18F452_5V - CADCAM Top SMT Paste Mask.TXT
+Bottom SMT Paste Mask   : PIC18F452_5V - CADCAM Bottom SMT Paste Mask.TXT
+Drill                   : PIC18F452_5V - CADCAM Drill.TXT
+
+Photoplotter Setup
+------------------
+Format: RS274X, ASCII, 2.4, imperial, absolute, eob=*, LZO
+Notes:  D=Diameter, S=Side, W=Width, H=Height
+
+D10	CIRCLE	D=15th                                      DRAW
+D11	CIRCLE	D=25th                                      DRAW
+D12	CIRCLE	D=40th                                      FLASH
+D13	CIRCLE	D=2.5th                                     DRAW
+D14	CIRCLE	D=8th                                       DRAW
+D15	SMT	W=18th                H=100th               FLASH
+D16	SMT	W=100th               H=18th                FLASH
+D17	SMT	W=40th                H=35th                FLASH
+D18	SMT	W=216.5th             H=78.7th              FLASH
+D19	SMT	W=60th                H=40th                FLASH
+D70	SMT	W=80th                H=60th                FLASH
+D71	SQUARE	S=80th                                      FLASH
+D20	CIRCLE	D=80th                                      FLASH
+D21	CIRCLE	D=60th                                      FLASH
+D22	SQUARE	S=60th                                      FLASH
+D23	CIRCLE	D=98.4th                                    FLASH
+D24	SMT	W=40th                H=60th                FLASH
+D25	SMT	W=51.8th              H=137.7th             FLASH
+D26	CIRCLE	D=200th                                     FLASH
+D27	SMT	W=60th                H=80th                FLASH
+D28	SMT	W=150th               H=80th                FLASH
+D29	SMT	W=38th                H=120th               FLASH
+D72	SMT	W=120th               H=38th                FLASH
+D73	SMT	W=60th                H=55th                FLASH
+D30	SMT	W=236.5th             H=98.7th              FLASH
+D31	SMT	W=100th               H=80th                FLASH
+D32	SMT	W=100th               H=100th               FLASH
+D33	CIRCLE	D=100th                                     FLASH
+D34	SMT	W=80th                H=80th                FLASH
+D35	CIRCLE	D=118.4th                                   FLASH
+D36	CIRCLE	D=220th                                     FLASH
+D37	SMT	W=80th                H=100th               FLASH
+D38	SMT	W=170th               H=100th               FLASH
+
+NC Drill Setup
+--------------
+Format: ASCII, 2.4, imperial, absolute, eob=<CR><LF>, no zero suppression.
+Notes:  Tool sizes are diameters. Layer sets are in brackets - 0=TOP, 15=BOTTOM, 1-14=INNER.
+
+T01	20th (0-15)
+T02	40th (0-15)
+T03	30th (0-15)
+T04	94.4th (0-15)
+T05	125.9th (0-15)
+
+
+[END OF FILE]
