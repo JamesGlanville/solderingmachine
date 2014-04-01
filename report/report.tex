@@ -646,6 +646,17 @@ The gear design was copied into a CamBam project. Ideally the Creo design could 
 generate GCODE for milling the gear, taking into account the machine's slow travel speeds. The firmware used in the machine does not handle parentheses in the GCODE, so the CamBam 
 output must be checked for them, and the lines removed.
 
+Milling settings:
+3mm acrylic
+1mm endmill
+conventional milling
+12mm clearance plane
+depth increment 1
+stock surface 10
+target depth 6.7
+cut/plunge 70mm/min
+
+
 \subsubsection {Envisioned uses for milling}
 {
 There are a number of uses for a machine capable of light milling:
@@ -663,6 +674,13 @@ There are a number of uses for a machine capable of light milling:
 \centering
 \includegraphics[width=90mm]{resources/gear_cambam.png}
 \caption{Gear outline shown in red. Toolpath shown in green/blue.}
+\label{overflow}
+\end{figure}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/gear_comparison.jpg}
+\caption{Milled gear (left) compared to original gear (right).}
 \label{overflow}
 \end{figure}
 
