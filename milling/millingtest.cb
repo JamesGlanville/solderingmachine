@@ -5,7 +5,7 @@
       <ModificationCount>0</ModificationCount>
       <objects>
         <pline id="2" Closed="true">
-          <ModificationCount>138</ModificationCount>
+          <ModificationCount>140</ModificationCount>
           <mat m="Identity" />
           <pts>
             <p>56.7955755991836,52.5981153755295,0</p>
@@ -1270,6 +1270,10 @@
             <p b="-0.010294329461476895">56.0106768485913,53.5207137955169,0</p>
           </pts>
         </pline>
+        <circle id="1" c="34,34,0" d="5">
+          <ModificationCount>1</ModificationCount>
+          <mat m="Identity" />
+        </circle>
       </objects>
     </layer>
   </layers>
@@ -1291,8 +1295,8 @@
           <ToolDiameter state="Value">1</ToolDiameter>
           <ToolNumber state="Default">0</ToolNumber>
           <ToolProfile state="Default">Unspecified</ToolProfile>
-          <PlungeFeedrate state="Value">50</PlungeFeedrate>
-          <CutFeedrate state="Value">50</CutFeedrate>
+          <PlungeFeedrate state="Value">70</PlungeFeedrate>
+          <CutFeedrate state="Value">70</CutFeedrate>
           <MaxCrossoverDistance state="Default">0.7</MaxCrossoverDistance>
           <StartPoint state="Default" />
           <CustomMOPHeader state="Default" />
@@ -1307,8 +1311,9 @@
           <VelocityMode state="Default">Undefined</VelocityMode>
           <primitive>
             <prim>2</prim>
+            <prim>1</prim>
           </primitive>
-          <TargetDepth state="Value">6</TargetDepth>
+          <TargetDepth state="Value">6.7</TargetDepth>
           <DepthIncrement state="Value">1</DepthIncrement>
           <FinalDepthIncrement state="Value">1</FinalDepthIncrement>
           <CutOrdering state="Default">DepthFirst</CutOrdering>
@@ -1342,7 +1347,7 @@
       </Stock>
       <ToolProfile>Unspecified</ToolProfile>
       <Nesting>
-        <BasePoint />
+        <BasePoint>0,0</BasePoint>
         <NestMethod>None</NestMethod>
       </Nesting>
     </part>
