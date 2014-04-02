@@ -19,7 +19,7 @@
 %\usepackage{subfig}                    % For subfigures...
 
 \usepackage{amsmath}                   % For improving maths/formula typesetting
-%\usepackage{tabularx}                  % Table changing package
+%\usepackage{tabular}                  % Table changing package
 
 %\usepackage{algpseudocode}             % For producing algorithms/flowcharts
 
@@ -646,16 +646,24 @@ The gear design was copied into a CamBam project. Ideally the Creo design could 
 generate GCODE for milling the gear, taking into account the machine's slow travel speeds. The firmware used in the machine does not handle parentheses in the GCODE, so the CamBam 
 output must be checked for them, and the lines removed.
 
-Milling settings:
-3mm acrylic
-1mm endmill
-conventional milling
-12mm clearance plane
-depth increment 1
-stock surface 10
-target depth 6.7
-cut/plunge 70mm/min
+\subsubsection {Milling Settings}
 
+The following settings were used to mill the green acrylic gear (Figure ~\ref{fig:gearcomparison}):
+
+\begin{center}
+	\begin{tabular}{| l | l | p{8cm} |}
+	\hline
+	Setting & Value & Comments \\ \hline
+	Sheet material & 3mm green acrylic & \\ \hline
+	Cutting bit & 1mm diameter endmill & Cambam estimated maxmimum endmill size to be ~1.4mm diameter. \\ \hline
+	%conventional milling
+	Depth increment & 1mm & Chosen to produce part quickly at the expense of edge quality. \\ \hline
+%	12mm clearance plane
+	Cut feedrate & 70mm/min & Very slow feedrate chosen for initial tests. \\ \hline
+	Plunge feedrate & 70mm/min & Slow feedrate to avoid chips clogging.\\
+	\hline
+	\end{tabular}
+\end{center}
 
 \subsubsection {Envisioned uses for milling}
 {
@@ -681,7 +689,7 @@ There are a number of uses for a machine capable of light milling:
 \centering
 \includegraphics[width=90mm]{resources/gear_comparison.jpg}
 \caption{Milled gear (left) compared to original gear (right).}
-\label{overflow}
+\label{fig:gearcomparison}
 \end{figure}
 
 \section{Operating Steps}
