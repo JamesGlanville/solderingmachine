@@ -51,9 +51,19 @@
 
 \tableofcontents
 
+\newpage
+
 \section{Introduction}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/smt_soldering.jpg}
+\caption{Example surface mount board.}
+\label{smdexample}
+\end{figure}
+
 The aim of this project is to develop ways to assist electronics hobbyists in working with SMD electronic components
-and circuit boards. SMD (Surface Mount Devices) are electronic components which are designed to be soldered to PCBs
+and circuit boards (See Figure \ref{smdexample}). SMD (Surface Mount Devices) are electronic components which are designed to be soldered to PCBs
 (Printed Circuit Boards) without requiring holes to be drilled in the board. Compared to through-hole devices, SMD parts 
 are usually smaller and cheaper and as a result are becoming ubiquitous in many applications. Even when hobbyist users do
 not require the size or cost advantages, many modern devices are only available in SMD packages. Using SMD parts require
@@ -75,9 +85,16 @@ Despite the increased complexity, many SMD parts can be soldered by hand. There 
 			while the necessary electrical connections are soldered.
 \end{itemize}
 
-These methods are imprecise, and will often neccesitate the use of solder wick or a solder sucker to remove solder bridges. More importantly, they are wholly unsuitable
+These methods are imprecise, and will often neccesitate the use of solder wick or a solder sucker to remove solder bridges (See Figure \ref{handsolder}). More importantly, they are wholly unsuitable
 for use with "leadless" packages. Instead of metal pins, these devices only have metal pads on their bases. Without exposed metal when the device is placed, it is not possible
 to solder the connections by hand.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=110mm]{resources/handsoldering.jpg}
+\caption{Removing excess solder with solder wick.}
+\label{handsolder}
+\end{figure}
 
 \subsection{Solder paste}
 
@@ -625,7 +642,7 @@ If the machine is to be used in a standalone capacity, there must be a way for t
 A 4x20 LCD is used to display information about the current job, as well as allow the user to select GCODE files. This is an inexpensive part based on the ubiquitous HD44780 controller chip.
 It is operated in 4-bit mode (as opposed to 8-bit mode, which requires four additional microcontroller pins). Six connections are required to the microcontroller: RS, EN, D4, D5, D6, D7. As
 the electronics board does not have many spare connections, it was decided to use an MCP23017 i2c port expander to connect the LCD. The Marlin firmware already supports this, and needs just
-two connections (SDA and SCL) to the driver board. See Figure ~\ref{fig:lcd_backpack} for the schematic.
+two connections (SDA and SCL) to the driver board. See Figure ~\ref{lcd_backpack} for the schematic.
 
 \begin{figure}[ht!]
 \centering
@@ -828,18 +845,18 @@ There are a number of challenges associated with working with dual sided boards:
 \addappheadtotoc
 \section{Servo tester}
 
-The ESC used to control the brushless spindle motor is controlled with standard "servo" control. This consists of variable length pulses sent approximately 20ms apart.
-The length of pulses corresponds to the position of the servo, or in this case the desired operation speed of the brushless motor. The pulses are specified to be 1-2ms,
-which correspond to the minimum and maximum desired speeds.
-
-During testing it because apparent that it would be useful to have manual control of spindle speed. I designed a simple circuit to provide the necessary pulses (See Figure ~\ref{fig:servotesterschem}).
-
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=160mm]{resources/servoexerciser.png}
 \caption{Servo tester schematic.}
-\label{servotesterschem}
+\label{fig:servotesterschem}
 \end{figure}
+
+The ESC used to control the brushless spindle motor is controlled with standard "servo" control. This consists of variable length pulses sent approximately 20ms apart.
+The length of pulses corresponds to the position of the servo, or in this case the desired operation speed of the brushless motor. The pulses are specified to be 1-2ms,
+which correspond to the minimum and maximum desired speeds.
+
+During testing it because apparent that it would be useful to have manual control of spindle speed. I designed a simple circuit to provide the necessary pulses (See Figure \ref{fig:servotesterschem}).
 
 The circuit works by using one 555 timer to generate a square wave of approximately 50Hz. This triggers a second 555 timer, which operates in monostable mode, with a pulse length
 that is dependent on the position of a potentiometer. The 50Hz wave satisfies the condition of pulses that should be sent approximately every 20ms, and the pulses are varied between 1-2ms. The speed controllers
