@@ -345,6 +345,21 @@ The first attempt to reduce the size of the extruder used bevel gears to shrink 
 
 I realised that using worm gears would give the same gear ratio in a smaller gearbox. The improved design is as small as possible and performs as well as the much larger extruder I started with.
 
+\section{Operating Speed}
+For the machine to be practical, there are some limitations on the maximum time that a board can take to manufacture. This is particularly true of the device placement stage, as this requires
+human intervention. The total time can be divided into a few main sections:
+
+\begin{itemize}
+	\item	X/Y travel.
+	\item	X/Y cutting.
+	\item	Z movement.
+	\item	Picking/placing components.
+	\item	Hot air reflow.
+\end{itemize}
+
+The X/Y travel will take the most time in total, so the estimated times should be calculated and optimised if possible. Assuming a travel speed of 10mm/s, the total
+time is simply total distance (mm) / 10.
+
 \section{Serial interface}
 For simplicity, the communication between the PC and the electronics board is implemented as a serial link. An arbitrary baud rate of 57600 has been
 chosen, this is sufficiently fast so that the electronics board is not slowed by waiting for instructions (as the firmware buffers incoming commands in
