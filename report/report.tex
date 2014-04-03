@@ -623,8 +623,16 @@ If the machine is to be used in a standalone capacity, there must be a way for t
 
 \subsubsection{Hardware}
 A 4x20 LCD is used to display information about the current job, as well as allow the user to select GCODE files. This is an inexpensive part based on the ubiquitous HD44780 controller chip.
-It is operated in 4-bit mode (as opposed to 8-bit mode, which requires four additional microcontroller pins). Six connections are required to the microcontroller: RS, EN, D4, D5, D6, D7. These
-are connected to a spare header on the driver board. 
+It is operated in 4-bit mode (as opposed to 8-bit mode, which requires four additional microcontroller pins). Six connections are required to the microcontroller: RS, EN, D4, D5, D6, D7. As
+the electronics board does not have many spare connections, it was decided to use an MCP23017 i2c port expander to connect the LCD. The Marlin firmware already supports this, and needs just
+two connections (SDA and SCL) to the driver board. See Figure ~\ref{fig:lcd_backpack} for the schematic.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=160mm]{resources/lcd_backpack.png}
+\caption{Schematic of i2c -> LCD board.}
+\label{lcd_backpack}
+\end{figure}
 
 A rotary encoder is used to provide input. This uses quadrature outputs to determine motion. The encoder also has a push switch inside for selecting options. This therefore require three microcontroller
 pins in total.
@@ -824,13 +832,13 @@ The ESC used to control the brushless spindle motor is controlled with standard 
 The length of pulses corresponds to the position of the servo, or in this case the desired operation speed of the brushless motor. The pulses are specified to be 1-2ms,
 which correspond to the minimum and maximum desired speeds.
 
-During testing it because apparent that it would be useful to have manual control of spindle speed. I designed a simple circuit to provide the necessary pulses.
+During testing it because apparent that it would be useful to have manual control of spindle speed. I designed a simple circuit to provide the necessary pulses (See Figure ~\ref{fig:servotesterschem}).
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=150mm]{resources/servoexerciser.png}
+\includegraphics[width=160mm]{resources/servoexerciser.png}
 \caption{Servo tester schematic.}
-\label{overflow}
+\label{servotesterschem}
 \end{figure}
 
 The circuit works by using one 555 timer to generate a square wave of approximately 50Hz. This triggers a second 555 timer, which operates in monostable mode, with a pulse length
