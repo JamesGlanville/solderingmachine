@@ -1,4 +1,4 @@
-EESchema-LIBRARY Version 2.3  Date: 03/04/2014 07:53:46
+EESchema-LIBRARY Version 2.3  Date: 03/04/2014 07:58:51
 #encoding utf-8
 #
 # +3.3V
@@ -19,7 +19,7 @@ ENDDEF
 # AMS1117
 #
 DEF AMS1117 U 0 40 Y Y 1 F N
-F0 "U" 300 -150 50 H V C CNN
+F0 "U" 350 -150 50 H V C CNN
 F1 "AMS1117" 0 100 50 H V C CNN
 F2 "~" 0 0 60 H V C CNN
 F3 "~" 0 0 60 H V C CNN
