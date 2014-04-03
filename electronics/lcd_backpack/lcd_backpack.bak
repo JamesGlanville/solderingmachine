@@ -1,0 +1,408 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:special
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:luminary-micro
+LIBS:MCP23017
+LIBS:ok-opto
+LIBS:lcd_conn
+EELAYER 27 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date "3 apr 2014"
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L MCP23017 U1
+U 1 1 533CCBC6
+P 2750 2400
+F 0 "U1" H 2200 3500 50  0000 C CNN
+F 1 "MCP23017" H 3200 1300 50  0000 C CNN
+F 2 "SOIC28" H 2250 1300 50  0001 C CNN
+F 3 "DOCUMENTATION" H 2750 2350 50  0001 C CNN
+	1    2750 2400
+	1    0    0    -1  
+$EndComp
+$Comp
+L LCD-HD44780 LCD1
+U 1 1 533CCC25
+P 5250 2650
+F 0 "LCD1" H 5250 2450 60  0000 C CNN
+F 1 "LCD-HD44780" H 5250 2650 60  0000 C CNN
+F 2 "" H 5250 2650 60  0000 C CNN
+F 3 "" H 5250 2650 60  0000 C CNN
+	1    5250 2650
+	0    -1   -1   0   
+$EndComp
+$Comp
+L POT RV1
+U 1 1 533CCD83
+P 4400 3450
+F 0 "RV1" H 4400 3350 50  0000 C CNN
+F 1 "10K" H 4400 3450 50  0000 C CNN
+F 2 "~" H 4400 3450 60  0000 C CNN
+F 3 "~" H 4400 3450 60  0000 C CNN
+	1    4400 3450
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R1
+U 1 1 533CCE7D
+P 5650 2600
+F 0 "R1" V 5730 2600 40  0000 C CNN
+F 1 "1K" V 5657 2601 40  0000 C CNN
+F 2 "~" V 5580 2600 30  0000 C CNN
+F 3 "~" H 5650 2600 30  0000 C CNN
+	1    5650 2600
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R2
+U 1 1 533CCF0B
+P 1300 2500
+F 0 "R2" V 1380 2500 40  0000 C CNN
+F 1 "2.2K" V 1307 2501 40  0000 C CNN
+F 2 "~" V 1230 2500 30  0000 C CNN
+F 3 "~" H 1300 2500 30  0000 C CNN
+	1    1300 2500
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R3
+U 1 1 533CCF1A
+P 1500 2500
+F 0 "R3" V 1580 2500 40  0000 C CNN
+F 1 "2.2K" V 1507 2501 40  0000 C CNN
+F 2 "~" V 1430 2500 30  0000 C CNN
+F 3 "~" H 1500 2500 30  0000 C CNN
+	1    1500 2500
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R4
+U 1 1 533CD001
+P 2050 1050
+F 0 "R4" V 2130 1050 40  0000 C CNN
+F 1 "10K" V 2057 1051 40  0000 C CNN
+F 2 "~" V 1980 1050 30  0000 C CNN
+F 3 "~" H 2050 1050 30  0000 C CNN
+	1    2050 1050
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4850 2100 4100 2100
+Wire Wire Line
+	4100 2100 4100 2450
+Wire Wire Line
+	4100 2450 3700 2450
+Wire Wire Line
+	3700 2550 4200 2550
+Wire Wire Line
+	4200 2550 4200 2200
+Wire Wire Line
+	4200 2200 4850 2200
+Wire Wire Line
+	4850 2300 4300 2300
+Wire Wire Line
+	4300 2300 4300 2650
+Wire Wire Line
+	4300 2650 3700 2650
+Wire Wire Line
+	3700 2750 4400 2750
+Wire Wire Line
+	4400 2750 4400 2400
+Wire Wire Line
+	4400 2400 4850 2400
+Wire Wire Line
+	4850 2900 4100 2900
+Wire Wire Line
+	4100 2900 4100 2850
+Wire Wire Line
+	4100 2850 3700 2850
+Wire Wire Line
+	3700 2950 4050 2950
+Wire Wire Line
+	4050 2950 4050 3000
+Wire Wire Line
+	4050 3000 4850 3000
+Wire Wire Line
+	4850 3100 4000 3100
+Wire Wire Line
+	4000 3100 4000 3050
+Wire Wire Line
+	4000 3050 3700 3050
+Wire Wire Line
+	1700 3750 5650 3750
+Wire Wire Line
+	4850 3750 4850 3400
+Wire Wire Line
+	4850 1900 4850 1750
+Wire Wire Line
+	4850 1750 5650 1750
+Connection ~ 4850 3750
+Wire Wire Line
+	4400 3700 4400 3750
+Connection ~ 4400 3750
+Wire Wire Line
+	4400 3200 4500 3200
+Wire Wire Line
+	4500 3200 4500 3300
+Wire Wire Line
+	4500 3300 4850 3300
+Wire Wire Line
+	4250 3450 4250 3150
+Wire Wire Line
+	4250 3150 4550 3150
+Wire Wire Line
+	4550 3150 4550 3200
+Wire Wire Line
+	4550 3200 4850 3200
+Wire Wire Line
+	5650 1750 5650 2350
+Wire Wire Line
+	5650 3750 5650 2850
+Wire Wire Line
+	4700 3300 4700 2000
+Wire Wire Line
+	4700 2000 4850 2000
+Connection ~ 4700 3300
+Wire Wire Line
+	1800 1950 1700 1950
+Wire Wire Line
+	1700 1800 1700 3750
+Wire Wire Line
+	1700 2150 1800 2150
+Wire Wire Line
+	1800 2050 1700 2050
+Connection ~ 1700 2050
+Connection ~ 2750 3750
+Connection ~ 1700 2150
+Wire Wire Line
+	2300 1050 2750 1050
+Wire Wire Line
+	1800 1050 1800 1500
+Wire Wire Line
+	1800 2900 1500 2900
+Wire Wire Line
+	1500 2750 1500 3500
+Wire Wire Line
+	1300 2750 1300 3000
+Wire Wire Line
+	1300 3000 1800 3000
+Wire Wire Line
+	1150 2250 1500 2250
+Wire Wire Line
+	1400 2250 1400 950 
+Wire Wire Line
+	1400 950  2400 950 
+Wire Wire Line
+	2400 950  2400 1050
+Connection ~ 2400 1050
+Connection ~ 1400 2250
+$Comp
+L C C1
+U 1 1 533CD19D
+P 1600 1500
+F 0 "C1" H 1600 1600 40  0000 L CNN
+F 1 "100nF" H 1606 1415 40  0000 L CNN
+F 2 "~" H 1638 1350 30  0000 C CNN
+F 3 "~" H 1600 1500 60  0000 C CNN
+	1    1600 1500
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1600 1300 1600 950 
+Connection ~ 1600 950 
+Wire Wire Line
+	1600 1700 1600 1800
+Wire Wire Line
+	1600 1800 1700 1800
+Connection ~ 1700 1950
+$Comp
+L VCC #PWR1
+U 1 1 533CD22C
+P 2000 800
+F 0 "#PWR1" H 2000 900 30  0001 C CNN
+F 1 "VCC" H 2000 900 30  0000 C CNN
+F 2 "" H 2000 800 60  0000 C CNN
+F 3 "" H 2000 800 60  0000 C CNN
+	1    2000 800 
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2000 800  2000 950 
+Connection ~ 2000 950 
+$Comp
+L VDD #PWR2
+U 1 1 533CD27C
+P 2000 3900
+F 0 "#PWR2" H 2000 4000 30  0001 C CNN
+F 1 "VDD" H 2000 4010 30  0000 C CNN
+F 2 "" H 2000 3900 60  0000 C CNN
+F 3 "" H 2000 3900 60  0000 C CNN
+	1    2000 3900
+	1    0    0    1   
+$EndComp
+Wire Wire Line
+	2000 3900 2000 3750
+Connection ~ 2000 3750
+$Comp
+L SPEAKER SP1
+U 1 1 533CD2E9
+P 5150 850
+F 0 "SP1" H 5050 1100 70  0000 C CNN
+F 1 "SPEAKER" H 5050 600 70  0000 C CNN
+F 2 "~" H 5150 850 60  0000 C CNN
+F 3 "~" H 5150 850 60  0000 C CNN
+	1    5150 850 
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED D1
+U 1 1 533CD2F8
+P 5150 1350
+F 0 "D1" H 5150 1450 50  0000 C CNN
+F 1 "LED" H 5150 1250 50  0000 C CNN
+F 2 "~" H 5150 1350 60  0000 C CNN
+F 3 "~" H 5150 1350 60  0000 C CNN
+	1    5150 1350
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED D2
+U 1 1 533CD307
+P 5150 1600
+F 0 "D2" H 5150 1700 50  0000 C CNN
+F 1 "LED" H 5150 1500 50  0000 C CNN
+F 2 "~" H 5150 1600 60  0000 C CNN
+F 3 "~" H 5150 1600 60  0000 C CNN
+	1    5150 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R5
+U 1 1 533CD325
+P 4550 1350
+F 0 "R5" V 4630 1350 40  0000 C CNN
+F 1 "1K" V 4557 1351 40  0000 C CNN
+F 2 "~" V 4480 1350 30  0000 C CNN
+F 3 "~" H 4550 1350 30  0000 C CNN
+	1    4550 1350
+	0    1    1    0   
+$EndComp
+$Comp
+L R R6
+U 1 1 533CD334
+P 4550 1600
+F 0 "R6" V 4630 1600 40  0000 C CNN
+F 1 "1K" V 4557 1601 40  0000 C CNN
+F 2 "~" V 4480 1600 30  0000 C CNN
+F 3 "~" H 4550 1600 30  0000 C CNN
+	1    4550 1600
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4850 950  4750 950 
+Wire Wire Line
+	4750 950  4750 1200
+Wire Wire Line
+	4750 1200 5350 1200
+Wire Wire Line
+	5350 1200 5350 1600
+Connection ~ 5350 1350
+Wire Wire Line
+	5350 1350 5800 1350
+Wire Wire Line
+	5800 1350 5800 2900
+Wire Wire Line
+	5800 2900 5650 2900
+Connection ~ 5650 2900
+Wire Wire Line
+	4800 1350 4950 1350
+Wire Wire Line
+	4800 1600 4950 1600
+Wire Wire Line
+	3700 2000 3800 2000
+Wire Wire Line
+	3800 2000 3800 750 
+Wire Wire Line
+	3800 750  4850 750 
+Wire Wire Line
+	3700 2100 3900 2100
+Wire Wire Line
+	3900 2100 3900 1350
+Wire Wire Line
+	3900 1350 4300 1350
+Wire Wire Line
+	3700 2200 4000 2200
+Wire Wire Line
+	4000 2200 4000 1600
+Wire Wire Line
+	4000 1600 4300 1600
+$Comp
+L LCD_CONN J1
+U 1 1 533CDE16
+P 1150 3150
+F 0 "J1" H 1150 2600 60  0000 C CNN
+F 1 "LCD_CONN" H 1150 3150 60  0000 C CNN
+F 2 "" H 1150 3150 60  0000 C CNN
+F 3 "" H 1150 3150 60  0000 C CNN
+	1    1150 3150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1300 3400 1700 3400
+Connection ~ 1700 3400
+Wire Wire Line
+	1300 3300 1400 3300
+Wire Wire Line
+	1400 3300 1400 3050
+Wire Wire Line
+	1400 3050 1150 3050
+Wire Wire Line
+	1150 3050 1150 2250
+Connection ~ 1300 2250
+Wire Wire Line
+	1500 3500 1300 3500
+Connection ~ 1500 2900
+Wire Wire Line
+	1300 3600 1600 3600
+Wire Wire Line
+	1600 3600 1600 3000
+Connection ~ 1600 3000
+$EndSCHEMATC
