@@ -77,6 +77,26 @@ not require the size or cost advantages, many modern devices are only available 
 smaller board features (A manufacturing challenge) as well as more advanced soldering techniques. For this project, a machine
 is envisioned which solves some or all of the challenges involved to ease the process of SMD board development.
 
+
+As an example of the need for such a machine, see Figure \ref{usbisolator}. I needed to make a USB isolator (to make USB connections to devices with non-isolated
+power supplies), which uses an ADUM3160 SOIC-28 part (See full schematic, Figure \ref{usbisolatorschem}). Without an automated method of board manufacture, I hand drew
+traces in etch-resist on each side of a double-sided board, and manually soldered all SMD parts. This was slow, and as figure \ref{usbisolator} shows, does not give
+neat results.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=120mm]{resources/usbisolator.jpg}
+\caption{My USB isolator.}
+\label{usbisolator}
+\end{figure}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=120mm]{resources/isolatorschem.png}
+\caption{USB isolator schematic.}
+\label{usbisolatorschem}
+\end{figure}
+
 \section{Existing Solutions}
 There are a number of hobbyist solutions to deal with SMD parts:
 
