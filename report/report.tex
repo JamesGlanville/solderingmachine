@@ -641,7 +641,34 @@ I have not yet measured the exact forces exerted by the routing bit, but I estim
 will need to exert the same or greater force to ensure that the board does not move. This in turn places extra resistance on the motor movement.
 
 \subsection{Testing methodology}
-In order to characterise the accuracy of the machine, it is important to have a consistent measuring regime.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/dialgauge.png}
+\caption{Measurement setup (this is a placeholder image).}
+\label{dialgauge}
+\end{figure}
+
+In order to characterise the accuracy of the machine, it is important to have a consistent measuring regime. I am using a dial gauge to measure
+relative positions of the axes. See Figure ~\ref{dialgauge} for the experimental setup. It is important to ensure the worst-case error is acceptable. The causes of error and their effects are:
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=150mm]{resources/errors.png}
+\caption{Measurement setup, showing error notation.}
+\label{errornotation}
+\end{figure}
+
+Effects are shown with reference to Figure ~\ref{errornotation}, noting that the X and Y referred to in the figure do not necessarily represent the machine axes.
+\begin{itemize} \itemsep0em
+	\item	Z displacement: It is possible the surface of the bed will move in the vertical direction, something that should not happen ideally. This 
+			will occur if the surface over which the idler bearing runs is not flat, or due to manufacturing tolerances in the linear slides.
+	\item	Rotation: The drawer slides do not elimanate rotation completely, and this error dominates. Rotation is relative to the small ball bearing array which slides along
+			the drawer slides, so this source of error depends on the absolute slide position. Figure ~\ref{errornotation} shows the largest error possible, with the ball bearings
+			far away from the location of maximum error, where rotation effects dominate.
+	\item	Motion parallel to the axis direction. This error is mostly caused by flex in the stepper motor mounts, the motor->threaded rod couplers and the anti-backlash nuts.
+	\item	Motion perpendicular to the axis direction. This error is caused by small amounts of slop in the drawer slides.
+\end{itemize}
 
 \section{Hot air tool}
 
