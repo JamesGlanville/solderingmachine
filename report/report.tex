@@ -77,7 +77,7 @@ not require the size or cost advantages, many modern devices are only available 
 smaller board features (A manufacturing challenge) as well as more advanced soldering techniques. For this project, a machine
 is envisioned which solves some or all of the challenges involved to ease the process of SMD board development.
 
-
+\vspace{0.5cm}
 As an example of the need for such a machine, see Figure \ref{usbisolator}. I needed to make a USB isolator (to make USB connections to devices with non-isolated
 power supplies), which uses an ADUM3160 SOIC-28 part (See full schematic, Figure \ref{usbisolatorschem}). Without an automated method of board manufacture, I hand drew
 traces in etch-resist on each side of a double-sided board, and manually soldered all SMD parts. This was slow, and as figure \ref{usbisolator} shows, does not give
@@ -114,15 +114,16 @@ In this report, the following terminology is assumed:
 There are a number of hobbyist solutions to deal with SMD parts:
 
 \subsection{Hand soldering}
-Despite the increased complexity, many SMD parts can be soldered by hand. There are two main methodologies for this process:
+Despite the increased complexity, many SMD parts can be soldered by hand. There are three main methodologies for this process:
 
 \begin{itemize}
 	\item	The pins are soldered individually. This is mainly suitable for larger SMD parts. A steady hand is required, as well as good eyesight.
 			Binocular microscopes are often used to assist this process.
-			
 	\item	The process of "drag soldering" is used. The device is placed on the board, and a small amount of solder is placed on the tip of a soldering iron.
 			The iron is slowly "dragged" along the pins. If done correctly, surface tension effects cause the majority of the solder to remain on the tip of the iron,
 			while the necessary electrical connections are soldered.
+	\item	The pins are roughly soldered, making sure each pin is at least soldered to the board. Many short circuits between adjacent pins will be present. Solder wick
+			is then used with copious flux to remove excess solder between pins.
 \end{itemize}
 
 These methods are imprecise, and will often neccesitate the use of solder wick or a solder sucker to remove solder bridges (See Figure \ref{handsolder}). More importantly, they are wholly unsuitable
@@ -632,13 +633,15 @@ A vacuum needle solution is workable, and a good choice for this project. Things
 \label{overflow}
 \end{figure}
 
-
 It is important to measure the accuracy of the axes to ensure that they can reach the specified +-0.05mm. This will need to be measured
 at all points on the bed (as the accuracy will worsen when the bed is central due to increased rod deflection.). Of particular concern will be
 the deflection under the load of the isolation routing bit. The solder paste and device placement will not involve any significant force. The 
 drilling will generate a force, but the tolerance required of a 1mm hole is not nearly as demanding as that of the isolation routing cutter.
 I have not yet measured the exact forces exerted by the routing bit, but I estimate that they are 5-10N. This means that the anti-backlash nut
 will need to exert the same or greater force to ensure that the board does not move. This in turn places extra resistance on the motor movement.
+
+\subsection{Testing methodology}
+In order to characterise the accuracy of the machine, it is important to have a consistent measuring regime.
 
 \section{Hot air tool}
 
