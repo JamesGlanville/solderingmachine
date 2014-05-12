@@ -18,6 +18,24 @@
 	urldate = {2014-05-12},
 	author = {James Glanville},
 	title = {JamesGlanville / pcb2gcode-metric}}
+	
+@ONLINE {imodela,
+	url = {http://www.imodela.co.uk/},
+	urldate = {2014-05-12},
+	author = {TechSoft UK Limited},
+	title = {iModela, the smart compact milling / engraving machine.}}
+	
+@ONLINE {caliperdata,
+	url = {http://www.robotroom.com/Caliper-Digital-Data-Port.html},
+	urldate = {2014-05-12},
+	author = {David Cook},
+	title = {Interfacing with Digital Calipers}}
+	
+@ONLINE {fpga4fun,
+	url = {http://www.fpga4fun.com/SMD.html},
+	urldate = {2014-05-12},
+	author = {Jean P. Nicolle},
+	title = {SMD (Surface Mount Device) / SMT (Surface Mount Technology)}}
 \end{filecontents}
 
 \documentclass[a4paper,11pt]{article}  % Standard document class
@@ -74,7 +92,6 @@
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=100mm]{resources/render.png}
-\caption{Rendered image of machine.}
 \label{render}
 \end{figure}
 
@@ -101,9 +118,9 @@ smaller board features (A manufacturing challenge) as well as more advanced sold
 is envisioned which solves some or all of the challenges involved to ease the process of SMD board development.
 
 \vspace{0.5cm}
-As an example of the need for such a machine, see Figure \ref{usbisolator}. I needed to make a USB isolator (to make USB connections to devices with non-isolated
-power supplies), which uses an ADUM3160 SOIC-28 part (See full schematic, Figure \ref{usbisolatorschem}). Without an automated method of board manufacture, I hand drew
-traces in etch-resist on each side of a double-sided board, and manually soldered all SMD parts. This was slow, and as figure \ref{usbisolator} shows, does not give
+As an example of the need for such a machine, see Figure \ref{usbisolator}. A USB isolator was required (to make USB connections to devices with non-isolated
+power supplies), which uses an ADUM3160 SOIC-28 part (See full schematic, Figure \ref{usbisolatorschem}). Without an automated method of board manufacture, the
+traces were hand drawn in etch-resist on each side of a double-sided board, and manually soldered all SMD parts. This was slow, and as figure \ref{usbisolator} shows, does not give
 neat results.
 
 \section{Terminology}
@@ -117,6 +134,8 @@ In this report, the following terminology is assumed:
 			for strength.
 	\item	THT: Through-hole technology. An older technology (compared to SMD) where component leads are inserted into holes in a PCB. Still used in cases where the superior 
 			attachment strength in required.
+	\item	CNC: Computer numerical control. Refers to the automation of machine tools with programmed commands.
+	\item	GCODE: A human-readable numerical control programming language, commonly used in CNC machines.
 \end{itemize}
 
 \begin{figure}[ht!]
@@ -149,7 +168,7 @@ Despite the increased complexity, many SMD parts can be soldered by hand. There 
 			is then used with copious flux to remove excess solder between pins.
 \end{itemize}
 
-These methods are imprecise, and will often neccesitate the use of solder wick or a solder sucker to remove solder bridges (See Figure \ref{handsolder}). More importantly, they are wholly unsuitable
+These methods are imprecise, and will often necessitate the use of solder wick or a solder sucker to remove solder bridges (See Figure \ref{handsolder}). More importantly, they are wholly unsuitable
 for use with "leadless" packages. Instead of metal pins, these devices only have metal pads on their bases. Without exposed metal when the device is placed, it is not possible
 to solder the connections by hand.
 
@@ -162,14 +181,14 @@ to solder the connections by hand.
 
 \subsection{Solder paste}
 
-Solder paste consists of powdered metal solder suspended in flux. It is used commercially to manufacture boards with SMD compenents. The solder paste is applied to the board where
+Solder paste consists of powdered metal solder suspended in flux. It is used commercially to manufacture boards with SMD components. The solder paste is applied to the board where
 connections are to be made. The devices are then placed on top (the paste has slight adhesive properties which limits undesirable component movement). Finally the paste is heated either directly
 or indirectly which causes it to melt and form solder joints. The paste is placed in a number of ways:
 
 \begin{itemize}
-			\item	Solder stencils: A thin stencil is manufactured, usually from mylar or stainless steel. It has holes which correspond to locations on the board that require solder.
+			\item	Solder stencils: A thin stencil is manufactured, usually from Mylar (trade name for BoPET) or stainless steel. It has holes which correspond to locations on the board that require solder.
 					Solder paste is then roughly applied to the top of the stencil before being scraped off. This forces controlled volumes of paste into the holes.
-					This a very quick process, and suitable for production quantities, but has the expensive setup costs of stencil manufacture.
+					This a very quick process, and suitable for production quantities, but has the expensive set-up costs of stencil manufacture.
 			\item	Solder paste can be applied by hand using a syringe. However, this requires high accuracy while placing paste and is time consuming.
 			\item	Automated solder paste extrusion uses a CNC (Computer Numerical Control) platform to manoeuvre a solder paste extruder around the board. Small amounts of paste
 					are extruded where necessary. This is not the fastest method of manufacture, but is suitable when only small numbers of boards are required.
@@ -185,9 +204,9 @@ Once the solder paste has been placed and the devices placed on top, it must be 
 \end{itemize}
 			
 \section{Project Idea}
-I have decided to approach the project by building a machine which can extrude solder paste accurately, and then place
+It was decided to approach the project by building a machine which can extrude solder paste accurately, and then place
 the surface mount devices on top. It should achieve this with minimal human interaction. The machine should also be able to
-drill holes for through-hole devices, as well as be equiped with a milling bit for isolation routing through copper-clad pcbs.
+drill holes for through-hole devices, as well as be equipped with a milling bit for isolation routing through copper-clad PCBs.
 
 \parskip 0.18in
 
@@ -199,11 +218,11 @@ design files (for example the holes to be drilled, pads to be soldered), generat
 \subsection{X/Y axes}
 A device pitch of 0.4mm (distance from centre of one pin to the next) is on the lower end of SMD ICs. Using solder paste,
 devices will shift slightly upon heating to self-align. A requirement is that the device should be placed to a
-small fraction of its pitch, so there is no danger of incorrect connections. I have decided to aim for an accuracy of $\pm$ 0.05mm
-in placement. This should be sufficient to ensure the correct connections are made, but may be difficult to achieve in practice.
+small fraction of its pitch, so there is no danger of incorrect connections. An accuracy of $\pm$ 0.05mm
+in placement was chosen as a project goal. This should be sufficient to ensure the correct connections are made, but may be difficult to achieve in practice.
 
 \subsection{Board size}
-A maximum board size of 100x100mm would be sufficient for the vast majority of boards. I have chosen 100x100mm because that
+A maximum board size of 100x100mm would be sufficient for the vast majority of boards. 100x100mm was chosen because that
 is the maximum board size using the free version of EAGLE, a popular design package. As a result, there are a lot of designs
 that use the maximum size, and it would be useful if this project allowed those designs to be populated.
 
@@ -216,12 +235,12 @@ accuracy requirement is met under this condition.
 \subsection{X/Y axes}
 
 The X/Y axes have the same requirements: $\pm$ 0.05mm accuracy. There is the choice between moving the various tools over a stationary
-bed, or keeping the tools stationary and moving the bed. I have decided to move only the bed, because it means that the pick
+bed, or keeping the tools stationary and moving the bed. Only the bed will be moved, because it means that the pick
 and place functionality does not have to move the parts, simply lift and lower them. This should reduce the risk of the parts
 shifting on the needle, or falling off. It also allows for the use of more tools since weight is no longer a concern.
 
 The bed will need travel distances of at least 100mm in both directions so that the entire bed can be accessed by tools. However,
-there should also be space to place devices before they are automatically placed. I have chosen to leave an area of 100x30mm as a compromise
+there should also be space to place devices before they are automatically placed. An area of 100x30mm was chosen as a compromise
 between maximum device storage and total machine size.
 
 \subsubsection{Possible kinematic mechanisms}
@@ -245,20 +264,20 @@ between maximum device storage and total machine size.
 \subsubsection{Possible slide mechanisms}
 \begin{itemize}
 	\item	Drawer slides: Inexpensive drawer slides contain pre-loaded ball bearings which reduce wobble.
-	\item	3d printed bushings and steel rod: If 3d printer existance assumed, then very cheap solution. These bearings
+	\item	3d printed bushings and steel rod: If 3d printer existence assumed, then very cheap solution. These bearings
 			will wear over time, so replacement must be trivial.
 	\item	LM8UUs and steel rod: About 50p each, simple to use and accurate.
 \end{itemize}
 
 \subsubsection{Chosen design}
 
-I have decided to utilise M8 threaded rod coupled to stepper motors. This simplifies control compared to a closed-loop solution, and is readily
-supported by existing microcontroller firmware. I will be using drawer slides because they are the cheapest option, and are easy to mount to flat boards.
+M8 threaded rod was chosen as the linear actuators, coupled to stepper motors. This simplifies control compared to a closed-loop solution, and is readily
+supported by existing microcontroller firmware. Drawer slides will be used because they are the cheapest option, and are easy to mount to flat boards.
 
-Having chosen to use small stepper motors to control the axes, the choice of stepper motor is now important. I had
-some NEMA17 motors, which claim a 2.2Kg/cm holding torque. I decided to run some tests to see what the maximum
-speed I could run them at without skipping steps, and found a result of 10mm/s. This is sufficient for use in the
-project (where speed is not a great concern), but I felt it would not be beneficial to use a smaller motor. 
+Having chosen to use small stepper motors to control the axes, the choice of stepper motor is now important. Some NEMA17 motors were tested,
+ which claim a 2.2Kg/cm holding torque. Tests were run to see what their maximum
+speed without skipping steps was, with a result of 10mm/s. This is sufficient for use in the
+project (where speed is not a great concern), but it was thought that it would not be beneficial to use a smaller motor. 
 
 \subsection{Z axis}
 The Z axis requires the same precision as the X and Y (Isolation routing bits are conical, therefore trace width error is proportional to height error). 
@@ -266,14 +285,14 @@ The Z axis requires the same precision as the X and Y (Isolation routing bits ar
 \subsubsection{Potential mechanisms}
 
 \begin{itemize}
-	\item	Hinged Z using micro servos: cheap (\pounds 2 on ebay). Require no drivers, and simple to drive. Z axis potentially
+	\item	Hinged Z using micro servos: cheap (\pounds 2 on eBay). Require no drivers, and simple to drive. Z axis potentially
 		does not need to be linear so rotary-\textgreater linear mechanism simpler. If not linear,
 		then hinging out of the way is a cheaper mechanism than slides.
 	\item	Using an identical threaded rod mechanism to the X and Y axes. This has the advantage of requiring less design work.
 \end{itemize}
 
 \subsubsection{Chosen design}
-I have chosen to use the same mechanism (threaded rod and stepper motors) for the Z axis. Ideally the axes will be as similar as possible which will result
+The same mechanism (threaded rod and stepper motors) was chosen for the Z axis. Ideally the axes will be as similar as possible which will result
 in less work characterising the errors in the mechanisms.
 
 \subsection{Part placement}
@@ -287,7 +306,7 @@ in less work characterising the errors in the mechanisms.
 \end{itemize}
 
 \subsubsection{Chosen design}
-I have decided to use the "vacuum tweezer" method to pick and place the parts. This is the usual method to move parts commercially, so it is a known and tested solution.
+The "vacuum tweezer" method will be used to pick and place the parts. This is the usual method to move parts commercially, so it is a known and tested solution.
 
 %\subsection{Heated Bed}
 %Soldering to a hot board is easier (smaller temperature difference). This is now irrelevant as I shall not be soldering pin-by-pin.
@@ -305,12 +324,12 @@ Drilling holes in pcbs is a time-consuming process to do by hand. It can also be
 for holes for small vias, or when holes must be aligned exactly (for example to fit a row of header pins). If this machine could drill the holes automatically,
 it would reduce the total time taken significantly. A small brushless motor with a collet would be enough. The biggest challenge
 will be mechanically coupling the motor to the drill bit. This is not intrinsically difficult, but if possible it should be made in a way that
-is accessable to people without the use of a lathe.
+is accessible to people without the use of a lathe.
 
 A 25 Amp ESC (Turnigy plush 25A, \pounds 9) powering a small brushless motor (Turnigy 2217 20turn 860kv 22A outrunner, \pounds 10) is capable of milling
 steel easily, so smaller, cheaper motors should be fine for routing/drilling copper.
 
-The imodela cnc appears to use a small ball bearing for the shaft, with custom machined shafts. The milling bits fit inside the shaft, and
+The iModela cnc (\cite{imodela}) appears to use a small ball bearing for the shaft, with custom machined shafts. The milling bits fit inside the shaft, and
 are secured with a single grub screw. This seems to work, though it would need a very carefully machined shaft so that axial misalignment
 did not shear the end of the milling bit.
 
@@ -330,7 +349,7 @@ There are a few possibilities for this process:
 			it can be an expensive method since it requires dedicated, expensive hardware.
 	\item	Hand-held hot air gun: A small hot air gun can be used to gradually melt the solder for the components (Figure \ref{hotairdemo}). There is a requirement
 			for the hot air gun that it emits sufficiently hot air at a sufficiently low velocity that the solder will melt, but also that
-			the devices will not shift under the force. I use a hot air attachment with a butane-powered soldering iron which works nicely.
+			the devices will not shift under the force. 
 			This does require the most human interaction (since it is less likely that the flow of hot air will cover the board uniformly, but it
 			is not a particularly demanding process.
 	\item	Hot-plate. A small hot-plate can be used to heat the board from underneath (see Hotplate tutorial \cite{hotplate}, \ref{hotplate}).
@@ -360,18 +379,18 @@ There are a few possibilities for this process:
 \end{figure}	
 			
 The choice of method to heat the solder paste may well depend on the end-user - one solution is not clearly superior to the others. During the
-course of this project I am likely to use the hand-held hot air gun since I possess the equipment.
+course of this project the hand-held hot air gun will be used most often due to equipment availability.
 
 \subsection{Electronics/Firmware}
-I have decided to use an AVR chip to translate GCODE to stepper motor commands for the following reasons:
+An AVR chip will be used to translate GCODE to stepper motor commands for the following reasons:
 
 \begin{itemize} \itemsep0em
-	\item	Cost: an atmega328 is \pounds 2-3, a usb-serial chip is < \pounds 2, which is not much.
-	\item	Mature open source firmware (GRBL, https://github.com/grbl/grbl) is available for gcode-\textgreater stepper
+	\item	Cost: an atmega328 is \pounds 2-3, a USB-serial chip is < \pounds 2, which is not much.
+	\item	Mature open source firmware (GRBL, https://github.com/grbl/grbl) is available for GCODE-\textgreater stepper
 		conversion, which leaves more time to focus on other parts of this project.
 \end{itemize}
 
-On the host pc, custom software will have to be written to translate the design into a gcode file to be sent to the machine. Usefully however,
+On the host pc, custom software will have to be written to translate the design into a GCODE file to be sent to the machine. Usefully however,
 the machine's firmware will not need to be written or modified significantly.
 
 \section{Improved designs}
@@ -400,7 +419,8 @@ The first attempt to reduce the size of the extruder used bevel gears to shrink 
 \label{overflow}
 \end{figure}
 
-I realised that using worm gears would give the same gear ratio in a smaller gearbox. The improved design is as small as possible and performs as well as the much larger extruder I started with.
+Worm gears would give the same gear ratio in a smaller gearbox, so a new design was made using them. The improved design is as small as possible and performs as well as the much larger extruder that
+was originally used.
 
 \section{Operating Speed}
 For the machine to be practical, there are some limitations on the maximum time that a board can take to manufacture. This is particularly true of the device placement stage, as this requires
@@ -423,8 +443,8 @@ chosen, this is sufficiently fast so that the electronics board is not slowed by
 a small buffer in RAM), and sufficiently slow that the error rate is assumed to be zero.
 
 \subsection{USB-serial cable}
-A usb-serial cable based on the FTDI FT232R chipset can be plugged into the serial header on the electronics board. This is a cheap (<\pounds 5) device that is 
-a complete solution. Driver support for the FT232R is available for all platforms that have been considered (Windows/OSX/Linux/Android).
+A USBserial cable based on the FTDI FT232R chipset can be plugged into the serial header on the electronics board. This is a cheap (<\pounds 5) device that is 
+a complete solution. Driver support for the FT232R is available for all platforms that have been considered (Windows/OS X/Linux/Android).
 
 \subsection{Bluetooth serial link}
 \begin{figure}[ht!]
@@ -442,29 +462,29 @@ a complete solution. Driver support for the FT232R is available for all platform
 \end{figure}
 
 As an alternative to a USB-serial cable, a bluetooth link can be used. Depending on the end user, this may be more convenient. The HC-05 bluetooth module was
-chosen because of its low cost (\pounds 3.50) and simplicity. The board requires a 3.3V supply, which is not present on the electronics board. I made a small
-breakout board for the module, including an AMS1117-3.3 3.3V linear regulator (\pounds 0.10) and link status LEDs. The 3.3V TX output from the module is sufficient
+chosen because of its low cost (\pounds 3.50) and simplicity. The board requires a 3.3V supply, which is not present on the electronics board. A small
+breakout board was manufactured for the module, including an AMS1117-3.3 3.3V linear regulator (\pounds 0.10) and link status LEDs. The 3.3V TX output from the module is sufficient
 for the AVR despite its higher 5V supply. To avoid damage to the bluetooth module, a potential divider consisting of two 1k resistors is used. This 2.5V output is
 again sufficient for the bluetooth module.
 
-To configure the baud rate for the bluetooth module, it was connected to a pc using a usb-serial cable. The bluetooth module is powered up whilst the "KEY" pin is held high (3.3V).
+To configure the baud rate for the bluetooth module, it was connected to a pc using a USB-serial cable. The bluetooth module is powered up whilst the "KEY" pin is held high (3.3V).
 This starts the module in AT configuration mode. The baud rate was then set by sending the string "AT+UART=57600,1,0" at 38400 baud. This configuration is only required once,
 the module stores all configuration in non-volatile storage.
 
 \section{Power Supply}
-The machine is powered with a 12V 30A power supply. It has overcurrent and overheating protection built in, but as a failsafe, a 20A fuse is added inline with the +12V cable. 
+The machine is powered with a 12V 30A power supply. It has over-current and overheating protection built in, but as a failsafe, a 20A fuse is added inline with the +12V cable. 
 
 \section{Host computer software}
 Software will have to be written to translate board cad data to gcode. Some of this already exists in the public domain, some will have to be made
 as part of this project.
 
 Isolation milling and drilling: pcb2gcode (https://github.com/festlv/pcb2gcode-metric). Takes gerber designs and generates isolation routing/drilling
-gcode. It is also capable of voronai isolation (functionally equivalent routing that cuts the least amount of material). The only configuration
+GCODE. It is also capable of voronai isolation (functionally equivalent routing that cuts the least amount of material). The only configuration
 will be to generate a millproject file with the correct cutting depths.
 
-Solder paste placement: No freely available software (as far as I am aware).
+Solder paste placement: No freely available software.
 
-Device placement: No freely available software (as far as I am aware).
+Device placement: No freely available software.
 
 The solder paste placement should be relatively straightforward. The program will simply need to find the locations of the pads, calculate their
 area, and then apply a suitable amount of paste to them. For ICs, the paste will not need to be separately applied to each pin (due to the high
@@ -474,37 +494,37 @@ The code to place devices will be the most challenging. However, provided there 
 not be too hard to calculate how to transport them to the required location.
 
 In my opinion, the most challenging part of writing the conversion code will simply be to extract the necessary data from the cad files. Once this
-has been obtained, the gcode should be easy to create.
+has been obtained, the GCODE should be easy to create.
 
 \subsection{Improvements to pcb2gcode}
-I have forked pcb2gcode on github, and my improvements are available at \cite{github}.
-To demonstrate the effects of the improvements, I have included pictures of a soic-20 breakout board being processed.
+pcb2gcode was forked on github, and the improvements from this project are available at \cite{github}.
+To demonstrate the effects of the improvements, pictures of a SOIC-20 breakout board being processed are included (Figures ~\ref{pcb2gcodeinput} , ~\ref{pcb2gcodeisolation} , ~\ref{pcb2gcodepaste} ).
 
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=90mm]{resources/breakout_copper.png}
 \caption{Input to pcb2gcode, showing the copper traces in white.}
-\label{overflow}
+\label{pcb2gcodeinput}
 \end{figure}
 
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=90mm]{resources/breakout_isolation.png}
 \caption{Output from pcb2gcode, showing isolation routing pattern (milling to be run between coloured sections).}
-\label{overflow}
+\label{pcb2gcodeisolation}
 \end{figure}
 
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=90mm]{resources/breakout_paste.png}
 \caption{Solder paste output from pcb2gcode, showing where paste is to be deposited.}
-\label{overflow}
+\label{pcb2gcodepaste}
 \end{figure}
 
 \subsubsection{Adding solder paste support}
-Solder paste information is contained in the GTP (gerber top paste) file. I decided to extend pcb2gcode to read this file, and output GCODE suitable for solder paste extrusion.
+Solder paste information is contained in the GTP (Gerber top paste) file. It was decided to extend pcb2gcode to read this file, and output GCODE suitable for solder paste extrusion.
 
-The GTP file is in the same RS-274X extended Gerber format as the other files that pcb2gcode can already read. For simplicity, I decided to use the existing Gerber processing.
+The GTP file is in the same RS-274X extended Gerber format as the other files that pcb2gcode can already read. For simplicity, the existing Gerber processing was used.
 This is retrieved in \begin{verbatim}NGC_Exporter::export_layer(see ngc_exporter.cpp)\end{verbatim}. The data is stored as a vector of vertices of each pad to be filled with solder paste.
 
 An assumption is currently made that all pads are rectangular, and that the paste can be suitably applied in a single place. This may need to be improved in the future if large areas
@@ -524,18 +544,18 @@ Retraction:
 
 The belt on the paste extruder is slightly springy. This results in the extruder continuing to extrude a small amount of solder paste after the motor has stopped moving.
 This has an adverse effect on board quality. To counter this, the extruder should be retracted slightly to remove all pressure from the syringe. The distance to retract
-as well as speed of retraction should be experimentally determined for optimum results. I have added retraction support to the solder paste output of pcb2gcode.
+as well as speed of retraction should be experimentally determined for optimum results. Retraction support has been added to the solder paste output of pcb2gcode.
 
 \section{Tools}
-I have a small mill, a 3d printer and a lathe. It may be worth considering that a lot of people/schools have
+In the course of this project, access to a small mill, a 3d printer and a lathe was essential. It may be worth considering that a lot of people/schools have
 access to a laser cutter and perhaps mill/lathe, so if possible all custom components could be 3d printed or 
-lasercut.
+laser cut.
 
 \section{Solder paste extrusion}
-I have decided to use the design here: http://www.thingiverse.com/thing:20733
+Initially, a freely available design for the paste extruder was used: http://www.thingiverse.com/thing:20733
 
 The extruder works by applying pressure to the top of the solder paste syringe. Pressure is applied by tightening a pulley made
-of T5 timing belt with a geared stepper motor. I chose this design because the extruder is compact, and the design allows for
+of T5 timing belt with a geared stepper motor. This design was chosen because the extruder is compact, and the design allows for
 fast reduction of pressure, important for clean extrusion and to avoid the solder paste dribbling. 
 
 To calibrate the extruder, two parameters are needed: steps/volume extruded and retraction steps. The first is easy to calculate:
@@ -551,7 +571,7 @@ To calibrate the extruder, two parameters are needed: steps/volume extruded and 
 	&=& 11.61 \nonumber
 \end{eqnarray}
 
-The retraction steps must be experimentally determined. The choice is a tradeoff between minimising solder paste dribble (large number
+The retraction steps must be experimentally determined. The choice is a trade-off between minimising solder paste dribble (large number
 of retraction steps) and reducing total process time (small number of retraction steps). It must be enough that negligible pressure is
 exerted on the syringe when retracted.
 
@@ -559,7 +579,7 @@ Some method to "prime" the extruder will be needed. Assuming the extruder is ini
 a possible method is to repeatedly advance the extruder and then retract by a slightly smaller amount, until the user notifies the machine
 that solder paste has been extruded. At this point, the extruder should pause after retracting. The solder paste deposition process can
 then commence since the exact point of extrusion has been established. Assuming that x is the required granularity of calibration (the 
-maximum amount of solder paste that will be wasted), and y is the retraction distance, the following example gcode will carry out this calibration:
+maximum amount of solder paste that will be wasted), and y is the retraction distance, the following example GCODE will carry out this calibration:
 
 \begin{lstlisting}[frame=single]
 //values in braces {} are to be evaluated on the host
@@ -585,27 +605,27 @@ by hand. There are a number of ways this could be done:
 	\item	Rectangular embossed outline, devices to be located in one corner.
 \end{itemize}
 
-I have decided that the latter will be easiest to implement. A rectangular hole will be milled into the bed. Each part can then
-be manually placed inside, then pushed to one corner. A consistent system will be needed to ensure correct orientation. I have decided to use
-the following set of rules:
+It was decided that the latter would be simplest to implement. A rectangular hole will be milled into the bed. Each part can then
+be manually placed inside, then pushed to one corner. A consistent system will be needed to ensure correct orientation. The following set of rules
+is to be used:
 
 \begin{itemize} \itemsep0em
-	\item	ICs will be placed with pin1 touching the datum corner.
+	\item	ICs will be placed with pin 1 touching the datum corner.
 	\item	Devices will always be placed with the longest side (if applicable) touching the long side of the rectangle.
-	\item	Devices such as mosfets will be placed with the corner between the longest side and side with most pins touching the datum corner.
+	\item	Devices such as MOSFETs will be placed with the corner between the longest side and side with most pins touching the datum corner.
 	\item	Polar 2-lead devices with always have the anode nearest the datum corner.
 \end{itemize}
 
 Given the current component to be placed, and the device footprint, it will be trivial to find the coordinates of the centre of the part. Some
-consideration will have to be given as to how to determine the centre of mass of parts which are not symmetrical in two directions (eg mosfets).
+consideration will have to be given as to how to determine the centre of mass of parts which are not symmetrical in two directions (e.g. MOSFETs).
 	   
 \section{Vacuum Placing}
 \subsection{Prototype}
-To test how effectively small parts could be placed with a vacuum, I made a simple test setup:
+To test how effectively small parts could be placed with a vacuum, a simple test setup was fabricated:
 
 \begin{itemize} \itemsep0em
-	\item	12V diaphragm air pump (\pounds 8.89 - ebay)
-	\item	6mm OD/4mm ID silicone tube (\pounds 2.69/m - ebay)
+	\item	12V diaphragm air pump (\pounds 8.89 - eBay)
+	\item	6mm OD/4mm ID silicone tube (\pounds 2.69/m - eBay)
 	\item	various needles (need more info here)
 	\item	MOSFET
 	\item	330$\Omega$ resistor
@@ -629,7 +649,7 @@ A vacuum needle solution is workable, and a good choice for this project. Things
 	\item	The pump takes a certain time to generate a vacuum because of the relatively large internal volume of the pump
 		and silicon tube. It will be important to measure this, and add a margin of error so that full suction is applied
 		to each device before any movement takes place. Similarly, when turning off the pump, the pressure must return to
-		atmospheric before the device can be considered to have been placed succesfully. In testing, the pump I used took
+		atmospheric before the device can be considered to have been placed successfully. In testing, the pump took
 		less than a second to leak sufficiently for this to occur, but if another pump were to be used, it may be necessary
 		to place a tiny hole in the air line so that pressure drops quickly.
 	\item	It is important to place the needle very near to the centre of mass of the device. The majority of devices will be
@@ -658,7 +678,7 @@ It is important to measure the accuracy of the axes to ensure that they can reac
 at all points on the bed (as the accuracy will worsen when the bed is central due to increased rod deflection.). Of particular concern will be
 the deflection under the load of the isolation routing bit. The solder paste and device placement will not involve any significant force. The 
 drilling will generate a force, but the tolerance required of a 1mm hole is not nearly as demanding as that of the isolation routing cutter.
-I have not yet measured the exact forces exerted by the routing bit, but I estimate that they are 5-10N. This means that the anti-backlash nut
+The exact forces exerted by the routing bit have yet to be measured, but are estimated to be 5-10N. This means that the anti-backlash nut
 will need to exert the same or greater force to ensure that the board does not move. This in turn places extra resistance on the motor movement.
 
 \subsection{Testing methodology}
@@ -666,11 +686,11 @@ will need to exert the same or greater force to ensure that the board does not m
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=90mm]{resources/dialgauge.png}
-\caption{Measurement setup (this is a placeholder image).}
+\caption{Measurement setup (This is a placeholder image).}
 \label{dialgauge}
 \end{figure}
 
-In order to characterise the accuracy of the machine, it is important to have a consistent measuring regime. I am using a dial gauge to measure
+In order to characterise the accuracy of the machine, it is important to have a consistent measuring regime. A dial gauge is used to measure
 relative positions of the axes. See Figure ~\ref{dialgauge} for the experimental setup. It is important to ensure the worst-case error is acceptable. The causes of error and their effects are:
 
 \begin{figure}[ht!]
@@ -684,7 +704,7 @@ Effects are shown with reference to Figure ~\ref{errornotation}, noting that the
 \begin{itemize} \itemsep0em
 	\item	Z displacement: It is possible the surface of the bed will move in the vertical direction, something that should not happen ideally. This 
 			will occur if the surface over which the idler bearing runs is not flat, or due to manufacturing tolerances in the linear slides.
-	\item	Rotation: The drawer slides do not elimanate rotation completely, and this error dominates. Rotation is relative to the small ball bearing array which slides along
+	\item	Rotation: The drawer slides do not eliminate rotation completely, and this error dominates. Rotation is relative to the small ball bearing array which slides along
 			the drawer slides, so this source of error depends on the absolute slide position. Figure ~\ref{errornotation} shows the largest error possible, with the ball bearings
 			far away from the location of maximum error, where rotation effects dominate.
 	\item	Motion parallel to the axis direction. This error is mostly caused by flex in the stepper motor mounts, the motor-\textgreater threaded rod couplers and the anti-backlash nuts.
@@ -709,7 +729,7 @@ A hot air tool used for soldering has the following requirements:
 \begin{itemize} \itemsep0em
 	\item	Ability to heat solder paste up to $240\,^{\circ}\mathrm{C}$
 	\item	Slow, steady airflow
-	\item	Controllable temperature (ie not open-loop)
+	\item	Controllable temperature (i.e. not open-loop)
 \end{itemize}
 
 \subsection{Calculations}
@@ -730,7 +750,7 @@ Power required to heat air (assuming losses) = 4.88*2 = 9.76W
 For simplicity, it is assumed that the heater requires 10W of input power.
 
 The design is based on a small coil of nichrome resistance wire as a heating element. Calculations must be made to find
-the size of wire reqired:
+the size of wire required:
 
 Size of coil (Chosen to be similar in diameter to the air tube with 6mm OD/4mm ID)
 
@@ -777,7 +797,7 @@ Resistance of 110.84mm of 0.315mm diameter nichrome wire:
 It may be useful to operate the machine without a connected PC. In the case of manufacturing a large number of boards, it may be impractical to dedicate a PC simply to sending GCODE.
 In addition, some functions of the machine produce dust, and are noisy. Allowing the machine to operate in a more remote location could be convenient. 
 
-The steps taken to produce GCODE (eg running pcb2gcode) will always need a PC, but once the GCODE has been produced it is possible for the machine to read this from connected storage.
+The steps taken to produce GCODE (e.g. running pcb2gcode) will always need a PC, but once the GCODE has been produced it is possible for the machine to read this from connected storage.
 
 \subsection{SD card reading}
 SD cards are ideal for use with microcontrollers, as they have a simple protocol (SPI), and are inexpensive. They also have wide compatibility with other devices. It would be useful if 
@@ -791,7 +811,7 @@ is used. Level translation must be used to convert the four connections to the r
 	\item	Potential dividers. This is the simplest option, using only resistors. The CS, MOSI and CLK connections send data to the SD card. A potential divider is used to reduce the voltages
 			from 5V to 3.3V. The MISO connection receives data from the SD card. The AVR has a high input threshold of above 2.6V. MISO can therefore be connected as it operates up to 3.3V. 
 			Although this is the simplest option, the high impedance output from the potential divider can cause problems at fast SPI speeds, as the SD card presents a relatively high
-			capacative loading.
+			capacitive loading.
 	\item	Discrete transistors can be used to translate between 3.3V and 5V. This has the advantage of faster operation, and increasing the noise margins (reduced when using 3.3V with a 5V chip).
 			Two transistors are needed for each connection to ensure the signal is not inverted.
 	\item	A level translation IC can be used. This needs no additional components (except from a decoupling capacitor).
@@ -848,7 +868,7 @@ The following settings were used to mill the green acrylic gear (Figure ~\ref{fi
 	\hline
 	Setting & Value & Comments \\ \hline
 	Sheet material & 3mm green acrylic & \\ \hline
-	Cutting bit & 1mm diameter endmill & Cambam estimated maxmimum endmill size to be ~1.4mm diameter. \\ \hline
+	Cutting bit & 1mm diameter endmill & Cambam estimated maximum endmill size to be ~1.4mm diameter. \\ \hline
 	%conventional milling
 	Depth increment & 1mm & Chosen to produce part quickly at the expense of edge quality. \\ \hline
 %	12mm clearance plane
@@ -863,7 +883,7 @@ The following settings were used to mill the green acrylic gear (Figure ~\ref{fi
 There are a number of uses for a machine capable of light milling:
 
 \begin{itemize} \itemsep0em
-	\item	Manufacturing PCBs with arbitrary shapes. For example, It is possible to build connecters from PCBs that lie on the circuit board if they can be milled to the correct shape.
+	\item	Manufacturing PCBs with arbitrary shapes. For example, It is possible to build connectors from PCBs that lie on the circuit board if they can be milled to the correct shape.
 			For example, USB connectors. This reduces part cost.
 	\item	Improving the finish of 3d printed components. In cases where the rough edges of 3d printed parts are not satisfactory, a milling pass over the piece can increase the flatness
 			of edges.
@@ -1021,7 +1041,7 @@ The ESC used to control the brushless spindle motor is controlled with standard 
 The length of pulses corresponds to the position of the servo, or in this case the desired operation speed of the brushless motor. The pulses are specified to be 1-2ms,
 which correspond to the minimum and maximum desired speeds.
 
-During testing it because apparent that it would be useful to have manual control of spindle speed. I designed a simple circuit to provide the necessary pulses (See Figure \ref{fig:servotesterschem}).
+During testing it because apparent that it would be useful to have manual control of spindle speed. A simple circuit was designed to provide the necessary pulses (See Figure \ref{fig:servotesterschem}).
 
 The circuit works by using one 555 timer to generate a square wave of approximately 50Hz. This triggers a second 555 timer, which operates in monostable mode, with a pulse length
 that is dependent on the position of a potentiometer. The 50Hz wave satisfies the condition of pulses that should be sent approximately every 20ms, and the pulses are varied between 1-2ms. The speed controllers
@@ -1046,11 +1066,11 @@ has been useful in project development.
 \end{figure}
 
 During the testing of accuracy it was necessary to take a large number of positional measurements in all directions. 
-To speed up this process, I modified an inexpensive pair of callipers to output a serial data stream which could be logged
-against the position according to the firmware. Instructions located at http://www.robotroom.com/Caliper-Digital-Data-Port.html
+To speed up this process, an inexpensive pair of callipers was modified to output a serial data stream which could be logged
+against the position according to the firmware. Instructions located here: \cite{caliperdata}.
 
-The positional data can be read from four traces on the calliper internal PCB. For convenience, I brought out the +V, ground, data and clock lines
-on to four 2.54" pin headers. As the callipers are powered by a 1.5V battery, NPN transistors are used to amplify the signals to 5V. An ATTINY2313
+The positional data can be read from four traces on the calliper internal PCB. For convenience, the +V, ground, data and clock lines
+were brought out on to four 2.54" pin headers. As the callipers are powered by a 1.5V battery, NPN transistors are used to amplify the signals to 5V. An ATTINY2313
 decodes the data stream and converts it to a serial stream, sent via a USB-serial cable to the PC.
 
 \newpage
@@ -1059,7 +1079,7 @@ decodes the data stream and converts it to a serial stream, sent via a USB-seria
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=150mm]{resources/SMDsizes.jpg}
-\caption{Example SMD components (From fpga4fun.com)}
+\caption{Example SMD components (From \cite{fpga4fun})}
 \label{overflow}
 \end{figure}
 
