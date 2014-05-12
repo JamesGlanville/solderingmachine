@@ -83,6 +83,19 @@ power supplies), which uses an ADUM3160 SOIC-28 part (See full schematic, Figure
 traces in etch-resist on each side of a double-sided board, and manually soldered all SMD parts. This was slow, and as figure \ref{usbisolator} shows, does not give
 neat results.
 
+\section{Terminology}
+
+In this report, the following terminology is assumed:
+
+\begin{itemize} \itemsep0em
+	\item	PCB: Printed circuit board. A circuit board made of an insulating sheet covered in conductive traces to which components are soldered. FR-4 is the common grade
+			of glass-reinforced epoxy used in most PCBs, and as such is the only material covered by this project.
+	\item	SMD: Surface mount device. A component with no through-hole leads which is designed to be soldered to a PCB. In some cases the components are glued to the board
+			for strength.
+	\item	THT: Through-hole technology. An older technology (compared to SMD) where component leads are inserted into holes in a PCB. Still used in cases where the superior 
+			attachment strength in required.
+\end{itemize}
+
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=120mm]{resources/usbisolator.jpg}
@@ -386,7 +399,7 @@ chosen, this is sufficiently fast so that the electronics board is not slowed by
 a small buffer in RAM), and sufficiently slow that the error rate is assumed to be zero.
 
 \subsection{USB-serial cable}
-A usb-serial cable based on the FTDI ft232r chipset can be plugged into the serial header on the electronics board. This is a cheap (<\pounds 5) device that is 
+A usb-serial cable based on the FTDI FT232R chipset can be plugged into the serial header on the electronics board. This is a cheap (<\pounds 5) device that is 
 a complete solution. Driver support for the FT232R is available for all platforms that have been considered (Windows/OSX/Linux/Android).
 
 \subsection{Bluetooth serial link}
@@ -612,6 +625,14 @@ A vacuum needle solution is workable, and a good choice for this project. Things
 \end{figure}
 
 \section{Measuring Accuracy}
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=170mm]{resources/registration.png}
+\caption{Visual alignment test using one side of a TQFP-32 Atmega328.}
+\label{overflow}
+\end{figure}
+
+
 It is important to measure the accuracy of the axes to ensure that they can reach the specified +-0.05mm. This will need to be measured
 at all points on the bed (as the accuracy will worsen when the bed is central due to increased rod deflection.). Of particular concern will be
 the deflection under the load of the isolation routing bit. The solder paste and device placement will not involve any significant force. The 
@@ -641,13 +662,15 @@ A hot air tool used for soldering has the following requirements:
 \subsection{Calculations}
 
 Assumptions:
-Specific heat capacity of dry air is not significantly affected by temperature for estimates of power required.
-50\% of energy into heater is used to heat hot air stream (other radiative losses)
+\begin{itemize} \itemsep0em
+	\item Specific heat capacity of dry air is not significantly affected by temperature for estimates of power required.
+	\item 50\% of energy into heater is used to heat hot air stream (other radiative losses)
+	\item Flow rate of air pump = 18 cm\textsuperscript{3} / s
+	\item Specific heat capacity of dry air = 1.006 J/gK. This is assumed to not change significantly with temperature (acceptable to $\pm$ 10\%).
+	\item Room temperature of 20\textsuperscript{0}C, temperature required is 240\textsuperscript{0}C. Delta T = 220K
+	\item Density of air = 0.001225 g / cm\textsuperscript{3}
+\end{itemize}
 
-Flow rate of air pump = 18 cm\textsuperscript{3} / s
-Specific heat capacity of dry air = 1.006 J/gK
-Delta T = 240 - 20 = 220K
-Density of air = 0.001225 g / cm\textsuperscript{3}
 Power required to heat air (ideal) = (18*0.001225)*220*1.006 = 4.88W
 Power required to heat air (assuming losses) = 4.88*2 = 9.76W
 
@@ -1134,6 +1157,10 @@ Auto-generate from "Part List.xlsx" using http://ericwood.org/excel2latex/
 	AMS1117-3.3 3.3V linear regulator & 1 & 0.03 & ebay & http://www.ebay.co.uk/itm/141128141176 & \  \\ \hline
 \end{tabular}
 
+\newpage
+\section{Improvements to report}
+Need to do:
 
+Get up to date render of machine for start of report.
 
 \end{document}
