@@ -54,6 +54,40 @@
 \usepackage{biblatex}
 \addbibresource{bibliography.bib}
 
+\usepackage[xindy,toc]{glossaries}
+\makeglossaries
+
+\newglossaryentry{GCODE}
+{
+	name=GCODE,
+	description={A human-readable numerical control programming language, commonly used in CNC machines}
+}
+
+\newglossaryentry{PCB}
+{
+	name=PCB,
+	description={Printed circuit board. A circuit board made of an insulating sheet covered in conductive traces to which components are soldered. FR-4 is the common grade
+			of glass-reinforced epoxy used in most PCBs, and as such is the only material covered by this project.}
+}
+
+\newglossaryentry{SMD}
+{
+	name=SMD,
+	description={Surface mount device. A component with no through-hole leads which is designed to be soldered to a PCB. In some cases the components are glued to the board
+			for strength.}
+}
+\newglossaryentry{THT}
+{
+	name=THT,
+	description = {Through-hole technology. An older technology (compared to SMD) where component leads are inserted into holes in a PCB. Still used in cases where the superior 
+			attachment strength in required.}
+}
+\newglossaryentry{CNC}
+{
+	name=CNC,
+	description = {Computer numerical control. Refers to the automation of machine tools with programmed commands.}
+}
+
 %\usepackage{placeins}                  % Allows use of \FloatBarrier
 % to avoid images or tables
 % moving into next section
@@ -110,8 +144,8 @@
 \end{figure}
 
 The aim of this project is to develop ways to assist electronics hobbyists in working with SMD electronic components
-and circuit boards (See Figure \ref{smdexample}). SMD (Surface Mount Devices) are electronic components which are designed to be soldered to PCBs
-(Printed Circuit Boards) without requiring holes to be drilled in the board. Compared to through-hole devices, SMD parts 
+and circuit boards (See Figure \ref{smdexample}). \gls{SMD}s are electronic components which are designed to be soldered to \gls{PCB}s
+(Printed Circuit Boards) without requiring holes to be drilled in the board. Compared to through-hole devices(\gls{THT}), SMD parts 
 are usually smaller and cheaper and as a result are becoming ubiquitous in many applications. Even when hobbyist users do
 not require the size or cost advantages, many modern devices are only available in SMD packages. Using SMD parts require
 smaller board features (A manufacturing challenge) as well as more advanced soldering techniques. For this project, a machine
@@ -122,21 +156,6 @@ As an example of the need for such a machine, see Figure \ref{usbisolator}. A US
 power supplies), which uses an ADUM3160 SOIC-28 part (See full schematic, Figure \ref{usbisolatorschem}). Without an automated method of board manufacture, the
 traces were hand drawn in etch-resist on each side of a double-sided board, and manually soldered all SMD parts. This was slow, and as figure \ref{usbisolator} shows, does not give
 neat results.
-
-\section{Terminology}
-
-In this report, the following terminology is assumed:
-
-\begin{itemize} \itemsep0em
-	\item	PCB: Printed circuit board. A circuit board made of an insulating sheet covered in conductive traces to which components are soldered. FR-4 is the common grade
-			of glass-reinforced epoxy used in most PCBs, and as such is the only material covered by this project.
-	\item	SMD: Surface mount device. A component with no through-hole leads which is designed to be soldered to a PCB. In some cases the components are glued to the board
-			for strength.
-	\item	THT: Through-hole technology. An older technology (compared to SMD) where component leads are inserted into holes in a PCB. Still used in cases where the superior 
-			attachment strength in required.
-	\item	CNC: Computer numerical control. Refers to the automation of machine tools with programmed commands.
-	\item	GCODE: A human-readable numerical control programming language, commonly used in CNC machines.
-\end{itemize}
 
 \begin{figure}[ht!]
 \centering
@@ -1230,11 +1249,15 @@ Auto-generate from "Part List.xlsx" using http://ericwood.org/excel2latex/
 	AMS1117-3.3 3.3V linear regulator & 1 & 0.03 & ebay & http://www.ebay.co.uk/itm/141128141176 & \  \\ \hline
 \end{tabular}
 
+
+
 \newpage
 \section{Improvements to report}
 Need to do:
 
 Get up to date render of machine for start of report.
+
+\printglossaries
 
 \nocite{*}
 \printbibliography
