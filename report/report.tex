@@ -1,5 +1,25 @@
 % File name: report/report.tex
 
+\begin{filecontents}{bibliography.bib}
+@ONLINE {toastersmd,
+    url= {http://openhardware.net/Misc_Stuff/ToasterSMD/},
+    urldate = {2014-05-12},
+    author = {Tom Walsh},
+    title = {ToasterSMD}}
+    
+@ONLINE {hotplate,
+	url = {http://www.hobbytronics.co.uk/hotplate-smd-soldering},
+	urldate = {2014-05-12},
+	author = {Hobbytronics},
+	title= {Hotplate Surface Mount SMD Soldering Tutorial}}
+	
+@ONLINE {github,
+	url = {https://github.com/JamesGlanville/pcb2gcode-metric},
+	urldate = {2014-05-12},
+	author = {James Glanville},
+	title = {JamesGlanville / pcb2gcode-metric}}
+\end{filecontents}
+
 \documentclass[a4paper,11pt]{article}  % Standard document class
 \usepackage[english]{babel}            % Set document language
 \usepackage{fullpage}                  % Set up page for small margins etc
@@ -12,6 +32,9 @@
 \usepackage{appendix}
 \usepackage{color}
 \usepackage{hyperref}
+
+\usepackage{biblatex}
+\addbibresource{bibliography.bib}
 
 %\usepackage{placeins}                  % Allows use of \FloatBarrier
 % to avoid images or tables
@@ -243,7 +266,7 @@ The Z axis requires the same precision as the X and Y (Isolation routing bits ar
 \subsubsection{Potential mechanisms}
 
 \begin{itemize}
-	\item	Hinged Z using micro servos: cheap (£2 on ebay). Require no drivers, and simple to drive. Z axis potentially
+	\item	Hinged Z using micro servos: cheap (\pounds 2 on ebay). Require no drivers, and simple to drive. Z axis potentially
 		does not need to be linear so rotary-\textgreater linear mechanism simpler. If not linear,
 		then hinging out of the way is a cheaper mechanism than slides.
 	\item	Using an identical threaded rod mechanism to the X and Y axes. This has the advantage of requiring less design work.
@@ -284,7 +307,7 @@ it would reduce the total time taken significantly. A small brushless motor with
 will be mechanically coupling the motor to the drill bit. This is not intrinsically difficult, but if possible it should be made in a way that
 is accessable to people without the use of a lathe.
 
-A 25 Amp ESC (Turnigy plush 25A, £9) powering a small brushless motor (Turnigy 2217 20turn 860kv 22A outrunner, £10) is capable of milling
+A 25 Amp ESC (Turnigy plush 25A, \pounds 9) powering a small brushless motor (Turnigy 2217 20turn 860kv 22A outrunner, \pounds 10) is capable of milling
 steel easily, so smaller, cheaper motors should be fine for routing/drilling copper.
 
 The imodela cnc appears to use a small ball bearing for the shaft, with custom machined shafts. The milling bits fit inside the shaft, and
@@ -302,7 +325,7 @@ Once the board has been pasted and the parts deposited, the solder paste needs t
 There are a few possibilities for this process:
 
 \begin{itemize} %\itemsep0em
-	\item	Oven: a small oven can be used to heat the entire board (see: http://www.openhardware.net/Misc\_Stuff/ToasterSMD/, \ref{toasteroven}). This appears to
+	\item	Oven: a small oven can be used to heat the entire board (see: ToasterSMD \cite{toastersmd}, Figure \ref{toasteroven}). This appears to
 			work well, however the oven should not be used for food after that, since the components of solder paste are toxic. As a result,
 			it can be an expensive method since it requires dedicated, expensive hardware.
 	\item	Hand-held hot air gun: A small hot air gun can be used to gradually melt the solder for the components (Figure \ref{hotairdemo}). There is a requirement
@@ -310,7 +333,7 @@ There are a few possibilities for this process:
 			the devices will not shift under the force. I use a hot air attachment with a butane-powered soldering iron which works nicely.
 			This does require the most human interaction (since it is less likely that the flow of hot air will cover the board uniformly, but it
 			is not a particularly demanding process.
-	\item	Hot-plate. A small hot-plate can be used to heat the board from underneath (see http://www.hobbytronics.co.uk/hotplate-smd-soldering, \ref{hotplate}).
+	\item	Hot-plate. A small hot-plate can be used to heat the board from underneath (see Hotplate tutorial \cite{hotplate}, \ref{hotplate}).
 			An advantage compared to the oven method is that a piece of thermally conductive metal can be used between a hotplate and the board, so
 			that the hot plate will not become food-unsafe. 
 \end{itemize}
@@ -343,7 +366,7 @@ course of this project I am likely to use the hand-held hot air gun since I poss
 I have decided to use an AVR chip to translate GCODE to stepper motor commands for the following reasons:
 
 \begin{itemize} \itemsep0em
-	\item	Cost: an atmega328 is £2-3, a usb-serial chip is <£2, which is not much.
+	\item	Cost: an atmega328 is \pounds 2-3, a usb-serial chip is < \pounds 2, which is not much.
 	\item	Mature open source firmware (GRBL, https://github.com/grbl/grbl) is available for gcode-\textgreater stepper
 		conversion, which leaves more time to focus on other parts of this project.
 \end{itemize}
@@ -419,8 +442,8 @@ a complete solution. Driver support for the FT232R is available for all platform
 \end{figure}
 
 As an alternative to a USB-serial cable, a bluetooth link can be used. Depending on the end user, this may be more convenient. The HC-05 bluetooth module was
-chosen because of its low cost (£3.50) and simplicity. The board requires a 3.3V supply, which is not present on the electronics board. I made a small
-breakout board for the module, including an AMS1117-3.3 3.3V linear regulator (£0.10) and link status LEDs. The 3.3V TX output from the module is sufficient
+chosen because of its low cost (\pounds 3.50) and simplicity. The board requires a 3.3V supply, which is not present on the electronics board. I made a small
+breakout board for the module, including an AMS1117-3.3 3.3V linear regulator (\pounds 0.10) and link status LEDs. The 3.3V TX output from the module is sufficient
 for the AVR despite its higher 5V supply. To avoid damage to the bluetooth module, a potential divider consisting of two 1k resistors is used. This 2.5V output is
 again sufficient for the bluetooth module.
 
@@ -454,7 +477,7 @@ In my opinion, the most challenging part of writing the conversion code will sim
 has been obtained, the gcode should be easy to create.
 
 \subsection{Improvements to pcb2gcode}
-I have forked pcb2gcode on github, and my improvements are available at https://github.com/JamesGlanville/pcb2gcode-metric
+I have forked pcb2gcode on github, and my improvements are available at \cite{github}.
 To demonstrate the effects of the improvements, I have included pictures of a soic-20 breakout board being processed.
 
 \begin{figure}[ht!]
@@ -518,17 +541,15 @@ fast reduction of pressure, important for clean extrusion and to avoid the solde
 To calibrate the extruder, two parameters are needed: steps/volume extruded and retraction steps. The first is easy to calculate:
 
 (All dimensions in mm,mm\textsuperscript{2},mm\textsuperscript{3})
-\begin{align}
-	Volume extruded per step &= (cross-sectional area of syringe * T5 pitch * number of teeth of T5 pulley) \\&/ (number of microsteps/step * steps/rotation of motor * gear reduction ratio)\\
-	&= (66.1276*5*10)/(16*200*12)\\
-	&= 0.0861 mm\textsuperscript{3}\\
-\end{align}
 
-\begin{align}					 
-	Steps/mm\textsuperscript{3} &= 1 / volume extruded per step\\
-	&= 1 / 0.0861\\
-	&= 11.61\\
-\end{align}
+\begin{eqnarray}
+\text{Volume extruded / step} &=& \frac{\text{cross-sectional area of syringe} \times \text{T5 pitch} \times \text{number of teeth of T5 pulley}}{\text{number of microsteps} \times \text{steps/revolution} \times \text{gear reduction ratio}} \nonumber \\
+&=&\frac{66.1276 \times 5 \times 10}{16 \times 200 \times 12} \nonumber \\
+&=&0.0861mm\textsuperscript{3} \nonumber \\
+	\text{Steps / mm\textsuperscript{3}} &=& \frac{1} {\text{volume extruded / step}} \nonumber \\
+	&=& \frac{1}{ 0.0861} \nonumber \\
+	&=& 11.61 \nonumber
+\end{eqnarray}
 
 The retraction steps must be experimentally determined. The choice is a tradeoff between minimising solder paste dribble (large number
 of retraction steps) and reducing total process time (small number of retraction steps). It must be enough that negligible pressure is
@@ -583,8 +604,8 @@ consideration will have to be given as to how to determine the centre of mass of
 To test how effectively small parts could be placed with a vacuum, I made a simple test setup:
 
 \begin{itemize} \itemsep0em
-	\item	12V diaphragm air pump (£8.89 - ebay)
-	\item	6mm OD/4mm ID silicone tube (£2.69/m - ebay)
+	\item	12V diaphragm air pump (\pounds 8.89 - ebay)
+	\item	6mm OD/4mm ID silicone tube (\pounds 2.69/m - ebay)
 	\item	various needles (need more info here)
 	\item	MOSFET
 	\item	330$\Omega$ resistor
@@ -666,9 +687,11 @@ Effects are shown with reference to Figure ~\ref{errornotation}, noting that the
 	\item	Rotation: The drawer slides do not elimanate rotation completely, and this error dominates. Rotation is relative to the small ball bearing array which slides along
 			the drawer slides, so this source of error depends on the absolute slide position. Figure ~\ref{errornotation} shows the largest error possible, with the ball bearings
 			far away from the location of maximum error, where rotation effects dominate.
-	\item	Motion parallel to the axis direction. This error is mostly caused by flex in the stepper motor mounts, the motor->threaded rod couplers and the anti-backlash nuts.
+	\item	Motion parallel to the axis direction. This error is mostly caused by flex in the stepper motor mounts, the motor-\textgreater threaded rod couplers and the anti-backlash nuts.
 	\item	Motion perpendicular to the axis direction. This error is caused by small amounts of slop in the drawer slides.
 \end{itemize}
+
+As it is only important to measure the worst-case error, the point shown in purple in Figure ~\ref(errornotation) is the only point which will be measured. 
 
 \section{Hot air tool}
 
@@ -1192,5 +1215,8 @@ Auto-generate from "Part List.xlsx" using http://ericwood.org/excel2latex/
 Need to do:
 
 Get up to date render of machine for start of report.
+
+\nocite{*}
+\printbibliography
 
 \end{document}
