@@ -36,6 +36,12 @@
 	urldate = {2014-05-12},
 	author = {Jean P. Nicolle},
 	title = {SMD (Surface Mount Device) / SMT (Surface Mount Technology)}}
+	
+@ONLINE {smdwiki,
+	url = {http://en.wikipedia.org/wiki/Surface-mount_technology},
+	urldate = {2014-05-12},
+	author = {various},
+	title = {Surface-mount technology}}
 \end{filecontents}
 
 \documentclass[a4paper,11pt]{article}  % Standard document class
@@ -50,6 +56,9 @@
 \usepackage{appendix}
 \usepackage{color}
 \usepackage{hyperref}
+
+\usepackage{caption}
+\usepackage{subcaption}
 
 \usepackage{biblatex}
 \addbibresource{bibliography.bib}
@@ -145,7 +154,7 @@
 
 The aim of this project is to develop ways to assist electronics hobbyists in working with SMD electronic components
 and circuit boards (See Figure \ref{smdexample}). \gls{SMD}s are electronic components which are designed to be soldered to \gls{PCB}s
-(Printed Circuit Boards) without requiring holes to be drilled in the board. Compared to through-hole devices(\gls{THT}), SMD parts 
+(Printed Circuit Boards) without requiring holes to be drilled in the board. Compared to \gls{THT}(Through-hole technology), SMD parts 
 are usually smaller and cheaper and as a result are becoming ubiquitous in many applications. Even when hobbyist users do
 not require the size or cost advantages, many modern devices are only available in SMD packages. Using SMD parts require
 smaller board features (A manufacturing challenge) as well as more advanced soldering techniques. For this project, a machine
@@ -156,6 +165,14 @@ As an example of the need for such a machine, see Figure \ref{usbisolator}. A US
 power supplies), which uses an ADUM3160 SOIC-28 part (See full schematic, Figure \ref{usbisolatorschem}). Without an automated method of board manufacture, the
 traces were hand drawn in etch-resist on each side of a double-sided board, and manually soldered all SMD parts. This was slow, and as figure \ref{usbisolator} shows, does not give
 neat results.
+
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=150mm]{resources/SMDsizes.jpg}
+\caption{Example SMD components (From \cite{fpga4fun})}
+\label{overflow}
+\end{figure}
 
 \begin{figure}[ht!]
 \centering
@@ -376,25 +393,28 @@ There are a few possibilities for this process:
 			that the hot plate will not become food-unsafe. 
 \end{itemize}
 		
-\begin{figure}[ht!]
+\begin{figure}
 \centering
-\includegraphics[width=90mm]{resources/boardintheoven.jpg}
-\caption{SMD board being reflowed in a toasted oven.}
-\label{toasteroven}
-\end{figure}
-	
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/hotair_demo.jpg}
-\caption{SMD component being soldered with a hand-held hot air gun.}
-\label{hotairdemo}
-\end{figure}	
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/hotplate.jpg}
-\caption{SMD board being soldered with a hotplate.}
-\label{hotplate}
+\begin{minipage}{.3\textwidth}
+	\centering
+	\includegraphics[width=40mm]{resources/boardintheoven.jpg}
+	\captionof{figure}{SMD board being reflowed in a toasted oven.}
+	\label{toasteroven}
+\end{minipage}%
+\hfill
+\begin{minipage}{.3\textwidth}
+	\centering
+	\includegraphics[width=40mm]{resources/hotair_demo.jpg}
+	\captionof{figure}{SMD component being soldered with a hand-held hot air gun.}
+	\label{hotairdemo}
+\end{minipage}%
+\hfill
+\begin{minipage}{.3\textwidth}
+	\centering
+	\includegraphics[width=40mm]{resources/hotplate.jpg}
+	\captionof{figure}{SMD board being soldered with a hotplate.}
+	\label{hotplate}
+\end{minipage}
 \end{figure}	
 			
 The choice of method to heat the solder paste may well depend on the end-user - one solution is not clearly superior to the others. During the
@@ -441,21 +461,6 @@ The first attempt to reduce the size of the extruder used bevel gears to shrink 
 Worm gears would give the same gear ratio in a smaller gearbox, so a new design was made using them. The improved design is as small as possible and performs as well as the much larger extruder that
 was originally used.
 
-\section{Operating Speed}
-For the machine to be practical, there are some limitations on the maximum time that a board can take to manufacture. This is particularly true of the device placement stage, as this requires
-human intervention. The total time can be divided into a few main sections:
-
-\begin{itemize}
-	\item	X/Y travel.
-	\item	X/Y cutting.
-	\item	Z movement.
-	\item	Picking/placing components.
-	\item	Hot air reflow.
-\end{itemize}
-
-The X/Y travel will take the most time in total, so the estimated times should be calculated and optimised if possible. Assuming a travel speed of 10mm/s, the total
-time is simply total distance (mm) / 10.
-
 \section{Serial interface}
 For simplicity, the communication between the PC and the electronics board is implemented as a serial link. An arbitrary baud rate of 57600 has been
 chosen, this is sufficiently fast so that the electronics board is not slowed by waiting for instructions (as the firmware buffers incoming commands in
@@ -465,20 +470,20 @@ a small buffer in RAM), and sufficiently slow that the error rate is assumed to 
 A USBserial cable based on the FTDI FT232R chipset can be plugged into the serial header on the electronics board. This is a cheap (<\pounds 5) device that is 
 a complete solution. Driver support for the FT232R is available for all platforms that have been considered (Windows/OS X/Linux/Android).
 
-\subsection{Bluetooth serial link}
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/bluetoothmodule.jpg}
-\caption{Bluetooth module mounted on breakout board.}
-\label{overflow}
-\end{figure}
+%\subsection{Bluetooth serial link}
+%\begin{figure}[ht!]
+%\centering
+%\includegraphics[width=90mm]{resources/bluetoothmodule.jpg}
+%\caption{Bluetooth module mounted on breakout board.}
+%\label{overflow}
+%\end{figure}
 
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=160mm]{resources/hc05breakout.png}
-\caption{Bluetooth breakout module schematic.}
-\label{overflow}
-\end{figure}
+%\begin{figure}[ht!]
+%\centering
+%\includegraphics[width=160mm]{resources/hc05breakout.png}
+%\caption{Bluetooth breakout module schematic.}
+%\label{overflow}
+%\end{figure}
 
 As an alternative to a USB-serial cable, a bluetooth link can be used. Depending on the end user, this may be more convenient. The HC-05 bluetooth module was
 chosen because of its low cost (\pounds 3.50) and simplicity. The board requires a 3.3V supply, which is not present on the electronics board. A small
@@ -581,6 +586,8 @@ To calibrate the extruder, two parameters are needed: steps/volume extruded and 
 
 (All dimensions in mm,mm\textsuperscript{2},mm\textsuperscript{3})
 
+The solder paste is supplied in a 2.5ml syringe, with a 66.1276mm\textsuperscript{2} cross-sectional area.
+
 \begin{eqnarray}
 \text{Volume extruded / step} &=& \frac{\text{cross-sectional area of syringe} \times \text{T5 pitch} \times \text{number of teeth of T5 pulley}}{\text{number of microsteps} \times \text{steps/revolution} \times \text{gear reduction ratio}} \nonumber \\
 &=&\frac{66.1276 \times 5 \times 10}{16 \times 200 \times 12} \nonumber \\
@@ -597,21 +604,22 @@ exerted on the syringe when retracted.
 Some method to "prime" the extruder will be needed. Assuming the extruder is initially hand-tightened so that the belt has little slack,
 a possible method is to repeatedly advance the extruder and then retract by a slightly smaller amount, until the user notifies the machine
 that solder paste has been extruded. At this point, the extruder should pause after retracting. The solder paste deposition process can
-then commence since the exact point of extrusion has been established. Assuming that x is the required granularity of calibration (the 
-maximum amount of solder paste that will be wasted), and y is the retraction distance, the following example GCODE will carry out this calibration:
+then commence since the exact point of extrusion has been established. 
+%Assuming that x is the required granularity of calibration (the 
+%maximum amount of solder paste that will be wasted), and y is the retraction distance, the following example GCODE will carry out this calibration:
 
-\begin{lstlisting}[frame=single]
-//values in braces {} are to be evaluated on the host
-
-//Start loop here:
-G92 E{y} //Set extruder position in firmware to be y
-G1 E{x+y} //Extrude x amount of paste
-G1 E{y} //Retract
-//if user has not indicated extrusion then loop again
-
-//when the user has indicated extrusion:
-G92 E{y}
-\end{lstlisting}
+%\begin{lstlisting}[frame=single]
+%//values in braces {} are to be evaluated on the host
+%
+%//Start loop here:
+%G92 E{y} //Set extruder position in firmware to be y
+%G1 E{x+y} //Extrude x amount of paste
+%G1 E{y} //Retract
+%//if user has not indicated extrusion then loop again
+%
+%//when the user has indicated extrusion:
+%G92 E{y}
+%\end{lstlisting}
 	  
 \section{Managing devices prior to placement}
 There will need to be a way to place the devices in a known position, so they can then be picked up and placed in their final locations.
@@ -684,6 +692,21 @@ A vacuum needle solution is workable, and a good choice for this project. Things
 \caption{SMD resistor being picked up.}
 \label{overflow}
 \end{figure}
+
+\section{Operating Speed}
+For the machine to be practical, there are some limitations on the maximum time that a board can take to manufacture. This is particularly true of the device placement stage, as this requires
+human intervention. The total time can be divided into a few main sections:
+
+\begin{itemize}
+	\item	X/Y travel.
+	\item	X/Y cutting.
+	\item	Z movement.
+	\item	Picking/placing components.
+	\item	Hot air reflow.
+\end{itemize}
+
+The X/Y travel will take the most time in total, so the estimated times should be calculated and optimised if possible. Assuming a travel speed of 10mm/s, the total
+time is simply total distance (mm) / 10.
 
 \section{Measuring Accuracy}
 \begin{figure}[ht!]
@@ -869,6 +892,9 @@ The spindle on the machine is quite capable of light milling, with some limitati
 	\item	Milling bits only protrude from the spindle by approximately 8mm (depending on the bit). This means that this is the deepest cut the machine is capable of making.
 	\item	The axes do not have the rigidity required for milling tough materials. Plastics and wood are possible, while metals are not.
 	\item	The spindle only supports parts with a 3mm shank.
+	\item	The spindle speed is variable from 1000-\textgreater40000rpm unloaded. The speed controller attempts to maintain the rotational speed setpoint, however it prioritises
+			correct motor commutation. Therefore at higher speeds under heavy loads care must be taken that the spindle speed does not drop significantly. In practice this is unlikely
+			to be a problem, as the motor has a maximum power of 250W and has significant moment of inertia.
 \end{itemize}
 
 As this functionality is not a central focus of this project, only a simple demonstration of milling ability was done. The spur gear used in the gear extruder is cut from 6mm acrylic:
@@ -1095,14 +1121,7 @@ decodes the data stream and converts it to a serial stream, sent via a USB-seria
 \newpage
 \section{SMD component types}
 
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=150mm]{resources/SMDsizes.jpg}
-\caption{Example SMD components (From \cite{fpga4fun})}
-\label{overflow}
-\end{figure}
-
-A large variety of SMD types and sizes are available. A selection is described here (from wikipedia, cite?)
+A large variety of SMD types and sizes are available. A selection is described here (from \cite{smdwiki})
 
 \subsection{Two-terminal passive components (mostly resistors and capacitors)}
 Package types are given a four digit code, which describes the length and width in mm.
