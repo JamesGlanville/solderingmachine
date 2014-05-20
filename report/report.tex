@@ -117,7 +117,7 @@
 \providecommand{\degrees}{\ensuremath{^{\circ}}}
 
 % Define title here:
-\title{4th Year Project: Soldering Machine}
+\title{4th Year Project: Automated soldering/solder paste machine (C-PJGL2-7)} %C-PJGL2-7
 \author{James Glanville}
 \date{11th June 2013}
 
@@ -1140,83 +1140,6 @@ SOT-223 is a 6.7x3.7x1.8mm body, three terminals plus a heat transfer pad.
 
 \subsection{SOIC: Small-Outline Integrated Circuit}
 Dual-in-line devices with 8 or more gull-wing lead form pins, spacing of 1.27mm
-
-\newpage
-\section{Building pcb2gcode from source}
-
-The pcb2gcode source should first be obtained:
-\begin{lstlisting}[frame=single]
-git clone git@github.com:JamesGlanville/pcb2gcode-metric.git
-\end{lstlisting}
-
-\subsection{Compilation in Linux}
-For these instructions the use of Ubuntu/Debian is assumed, although other distributions should be similar.
-
-To install prerequisites:
-\begin{lstlisting}[frame=single,breaklines=true]
-sudo apt-get install build-essential automake autoconf libtool libboost-all-dev libgtkmm-2.4-dev gerbv
-\end{lstlisting}
-
-To compile pcb2gcode:
-\begin{lstlisting}[frame=single]
-cd pcb2gcode-metric
-./git-build.sh
-\end{lstlisting}
-
-(Optional) To install pcb2gcode:
-\begin{lstlisting}[frame=single]
-sudo make install
-\end{lstlisting}
-
-\subsection{Compilation in Windows}
-Installing prerequisites is more complex in Windows:
-
-\subsubsection{Visual Studio}
-Install Visual Studio 2012 Professional from:
-\begin{lstlisting}[frame=single]
-www.visualstudio.com
-\end{lstlisting}
-
-\subsubsection{GTK+ development files}
-Download:
-\begin{lstlisting}[frame=single,breaklines=true]
-http://ftp.gnome.org/pub/gnome/binaries/win32/gtk+/2.24/gtk+-bundle_2.24.10-20120208_win32.zip
-\end{lstlisting}
-and extract to pcb2gcode-metric folder.
-
-\subsubsection{Gerbv}
-download gerbv from http://sourceforge.net/projects/gerbv/
-gerbvinst-2.6.1.exe and install
-TODO: add instructions for generating .lib file
-
-\subsubsection{Boost libraries}
-\begin{lstlisting}[frame=single,breaklines=true]
-download boost_1_55_0.zip from http://sourceforge.net/projects/boost/
-\end{lstlisting}
-unzip contents to c:\\boost155
-open VS2012 x86 Native Tools Command Prompt, from C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Microsoft Visual Studio 2012\\Visual Studio Tools
-AS ADMINISTRATOR
-cd c:\\boost155
-bootstrap.bat
-bjam.exe
-
-\subsubsection{GTKMM}
-\begin{lstlisting}[frame=single,breaklines=true]
-download http://ftp.gnome.org/pub/GNOME/binaries/win32/gtkmm/2.22/gtkmm-win32-devel-2.22.0-2.exe
-\end{lstlisting}
-from http://ftp.gnome.org/pub/GNOME/binaries/win32/gtkmm/2.22/
-and install.
-
-\subsubsection{gerbv?}
-\begin{lstlisting}[frame=single,breaklines=true]
-download gerbv-2.6.1.tar.gz from http://sourceforge.net/projects/gerbv/files/gerbv/gerbv-2.6.1/
-\end{lstlisting}
-and extract to c:\\gerbv-2.6.1
-
-hack appwindow.c
-create config.h
-create demo-config.h
-%\end{verbatim}
 
 \newpage
 \section{Part List}

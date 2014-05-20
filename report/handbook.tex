@@ -1,0 +1,277 @@
+% File name: report/handbook.tex
+
+\documentclass[a4paper,11pt]{article}  % Standard document class
+\usepackage[english]{babel}            % Set document language
+\usepackage{fullpage}                  % Set up page for small margins etc
+\usepackage{listings}
+\usepackage{graphicx}                  % For including images in document
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+
+\usepackage{appendix}
+\usepackage{color}
+\usepackage{hyperref}
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+%\usepackage{placeins}                  % Allows use of \FloatBarrier
+% to avoid images or tables
+% moving into next section
+%\usepackage{subfig}                    % For subfigures...
+
+\usepackage{amsmath}                   % For improving maths/formula typesetting
+%\usepackage{tabular}                  % Table changing package
+
+%\usepackage{algpseudocode}             % For producing algorithms/flowcharts
+
+\usepackage{listings}                  % For including source code in document
+\lstset{
+  basicstyle = \small
+}
+
+% Provide command for scientific notation
+\providecommand{\e}[1]{\ensuremath{\times10^{#1}}}
+\providecommand{\degrees}{\ensuremath{^{\circ}}}
+
+% Define title here:
+\title{Soldering Machine Handbook}
+\author{James Glanville}
+\date{15th May 2013}
+
+\hypersetup{
+    colorlinks,
+    allcolors=blue,
+    linktoc=all,
+}
+
+\begin{document}
+
+% generate title
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+\section{Introduction}
+
+This handbook lists the steps required to operate the machine, and
+produce populated PCBs. The operating system used in this handbook is
+Ubuntu 13.10. The PCB CAD program used is Kicad.
+
+\section{Prerequisites}
+The following things are assumed:
+
+\begin{itemize}
+	\item	Computer with Windows/Linux. OS X may work, but is untested.
+	\item	SD card (at least 128mb).
+\end{itemize}
+
+\section{Installing Software}
+The following steps need only be carried out once.
+
+\subsection{Installing prerequisites}
+The following command will install the necessary packages:
+
+\begin{lstlisting}
+sudo apt-get install git build-essential
+\end{lstlisting}
+
+\subsection{Obtaining software}
+The following commands will fetch the necessary software from source control.
+
+\begin{lstlisting}
+git clone https://github.com/JamesGlanville/pcb2gcode-metric.git
+git clone https://github.com/JamesGlanville/solderingmachine.git
+\end{lstlisting}
+
+\subsection{Compiling Software}
+The following command will compile pcb2gcode:
+\begin{lstlisting}
+cd pcb2gcode-metric
+./git-build.sh
+\end{lstlisting}
+
+\subsection{Install pronterface (if PC control is required)}
+\begin{lstlisting}
+git clone https://github.com/kliment/Printrun.git
+\end{lstlisting}
+
+
+\subsection{Preparing SD card}
+Format the SD card to the FAT32 filesystem, ensuring the disk has an
+MSDOS partition table and that the FAT32 partition is on the first
+primary partition.
+
+In Ubuntu, the following steps are necessary:
+
+Install gparted if it is not already installed:
+
+\begin{lstlisting}
+sudo apt-get install gparted
+\end{lstlisting}
+
+Launch gparted as root:
+\begin{lstlisting}
+sudo gparted
+\end{lstlisting}
+
+Select the SD card using the drop down menu at the top right of the
+screen.
+
+Create the MSDOS partition table by clicking Device-\textgreater Create Partition Table.
+
+Create the FAT32 filesystem by right-clicking on the empty disk, and selecting "New". 
+Fill in the information in the dialogue box, and click "Apply changes". 
+
+\subsection{Copying utility GCODE to SD card.}
+I need to make a bunch of GCODE files, put them on github, and give instructions.
+I will need:
+
+Zeroing.
+Spindle speed.
+
+\section{Creating GERBER files.}
+Export from kicad.
+
+\section{Generating GCODE with pcb2gcode}
+\subsection{Creating millproject file.}
+
+\subsection{Copy GCODE to SD Card}
+
+\section{Isolation Routing}
+Attach copper-clad PCB to machine (how?).
+
+\subsection{Configuring the machine}
+Insert conical routing bit into the spindle. This is achieved by loosening
+the idler section, and then loosening the two machine screws holding the bit in place.
+The bit should be carefully removed by hand, and the conical routing bit 
+pushed into its place. The two machine screws should be tightened, and the idler
+tightened.
+
+The spindle tool should then be attached to the tool holder with the two
+wing nuts.
+
+\subsection{Routing}
+Run "zero.gcode" then "startspindle.gcode" then "mill.gcode"
+
+Run "stopspindle.gcode"
+
+\section{Drilling}
+This section may be ignored if no holes need be drilled through the PCB.
+
+\subsection{Configuring the machine}
+The drill bit should be inserted into the spindle tool as described in 
+the "Isolation Routing" section above.
+
+\subsection{Drilling}
+Run "zero.gcode" then "startspindle.gcode" then "drill.gcode"
+
+Run "stopspindle.gcode"
+
+\section{Paste Extrusion}
+
+\subsection{Configuring the machine}
+Insert a syringe containing a sufficient volume of solder paste into
+the paste extruder. Hand-tighten the extruder so that there is only a 
+small amount of slack in the timing belt.
+
+Attach the paste extruder to the tool holder and hand-tighten the wing 
+nuts.
+
+
+
+
+\newpage
+\appendix
+\appendixpage
+\addappheadtotoc
+
+
+
+
+
+
+\section{NEED TO DO}
+I need to describe how zeroing works, with attaching electrical clips.
+
+\newpage
+\section{Building pcb2gcode from source}
+
+The pcb2gcode source should first be obtained:
+\begin{lstlisting}[frame=single]
+git clone git@github.com:JamesGlanville/pcb2gcode-metric.git
+\end{lstlisting}
+
+\subsection{Compilation in Linux}
+For these instructions the use of Ubuntu/Debian is assumed, although other distributions should be similar.
+
+To install prerequisites:
+\begin{lstlisting}[frame=single,breaklines=true]
+sudo apt-get install build-essential automake autoconf libtool libboost-all-dev libgtkmm-2.4-dev gerbv
+\end{lstlisting}
+
+To compile pcb2gcode:
+\begin{lstlisting}[frame=single]
+cd pcb2gcode-metric
+./git-build.sh
+\end{lstlisting}
+
+(Optional) To install pcb2gcode:
+\begin{lstlisting}[frame=single]
+sudo make install
+\end{lstlisting}
+
+\subsection{Compilation in Windows}
+Installing prerequisites is more complex in Windows:
+
+\subsubsection{Visual Studio}
+Install Visual Studio 2012 Professional from:
+\begin{lstlisting}[frame=single]
+www.visualstudio.com
+\end{lstlisting}
+
+\subsubsection{GTK+ development files}
+Download:
+\begin{lstlisting}[frame=single,breaklines=true]
+http://ftp.gnome.org/pub/gnome/binaries/win32/gtk+/2.24/gtk+-bundle_2.24.10-20120208_win32.zip
+\end{lstlisting}
+and extract to pcb2gcode-metric folder.
+
+\subsubsection{Gerbv}
+download gerbv from http://sourceforge.net/projects/gerbv/
+gerbvinst-2.6.1.exe and install
+TODO: add instructions for generating .lib file
+
+\subsubsection{Boost libraries}
+\begin{lstlisting}[frame=single,breaklines=true]
+download boost_1_55_0.zip from http://sourceforge.net/projects/boost/
+\end{lstlisting}
+unzip contents to c:\\boost155
+open VS2012 x86 Native Tools Command Prompt, from C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Microsoft Visual Studio 2012\\Visual Studio Tools
+AS ADMINISTRATOR
+cd c:\\boost155
+bootstrap.bat
+bjam.exe
+
+\subsubsection{GTKMM}
+\begin{lstlisting}[frame=single,breaklines=true]
+download http://ftp.gnome.org/pub/GNOME/binaries/win32/gtkmm/2.22/gtkmm-win32-devel-2.22.0-2.exe
+\end{lstlisting}
+from http://ftp.gnome.org/pub/GNOME/binaries/win32/gtkmm/2.22/
+and install.
+
+\subsubsection{gerbv?}
+\begin{lstlisting}[frame=single,breaklines=true]
+download gerbv-2.6.1.tar.gz from http://sourceforge.net/projects/gerbv/files/gerbv/gerbv-2.6.1/
+\end{lstlisting}
+and extract to c:\\gerbv-2.6.1
+
+hack appwindow.c
+create config.h
+create demo-config.h
+%\end{verbatim}
+
+\end{document}
