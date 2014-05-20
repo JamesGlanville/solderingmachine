@@ -6,3 +6,6 @@ bibtex report.aux
 pdflatex report.tex
 makeglossaries report
 pdflatex report.tex
+
+pdflatex handbook.tex
+pdflatex handbook.tex
