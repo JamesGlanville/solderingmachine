@@ -9,3 +9,6 @@ pdflatex report.tex
 
 pdflatex handbook.tex
 pdflatex handbook.tex
+
+pdflatex technicalabstract.tex
+pdflatex technicalabstract.tex
