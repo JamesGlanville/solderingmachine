@@ -9,12 +9,14 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows}
 
-%\usepackage{appendix}
+\usepackage{appendix}
 \usepackage{color}
 \usepackage{hyperref}
 
 \usepackage{caption}
 \usepackage{subcaption}
+
+\usepackage{parskip}
 
 %\usepackage{placeins}                  % Allows use of \FloatBarrier
 % to avoid images or tables
@@ -30,6 +32,9 @@
 \lstset{
   basicstyle = \small
 }
+
+\setlength{\parindent}{0in}
+%\setlength{\parskip}{0.3cm}
 
 % Provide command for scientific notation
 \providecommand{\e}[1]{\ensuremath{\times10^{#1}}}
@@ -70,28 +75,13 @@ The following things are assumed:
 \end{itemize}
 
 \section{Installing Software}
-The following steps need only be carried out once.
+First install pcb2gcode as described in Appendix \ref{sec:buildpcb2gcode}.
 
-\subsection{Installing prerequisites}
-The following command will install the necessary packages:
 
+\subsection{Project files}
+Fetch the project's files from source control:
 \begin{lstlisting}[frame=single,breaklines=true]
-sudo apt-get install git build-essential
-\end{lstlisting}
-
-\subsection{Obtaining software}
-The following commands will fetch the necessary software from source control.
-
-\begin{lstlisting}[frame=single,breaklines=true]
-git clone https://github.com/JamesGlanville/pcb2gcode-metric.git
 git clone https://github.com/JamesGlanville/solderingmachine.git
-\end{lstlisting}
-
-\subsection{Compiling Software}
-The following command will compile pcb2gcode:
-\begin{lstlisting}[frame=single,breaklines=true]
-cd pcb2gcode-metric
-./git-build.sh
 \end{lstlisting}
 
 \subsection{Install pronterface (if PC control is required)}
@@ -149,53 +139,137 @@ into the directory containing the GERBER files, and modified if necessary (see i
 
 \subsection{Copy GCODE to SD Card}
 
-\section{Isolation Routing}
-Attach copper-clad PCB to machine (how?).
+\section{Operating the machine}
+The following steps described the various stages involved in producing
+a populated and soldered circuit board. Some steps (such as drilling)
+may be omitted if not required.
 
-\subsection{Configuring the machine}
+\subsection{Attaching the PCB}
+Attach copper-clad PCB to machine using double sided tape. It is important that the PCB is level,
+so care must be taken ensure the tape is not bunched or folded. The PCB should be firmly
+pressed to the bed to ensure a strong bond.
+
+\subsection{Isolation Routing}
+\begin{enumerate}
+
+\item
 Insert conical routing bit into the spindle. This is achieved by loosening
 the idler section, and then loosening the two machine screws holding the bit in place.
 The bit should be carefully removed by hand, and the conical routing bit 
 pushed into its place. The two machine screws should be tightened, and the idler
 tightened.
 
+\item
 The spindle tool should then be attached to the tool holder with the two
 wing nuts.
 
-\subsection{Routing}
-Run "zero.gcode" then "startspindle.gcode" then "mill.gcode"
+\item
+Switch on the machine.
 
-Run "stopspindle.gcode"
+\item
+Insert the SD card containing all of the GCODE files and power on the 
+machine.
 
-\section{Drilling}
+\item
+Run \textbf{zero.gcode} then \textbf{startspindle.gcode} then \textbf{mill.gcode}
+
+\item
+When routing is complete, run \textbf{stopspindle.gcode}
+
+\end{enumerate}
+
+\subsection{Drilling}
 This section may be ignored if no holes need be drilled through the PCB.
 
-\subsection{Configuring the machine}
+\begin{enumerate}
+\item
 The drill bit should be inserted into the spindle tool as described in 
 the "Isolation Routing" section above.
 
-\subsection{Drilling}
-Run "zero.gcode" then "startspindle.gcode" then "drill.gcode"
+\item
+Switch on the machine.
 
-Run "stopspindle.gcode"
+\item
+Insert the SD card containing all of the GCODE files and power on the 
+machine.
 
-\section{Paste Extrusion}
+\item
+Run \textbf{zero.GCODE} then \textbf{startspindle.GCODE} then \textbf{drill.GCODE}
 
-\subsection{Configuring the machine}
+\item
+When drilling is complete, run \textbf{stopspindle.GCODE}
+
+\end{enumerate}
+
+\subsection{Paste Extrusion}
+
+\begin{enumerate}
+
+\item
 Insert a syringe containing a sufficient volume of solder paste into
 the paste extruder. Hand-tighten the extruder so that there is only a 
 small amount of slack in the timing belt.
 
+\item
 Attach the paste extruder to the tool holder and hand-tighten the wing 
 nuts.
 
+\item
+Switch on the machine.
 
+\item
+Insert the SD card containing all of the GCODE files and power on the 
+machine.
+
+\item
+Run \textbf{zero.GCODE} then \textbf{prime.GCODE} then \textbf{paste.GCODE}
+
+\end{enumerate}
+
+\subsection{Placing components}
+\begin{enumerate}
+\item
+Attach the vacuum needle tool to the machine and tighten with the wing nuts.
+
+\item
+Fill the part tray with the necessary SMD components.
+
+\item
+Switch on the machine.
+
+\item
+Insert the SD card containing all of the GCODE files and power on the 
+machine.
+
+\item
+Run \textbf{zero.GCODE} then \textbf{place.GCODE}.
+\end{enumerate}
+
+\subsection{Reflowing the board}
+\begin{enumerate}
+\item
+Attach the hot air tool to the machine and tighten with the wing nuts.
+
+\item
+Switch on the machine.
+
+\item
+Insert the SD card containing all of the GCODE files and power on the 
+machine.
+
+\item
+Run \textbf{zero.GCODE} then \textbf{reflow.GCODE}.
+
+\item
+Run \textbf{cooldown.GCODE}
+
+\end{enumerate}
 
 
 \newpage
-%\appendix
-%\appendixpage
-%\addappheadtotoc
+\appendix
+\appendixpage
+\addappheadtotoc
 
 %\newpage
 \section{Building pcb2gcode from source}
