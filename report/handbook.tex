@@ -9,7 +9,7 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows}
 
-\usepackage{appendix}
+%\usepackage{appendix}
 \usepackage{color}
 \usepackage{hyperref}
 
@@ -75,27 +75,27 @@ The following steps need only be carried out once.
 \subsection{Installing prerequisites}
 The following command will install the necessary packages:
 
-\begin{lstlisting}
+\begin{lstlisting}[frame=single,breaklines=true]
 sudo apt-get install git build-essential
 \end{lstlisting}
 
 \subsection{Obtaining software}
 The following commands will fetch the necessary software from source control.
 
-\begin{lstlisting}
+\begin{lstlisting}[frame=single,breaklines=true]
 git clone https://github.com/JamesGlanville/pcb2gcode-metric.git
 git clone https://github.com/JamesGlanville/solderingmachine.git
 \end{lstlisting}
 
 \subsection{Compiling Software}
 The following command will compile pcb2gcode:
-\begin{lstlisting}
+\begin{lstlisting}[frame=single,breaklines=true]
 cd pcb2gcode-metric
 ./git-build.sh
 \end{lstlisting}
 
 \subsection{Install pronterface (if PC control is required)}
-\begin{lstlisting}
+\begin{lstlisting}[frame=single,breaklines=true]
 git clone https://github.com/kliment/Printrun.git
 \end{lstlisting}
 
@@ -109,12 +109,12 @@ In Ubuntu, the following steps are necessary:
 
 Install gparted if it is not already installed:
 
-\begin{lstlisting}
+\begin{lstlisting}[frame=single,breaklines=true]
 sudo apt-get install gparted
 \end{lstlisting}
 
 Launch gparted as root:
-\begin{lstlisting}
+\begin{lstlisting}[frame=single,breaklines=true]
 sudo gparted
 \end{lstlisting}
 
@@ -138,7 +138,7 @@ The following steps should be followed to export GERBER files from Kicad:
 	\item	Select \textbf{Tracks and Vias} from the \textbf{Dimensions} Menu.
 	\item	Change the \textbf{Mask Clearance} to 0.0001.
 	\item	Select \textbf{Plot} from the \textbf{File} menu.
-	\item	Select the following layers: \textbf{Copper, Component, SoldP_Cmp, Edges_Pcb}
+	\item	Select the following layers: \textbf{Copper}, \textbf{Component},\textbf{SoldPCmp}, \textbf{EdgesPcb}
 	\item	Click \textbf{Plot} and then \textbf{Generate drill file}.
 \end{enumerate}
 
@@ -193,23 +193,16 @@ nuts.
 
 
 \newpage
-\appendix
-\appendixpage
-\addappheadtotoc
+%\appendix
+%\appendixpage
+%\addappheadtotoc
 
-
-
-
-
-
-\section{NEED TO DO}
-I need to describe how zeroing works, with attaching electrical clips.
-
-\newpage
+%\newpage
 \section{Building pcb2gcode from source}
+\label{sec:buildpcb2gcode}
 
 The pcb2gcode source should first be obtained:
-\begin{lstlisting}[frame=single]
+\begin{lstlisting}[frame=single,breaklines=true]
 git clone git@github.com:JamesGlanville/pcb2gcode-metric.git
 \end{lstlisting}
 
@@ -218,18 +211,18 @@ For these instructions the use of Ubuntu/Debian is assumed, although other distr
 
 To install prerequisites:
 \begin{lstlisting}[frame=single,breaklines=true]
-sudo apt-get install build-essential automake autoconf libtool libboost-all-dev libgtkmm-2.4-dev gerbv
+sudo apt-get install build-essential automake autoconf libtool libboost-all-dev libgtkmm-2.4-dev gerbv checkinstall
 \end{lstlisting}
 
 To compile pcb2gcode:
-\begin{lstlisting}[frame=single]
+\begin{lstlisting}[frame=single,breaklines=true]
 cd pcb2gcode-metric
 ./git-build.sh
 \end{lstlisting}
 
 (Optional) To install pcb2gcode:
-\begin{lstlisting}[frame=single]
-sudo make install
+\begin{lstlisting}[frame=single,breaklines=true]
+sudo checkinstall
 \end{lstlisting}
 
 \subsection{Compilation in Windows}
@@ -237,7 +230,7 @@ Installing prerequisites is more complex in Windows:
 
 \subsubsection{Visual Studio}
 Install Visual Studio 2012 Professional from:
-\begin{lstlisting}[frame=single]
+\begin{lstlisting}[frame=single,breaklines=true]
 www.visualstudio.com
 \end{lstlisting}
 
@@ -249,37 +242,51 @@ http://ftp.gnome.org/pub/gnome/binaries/win32/gtk+/2.24/gtk+-bundle_2.24.10-2012
 and extract to pcb2gcode-metric folder.
 
 \subsubsection{Gerbv}
-download gerbv from http://sourceforge.net/projects/gerbv/
-gerbvinst-2.6.1.exe and install
-TODO: add instructions for generating .lib file
+Download and install gerbvinst-2.6.1.exe from:
+\begin{lstlisting}[frame=single,breaklines=true]
+http://sourceforge.net/projects/gerbv/
+\end{lstlisting}
+%TODO: add instructions for generating .lib file
 
 \subsubsection{Boost libraries}
+%\begin{lstlisting}[frame=single,breaklines=true]
+Download boost\_1\_55\_0.zip from:
 \begin{lstlisting}[frame=single,breaklines=true]
-download boost_1_55_0.zip from http://sourceforge.net/projects/boost/
+http://sourceforge.net/projects/boost/
 \end{lstlisting}
-unzip contents to c:\\boost155
-open VS2012 x86 Native Tools Command Prompt, from C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Microsoft Visual Studio 2012\\Visual Studio Tools
-AS ADMINISTRATOR
-cd c:\\boost155
+
+Unzip contents to c:\textbackslash boost155
+open VS2012 x86 Native Tools Command Prompt, from:
+\begin{lstlisting}[frame=single,breaklines=true]
+ C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Microsoft Visual Studio 2012\Visual Studio Tools
+\end{lstlisting}
+
+As administrator, run the following commands:
+\begin{lstlisting}[frame=single,breaklines=true]
+cd c:\boost155
 bootstrap.bat
 bjam.exe
+\end{lstlisting}
 
 \subsubsection{GTKMM}
+Download and install gtkmm-win32-devel-2.22.0-2.exe from:
 \begin{lstlisting}[frame=single,breaklines=true]
-download http://ftp.gnome.org/pub/GNOME/binaries/win32/gtkmm/2.22/gtkmm-win32-devel-2.22.0-2.exe
+http://ftp.gnome.org/pub/GNOME/binaries/win32/gtkmm/2.22/
 \end{lstlisting}
-from http://ftp.gnome.org/pub/GNOME/binaries/win32/gtkmm/2.22/
-and install.
 
-\subsubsection{gerbv?}
+\subsubsection{Gerbv source}
+Download gerbv-2.6.1.tar.gz from:
 \begin{lstlisting}[frame=single,breaklines=true]
-download gerbv-2.6.1.tar.gz from http://sourceforge.net/projects/gerbv/files/gerbv/gerbv-2.6.1/
+http://sourceforge.net/projects/gerbv/files/gerbv/gerbv-2.6.1/
 \end{lstlisting}
-and extract to c:\\gerbv-2.6.1
+and extract to c:\textbackslash gerbv-2.6.1
 
-hack appwindow.c
-create config.h
-create demo-config.h
+\subsubsection{Compilation}
+The file pcb2gcode-metric.sln may now be opened in visual studio and the project can be compiled.
+
+%hack appwindow.c
+%create config.h
+%create demo-config.h
 %\end{verbatim}
 
 \end{document}
