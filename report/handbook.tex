@@ -127,17 +127,25 @@ Create the FAT32 filesystem by right-clicking on the empty disk, and selecting "
 Fill in the information in the dialogue box, and click "Apply changes". 
 
 \subsection{Copying utility GCODE to SD card.}
-I need to make a bunch of GCODE files, put them on github, and give instructions.
-I will need:
-
-Zeroing.
-Spindle speed.
+Copy all .GCODE files from pcb2gcode-metric/GCODE/ to the root of the SD card.
+These can be used to perform simple functions such as zeroing the axes.
 
 \section{Creating GERBER files.}
-Export from kicad.
+The following steps should be followed to export GERBER files from Kicad:
+
+\begin{enumerate}
+	\item	Open the PCB layout in PCBNew.
+	\item	Select \textbf{Tracks and Vias} from the \textbf{Dimensions} Menu.
+	\item	Change the \textbf{Mask Clearance} to 0.0001.
+	\item	Select \textbf{Plot} from the \textbf{File} menu.
+	\item	Select the following layers: \textbf{Copper, Component, SoldP_Cmp, Edges_Pcb}
+	\item	Click \textbf{Plot} and then \textbf{Generate drill file}.
+\end{enumerate}
 
 \section{Generating GCODE with pcb2gcode}
 \subsection{Creating millproject file.}
+An example millproject file is given in pcb2gcode-metric/millproject. This should be copied
+into the directory containing the GERBER files, and modified if necessary (see included comments).
 
 \subsection{Copy GCODE to SD Card}
 
