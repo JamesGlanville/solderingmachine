@@ -1098,7 +1098,50 @@ The greatest challenge has been to ensure that the machine's operation is reliab
 All machine subsystems operate correctly, but for convenient operation
 user interaction must be minimised. 
 
+\subsubsection{Machine axes}
+Obtaining the requires $\pm$ 0.05mm accuracy has been mostly achieved. It has
+proved hard to eliminate the occasional $\pm$ 0.07mm error. While this is not
+ideal, the accuracy appears sufficient for the parts that have been tested.
+
+During the planning stage, linear bearings were considered as a possible
+axis slide. These were measured to have a smaller error than the drawer
+slides, but the extra cost was not felt to be justified. The error inherent
+in the drawer slides however suggest it may have been better to use the 
+linear bearings. The machine design is however conducive to replacing
+the slides with bearings with little redesign.
+
+\subsubsection{Spindle}
+The novel spindle design has proven to perform excellently. It is greatly
+superior to the bearing design used in inexpensive rotary tools (eg the Dremel)
+that are sometimes used in CNC projects. In the course of the project, the
+limitation of the shaft size needing to be 3mm diameter has not proved to
+be a hindrance. While outside the scope of this project, it would be
+interesting to evaluate the relative performance of the design against
+the preloaded single-bearing spindles of desktop CNC mills.
+
+\subsubsection{Isolation Routing}
+The machine has proved as capable at PCB milling as the reference CNC
+mill used for comparison (A converted Proxxon MF-70 CNC mill). The
+inexpensive brushless motor had sufficient power to cut through the copper
+at high speed. In a production version of the machine, it is likely that
+the cost could be reduced by using a less powerful motor and speed
+controller.
+
 \subsection{Evaluation of method of PCB manufacture/population}
+
+\subsubsection{PCB manufacture}
+There are limitations inherent in milling PCBs (compared to the more
+usual chemical etching) - the process is incredibly sensitive to positional
+errors. It proved difficult to reliably manufacture traces of less than 0.03mm
+wide. This was also true of the reference PCB mill. Small flakes of milled
+copper have a tendency to bridge traces, and are difficult to reliably remove.
+
+While the machine is capable of manufacturing boards with undemanding
+features, it has not been shown to be better than a wet chemical etch.
+This process is relatively inexpensive and does not have the problem of 
+copper flakes (which are chemically dissolved).
+
+\subsubsection{}
 
 \newpage
 \appendix
