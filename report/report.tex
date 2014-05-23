@@ -466,7 +466,7 @@ course of this project the hand-held hot air gun will be used most often due to 
 An AVR chip will be used to translate GCODE to stepper motor commands for the following reasons:
 
 \begin{itemize} \itemsep0em
-	\item	Cost: an atmega328 is \pounds 2-3, a USB-serial chip is < \pounds 2, which is not much.
+	\item	Cost: an atmega328 is \pounds 2-3, a USB-serial chip is \textless \pounds 2, which is not much.
 	\item	Mature open source firmware (GRBL, https://github.com/grbl/grbl) is available for GCODE-\textgreater stepper
 		conversion, which leaves more time to focus on other parts of this project.
 \end{itemize}
@@ -501,7 +501,15 @@ The first attempt to reduce the size of the extruder used bevel gears to shrink 
 \end{figure}
 
 Worm gears would give the same gear ratio in a smaller gearbox, so a new design was made using them. The improved design is as small as possible and performs as well as the much larger extruder that
-was originally used.
+was originally used. See figure (~\ref{wormextruder}) for a rendering.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/extruder_worm.png}
+\caption{Placeholder image of worm extruder}
+\label{wormextruder}
+\end{figure}
+
 
 \subsection{Spindle}
 
@@ -521,8 +529,11 @@ chosen, this is sufficiently fast so that the electronics board is not slowed by
 a small buffer in RAM), and sufficiently slow that the error rate is assumed to be zero.
 
 \subsection{USB-serial cable}
-A USBserial cable based on the FTDI FT232R chipset can be plugged into the serial header on the electronics board. This is a cheap (<\pounds 5) device that is 
-a complete solution. Driver support for the FT232R is available for all platforms that have been considered (Windows/OS X/Linux/Android).
+A USB to serial cable based on the FTDI FT232R chipset can be plugged into the serial header on the electronics board. This is a cheap (\textless \pounds 5) device that is 
+a complete solution. Driver support for the FT232R is available for all platforms that have been considered (Windows/OS X/Linux/Android). A usb serial cable
+was chosen instead of an integrated chip because it allows more flexibility for using other interfaces instead. For example, a real RS232 port may be used with a trivial
+MAX232 level shifter, or a bluetooth serial link may be required under
+some circumstances.
 
 %\subsection{Bluetooth serial link}
 %\begin{figure}[ht!]
