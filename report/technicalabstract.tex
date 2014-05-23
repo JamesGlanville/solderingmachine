@@ -35,6 +35,9 @@
 \providecommand{\e}[1]{\ensuremath{\times10^{#1}}}
 \providecommand{\degrees}{\ensuremath{^{\circ}}}
 
+\setlength{\parindent}{0in}
+
+
 % Define title here:
 \title{4th Year Project: Automated soldering/solder paste machine (C-PJGL2-7) \\ Technical Abstract} %C-PJGL2-7
 %\title{4th Year Project: Automated soldering/solder paste machine (C-PJGL2-7) \\ \vspace{2 mm} {\large Technical Abstract}}
@@ -60,12 +63,86 @@
 
 
 \section*{Project Summary}
-To make soldering things happen.
+The aim of the project was to develop a tool to assist the process of 
+producing boards with surface mount components. The main problems that
+were the focus of the project brief were:
 
-\section*{Technique used?}
+\begin{itemize}\itemsep0em
+\item
+How to place components accurately on to the board.
+\item
+How to solder them in place.
+\end{itemize}
+
+Two further goals were added during the course of the project:
+
+\begin{itemize}\itemsep0em
+\item
+The ability to produce the PCB itself.
+\item
+The ability to drill any holes for through-hole components and vias, as
+well as routing out the board outline.
+\end{itemize}
+
+\section*{Project Approach}
+It was decided to build a three-axis CNC machine with a number of interchangeable
+tools which collectively could support all the required functions.
+
+The three-axis system uses commonly-available drawer slides as a novel
+and inexpensive slide mechanism. Small stepper motors coupled to threaded
+rod are used for actuation. An attempt was made during the design phase
+to have the three axis as similar as possible, a "generic unit", that would
+simplify design and ensure all errors and calculations were the same.
+
+A number of tools were constructed to perform the various actions:
+
+\begin{itemize}\itemsep0em
+\item
+A spindle that would accept both milling and drilling bits. A novel design
+was used that surrounded the bit with small ball bearings. The bit was loosely
+coupled to a brushless motor, so that only rotational motion was transferred.
+In this way both run-out and cost were both reduced compared to a more
+traditional spindle.
+\item
+A solder paste extruder was designed to accurately dispense small volumes
+of solder paste from the syringes in which it is commonly supplied.
+\item
+A vacuum needle tool was designed to pick and place the surface mount
+components. This has an integral pressure sensor to detect the presence of
+a component.
+\item
+A hot air tool was designed to heat and reflow the solder paste when the board
+was populated
+\end{itemize}
 
 \section*{Report Structure}
+TODO!
 
-\section*{Conclusions}
+Detailed description of project goals
+
+Design thoughts
+
+Chosen design
+
+Manufacture and testing
+
+Improved designs
+
+Results and Conclusions
+
+\section*{Results and Conclusions}
+The machine that was designed during the course of the project has proven
+to be capable of PCB manufacture and population. Some problems with
+reliability are apparent, however the design shows promise and could be
+improved with further work.
+
+During testing it has been the author's conclusion that while the original
+project goals have been proven to work, the pcb manufacturing aspect of the
+project has not proved to be practical for the smallest of traces. This
+does not present as much of a problem as it may appear, as boards with particularly fine
+traces are likely to need several layers and therefore be impractical for
+hobbyist manufacture.
+
+
 
 \end{document}
