@@ -366,6 +366,25 @@ The "vacuum tweezer" method will be used to pick and place the parts. This is th
 %where it would involve an additional placement step
 
 \subsection{Drilling and isolation routing}
+
+
+\begin{figure}
+\centering
+\begin{minipage}{.5\textwidth}
+	\centering
+	\includegraphics[width=70mm]{resources/breakout.png}
+	\captionof{figure}{Isolation routed SOIC board.}
+	\label{breakout}
+\end{minipage}%
+\hfill
+\begin{minipage}{.5\textwidth}
+	\centering
+	\includegraphics[width=70mm]{resources/breakout_closeup.png}
+	\captionof{figure}{Closeup of breakout board.}
+	\label{breakout_closeup}
+\end{minipage}%
+\end{figure}
+
 Isolation routing is a method to mill traces from copper-clad pcb. A conical engraving bit is used to cut very narrow tracks through
 the copper, to leave disconnected pads as required. The fine tip of the bit has very small flutes, and as a result can only manage
 small chip loads (the amount of material cut by each pass of a flute). To cut in reasonable time, a high speed spindle is required.
@@ -384,6 +403,8 @@ are secured with a single grub screw. This seems to work, though it would need a
 did not shear the end of the milling bit.
 
 An alternative design would be to use a low cost rotary tool, which already has the bearings, collet and spindle motor. 
+
+Figures \ref{breakout} and \ref{breakout_closeup} show a small SOIC breakout board that has been isolation routed using the machine. 
 
 \subsection{Soldering iron}
 Designing a mount for a cheap and widely available soldering iron may well have been the simplest approach. However, using solder paste, 
