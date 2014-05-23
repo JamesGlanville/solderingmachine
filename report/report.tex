@@ -841,7 +841,16 @@ is used. Level translation must be used to convert the four connections to the r
 The Marlin firmware used in the machine has full support for SD cards, provided they are formatted with the FAT filesystem.
 
 \subsection{LCD + User interface}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=70mm]{resources/lcd_real.jpg}
+\caption{LCD user interface.}
+\label{lcdreal}
+\end{figure}
+
 If the machine is to be used in a standalone capacity, there must be a way for the user to choose which GCODE file to send.
+Figure (~\ref{lcdreal}) shows the machine's user interface.
 
 \subsubsection{Hardware}
 A 4x20 LCD is used to display information about the current job, as well as allow the user to select GCODE files. This is an inexpensive part based on the ubiquitous HD44780 controller chip.
