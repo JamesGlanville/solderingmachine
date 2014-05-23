@@ -811,64 +811,7 @@ A hot air tool used for soldering has the following requirements:
 
 \subsection{Calculations}
 
-Assumptions:
-\begin{itemize} \itemsep0em
-	\item Specific heat capacity of dry air is not significantly affected by temperature for estimates of power required.
-	\item 50\% of energy into heater is used to heat hot air stream (other radiative losses)
-	\item Flow rate of air pump = 18 cm\textsuperscript{3} / s
-	\item Specific heat capacity of dry air = 1.006 J/gK. This is assumed to not change significantly with temperature (acceptable to $\pm$ 10\%).
-	\item Room temperature of 20\textsuperscript{0}C, temperature required is 240\textsuperscript{0}C. Delta T = 220K
-	\item Density of air = 0.001225 g / cm\textsuperscript{3}
-\end{itemize}
-
-Power required to heat air (ideal) = (18*0.001225)*220*1.006 = 4.88W
-Power required to heat air (assuming losses) = 4.88*2 = 9.76W
-
-For simplicity, it is assumed that the heater requires 10W of input power.
-
-The design is based on a small coil of nichrome resistance wire as a heating element. Calculations must be made to find
-the size of wire required:
-
-Size of coil (Chosen to be similar in diameter to the air tube with 6mm OD/4mm ID)
-
-Diameter = 5mm
-Length = 12mm
-Wire spacing = 2mm
-Angle of wire = tan\textsuperscript{-1} (2/(5* pi )) = 7.26 \textsuperscript{0}
-Turns of wire = 12/2 + 1 = 7
-Length of wire = 7 * sqrt ((5 * pi )\textsuperscript{2}  * 2\textsuperscript{2}) =  110.84mm
-
-Resistivity of nichrome at room temperature = 1.0 * 10E-6 ohm m 
-Power supply voltage = 12V
-Current draw = 10 / 12 = 0.83 A 
-Resistance required = 12\textsuperscript{2} / 10 = 14.4 ohms
-Cross sectional area of wire = 1.0 * 10\textsuperscript{-6} * 110.84 * 10\textsuperscript{-3} / 14.4 = 7.70 * 10\textsuperscript{-9} m\textsuperscript{2} = 7.70 * 10\textsuperscript{-3} mm\textsuperscript{2}
-Diameter of wire = sqrt(7.70E-3/pi) * 2 = 0.099mm
-
-This is the minimum diameter of wire. Next the maximum diameter of wire is calculated, assuming a maximum current draw of 10A.
-
-Resistance required = 12 / 10 = 1.2 ohms
-Cross sectional area of wire = 7.70 * 10\textsuperscript{-3} * (14.4/1.2) = 0.092 mm \textsuperscript{2}
-Diameter of wire = sqrt(0.092/pi) * 2 = 0.34mm
-
-Therefore wire diameter is between 0.099mm and 0.34mm
-The most commonly available suitable wire is sold as 30 SWG, equivalent to 0.315mm diameter.
-
-Resistance of 110.84mm of 0.315mm diameter nichrome wire:
-
-\begin{displaymath}
-\text{Resistance} = \frac{\rho L}{A}
-= \frac{1.0*10^-6*110.84*10^-3}{\pi*(\frac{0.315*10^-3}{2})^2}
-= 1.42 \Omega
-\end{displaymath}
-
-
-
-\begin{displaymath}
-\text{Maximum current draw} = \frac{\text{V}}{\text{R}}
-= \frac{12}{1.42}
-= 8.45 \text{A}
-\end{displaymath}
+Refer to Appendix \ref{heatcalc} for the heater calculations.
 
 \section{Standalone Operation}
 It may be useful to operate the machine without a connected PC. In the case of manufacturing a large number of boards, it may be impractical to dedicate a PC simply to sending GCODE.
@@ -1267,6 +1210,69 @@ SOT-223 is a 6.7x3.7x1.8mm body, three terminals plus a heat transfer pad.
 Dual-in-line devices with 8 or more gull-wing lead form pins, spacing of 1.27mm
 
 \newpage
+
+\section{Heater Calculations}
+\label{heatcalc}
+Assumptions:
+\begin{itemize} \itemsep0em
+	\item Specific heat capacity of dry air is not significantly affected by temperature for estimates of power required.
+	\item 50\% of energy into heater is used to heat hot air stream (other radiative losses)
+	\item Flow rate of air pump = 18 cm\textsuperscript{3} / s
+	\item Specific heat capacity of dry air = 1.006 J/gK. This is assumed to not change significantly with temperature (acceptable to $\pm$ 10\%).
+	\item Room temperature of 20\textsuperscript{0}C, temperature required is 240\textsuperscript{0}C. Delta T = 220K
+	\item Density of air = 0.001225 g / cm\textsuperscript{3}
+\end{itemize}
+
+Power required to heat air (ideal) = (18*0.001225)*220*1.006 = 4.88W
+Power required to heat air (assuming losses) = 4.88*2 = 9.76W
+
+For simplicity, it is assumed that the heater requires 10W of input power.
+
+The design is based on a small coil of nichrome resistance wire as a heating element. Calculations must be made to find
+the size of wire required:
+
+Size of coil (Chosen to be similar in diameter to the air tube with 6mm OD/4mm ID)
+
+Diameter = 5mm
+Length = 12mm
+Wire spacing = 2mm
+Angle of wire = tan\textsuperscript{-1} (2/(5* pi )) = 7.26 \textsuperscript{0}
+Turns of wire = 12/2 + 1 = 7
+Length of wire = 7 * sqrt ((5 * pi )\textsuperscript{2}  * 2\textsuperscript{2}) =  110.84mm
+
+Resistivity of nichrome at room temperature = 1.0 * 10E-6 ohm m 
+Power supply voltage = 12V
+Current draw = 10 / 12 = 0.83 A 
+Resistance required = 12\textsuperscript{2} / 10 = 14.4 ohms
+Cross sectional area of wire = 1.0 * 10\textsuperscript{-6} * 110.84 * 10\textsuperscript{-3} / 14.4 = 7.70 * 10\textsuperscript{-9} m\textsuperscript{2} = 7.70 * 10\textsuperscript{-3} mm\textsuperscript{2}
+Diameter of wire = sqrt(7.70E-3/pi) * 2 = 0.099mm
+
+This is the minimum diameter of wire. Next the maximum diameter of wire is calculated, assuming a maximum current draw of 10A.
+
+Resistance required = 12 / 10 = 1.2 ohms
+Cross sectional area of wire = 7.70 * 10\textsuperscript{-3} * (14.4/1.2) = 0.092 mm \textsuperscript{2}
+Diameter of wire = sqrt(0.092/pi) * 2 = 0.34mm
+
+Therefore wire diameter is between 0.099mm and 0.34mm
+The most commonly available suitable wire is sold as 30 SWG, equivalent to 0.315mm diameter.
+
+Resistance of 110.84mm of 0.315mm diameter nichrome wire:
+
+\begin{displaymath}
+\text{Resistance} = \frac{\rho L}{A}
+= \frac{1.0*10^-6*110.84*10^-3}{\pi*(\frac{0.315*10^-3}{2})^2}
+= 1.42 \Omega
+\end{displaymath}
+
+
+
+\begin{displaymath}
+\text{Maximum current draw} = \frac{\text{V}}{\text{R}}
+= \frac{12}{1.42}
+= 8.45 \text{A}
+\end{displaymath}
+
+\newpage
 \section{Part List}
 
 Auto-generated from "Part List.xlsx" using \cite{excel2latex}.
@@ -1303,6 +1309,8 @@ Auto-generated from "Part List.xlsx" using \cite{excel2latex}.
 	rightangle & 4 & \  & \  \\ \hline
 \end{tabular}
 
+
+\newpage
 \section{Risk assessment retrospective}
 The risks highlighted in the risk assessment were as follows:
 
