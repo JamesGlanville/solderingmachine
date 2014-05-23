@@ -496,6 +496,18 @@ The first attempt to reduce the size of the extruder used bevel gears to shrink 
 Worm gears would give the same gear ratio in a smaller gearbox, so a new design was made using them. The improved design is as small as possible and performs as well as the much larger extruder that
 was originally used.
 
+\subsection{Spindle}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/spindle.png}
+\caption{Rendering of improved spindle design}
+\label{spindle}
+\end{figure}
+
+The spindle was redesigned to be stronger and neater. See figure (~\ref{spindle}) for a rendering.
+The new design encloses the moving parts more for safety.
+
 \section{Serial interface}
 For simplicity, the communication between the PC and the electronics board is implemented as a serial link. An arbitrary baud rate of 57600 has been
 chosen, this is sufficiently fast so that the electronics board is not slowed by waiting for instructions (as the firmware buffers incoming commands in
@@ -529,6 +541,25 @@ again sufficient for the bluetooth module.
 To configure the baud rate for the bluetooth module, it was connected to a pc using a USB-serial cable. The bluetooth module is powered up whilst the "KEY" pin is held high (3.3V).
 This starts the module in AT configuration mode. The baud rate was then set by sending the string "AT+UART=57600,1,0" at 38400 baud. This configuration is only required once,
 the module stores all configuration in non-volatile storage.
+
+\section{User interface}
+%\label{lcdUI}
+The machine has two main user interfaces: the interface used for the machine in 
+standalone operation (see ~\ref{lcdUI}), and that used when connected to a host computer.
+As the standalone operation has already been described, this section will only
+detail the host computer interface.
+
+\subsection{Pronterface}
+Pronterface was chosen as the user interface as it is a mature GCODE visualiser
+and sender.
+
+INSERT PICTURE
+
+Once the correct serial port and baud rate have been selected, pronterface will connect
+to the machine. GCODE can be loaded using the \textbf{Load file} button. It is 
+rendered to the center of the window (however some operations are not shown correctly).
+The program is primarily intended for operating 3d printers, so to send the GCODE
+to the machine the \textbf{Print} button must be used.
 
 \section{Power Supply}
 The machine is powered with a 12V 30A power supply. It has over-current and overheating protection built in, but as a failsafe, a 20A fuse is added inline with the +12V cable. 
@@ -841,6 +872,7 @@ is used. Level translation must be used to convert the four connections to the r
 The Marlin firmware used in the machine has full support for SD cards, provided they are formatted with the FAT filesystem.
 
 \subsection{LCD + User interface}
+\label{lcdUI}
 
 \begin{figure}[ht!]
 \centering
