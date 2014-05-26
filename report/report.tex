@@ -1145,6 +1145,79 @@ A hot air tool used for soldering has the following requirements:
 
 Refer to Appendix \ref{heatcalc} for the heater calculations.
 
+\section{Host computer software}
+Software will have to be written to translate board cad data to gcode. Some of this already exists in the public domain, some will have to be made
+as part of this project.
+
+Isolation milling and drilling: pcb2gcode (https://github.com/festlv/pcb2gcode-metric). Takes gerber designs and generates isolation routing/drilling
+GCODE. It is also capable of voronai isolation (functionally equivalent routing that cuts the least amount of material). The only configuration
+will be to generate a millproject file with the correct cutting depths.
+
+Solder paste placement: No freely available software.
+
+Device placement: No freely available software.
+
+The solder paste placement should be relatively straightforward. The program will simply need to find the locations of the pads, calculate their
+area, and then apply a suitable amount of paste to them. For ICs, the paste will not need to be separately applied to each pin (due to the high
+surface tension of molten solder), so some method of detecting ICs on the board layout will be needed.
+
+The code to place devices will be the most challenging. However, provided there is a sensible area in which to hand-deposit the devices, it should
+not be too hard to calculate how to transport them to the required location.
+
+In my opinion, the most challenging part of writing the conversion code will simply be to extract the necessary data from the cad files. Once this
+has been obtained, the GCODE should be easy to create.
+
+\subsection{Improvements to pcb2gcode}
+pcb2gcode was forked on github, and the improvements from this project are available at \cite{github}.
+To demonstrate the effects of the improvements, pictures of a SOIC-20 breakout board being processed are included (Figures ~\ref{pcb2gcodeinput} , ~\ref{pcb2gcodeisolation} , ~\ref{pcb2gcodepaste} ).
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/breakout_copper.png}
+\caption{Input to pcb2gcode, showing the copper traces in white.}
+\label{pcb2gcodeinput}
+\end{figure}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/breakout_isolation.png}
+\caption{Output from pcb2gcode, showing isolation routing pattern (milling to be run between coloured sections).}
+\label{pcb2gcodeisolation}
+\end{figure}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/breakout_paste.png}
+\caption{Solder paste output from pcb2gcode, showing where paste is to be deposited.}
+\label{pcb2gcodepaste}
+\end{figure}
+
+\subsubsection{Adding solder paste support}
+Solder paste information is contained in the GTP (Gerber top paste) file. It was decided to extend pcb2gcode to read this file, and output GCODE suitable for solder paste extrusion.
+
+The GTP file is in the same RS-274X extended Gerber format as the other files that pcb2gcode can already read. For simplicity, the existing Gerber processing was used.
+This is retrieved in \begin{verbatim}NGC_Exporter::export_layer(see ngc_exporter.cpp)\end{verbatim}. The data is stored as a vector of vertices of each pad to be filled with solder paste.
+
+An assumption is currently made that all pads are rectangular, and that the paste can be suitably applied in a single place. This may need to be improved in the future if large areas
+of solder paste are required.
+
+Process of determining where to deposit paste:
+
+\begin{enumerate}
+	\item	Vertices of pad stored in array.
+	\item	Area of pad calculated.
+	\item	Center of pad calculated.
+	\item	From the area of the pad, the diameter of the needle, and the required paste thickness, the extrusion distance is calculated.
+	\item	GCODE is written to extrude paste at the center of the pad.
+\end{enumerate}
+
+Retraction:
+
+The belt on the paste extruder is slightly springy. This results in the extruder continuing to extrude a small amount of solder paste after the motor has stopped moving.
+This has an adverse effect on board quality. To counter this, the extruder should be retracted slightly to remove all pressure from the syringe. The distance to retract
+as well as speed of retraction should be experimentally determined for optimum results. Retraction support has been added to the solder paste output of pcb2gcode.
+
+
 \section{Machine testing and use}
 As the machine operation is complex, a handbook has been produced that
 detail the steps needed to operate it. This forms a separate document
@@ -1310,77 +1383,6 @@ by hand to reflow the parts. It is likely that a future improvement would
 be to replace the hand made hot air tool with a commercial product.
 
 
-\section{Host computer software}
-Software will have to be written to translate board cad data to gcode. Some of this already exists in the public domain, some will have to be made
-as part of this project.
-
-Isolation milling and drilling: pcb2gcode (https://github.com/festlv/pcb2gcode-metric). Takes gerber designs and generates isolation routing/drilling
-GCODE. It is also capable of voronai isolation (functionally equivalent routing that cuts the least amount of material). The only configuration
-will be to generate a millproject file with the correct cutting depths.
-
-Solder paste placement: No freely available software.
-
-Device placement: No freely available software.
-
-The solder paste placement should be relatively straightforward. The program will simply need to find the locations of the pads, calculate their
-area, and then apply a suitable amount of paste to them. For ICs, the paste will not need to be separately applied to each pin (due to the high
-surface tension of molten solder), so some method of detecting ICs on the board layout will be needed.
-
-The code to place devices will be the most challenging. However, provided there is a sensible area in which to hand-deposit the devices, it should
-not be too hard to calculate how to transport them to the required location.
-
-In my opinion, the most challenging part of writing the conversion code will simply be to extract the necessary data from the cad files. Once this
-has been obtained, the GCODE should be easy to create.
-
-\subsection{Improvements to pcb2gcode}
-pcb2gcode was forked on github, and the improvements from this project are available at \cite{github}.
-To demonstrate the effects of the improvements, pictures of a SOIC-20 breakout board being processed are included (Figures ~\ref{pcb2gcodeinput} , ~\ref{pcb2gcodeisolation} , ~\ref{pcb2gcodepaste} ).
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/breakout_copper.png}
-\caption{Input to pcb2gcode, showing the copper traces in white.}
-\label{pcb2gcodeinput}
-\end{figure}
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/breakout_isolation.png}
-\caption{Output from pcb2gcode, showing isolation routing pattern (milling to be run between coloured sections).}
-\label{pcb2gcodeisolation}
-\end{figure}
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/breakout_paste.png}
-\caption{Solder paste output from pcb2gcode, showing where paste is to be deposited.}
-\label{pcb2gcodepaste}
-\end{figure}
-
-\subsubsection{Adding solder paste support}
-Solder paste information is contained in the GTP (Gerber top paste) file. It was decided to extend pcb2gcode to read this file, and output GCODE suitable for solder paste extrusion.
-
-The GTP file is in the same RS-274X extended Gerber format as the other files that pcb2gcode can already read. For simplicity, the existing Gerber processing was used.
-This is retrieved in \begin{verbatim}NGC_Exporter::export_layer(see ngc_exporter.cpp)\end{verbatim}. The data is stored as a vector of vertices of each pad to be filled with solder paste.
-
-An assumption is currently made that all pads are rectangular, and that the paste can be suitably applied in a single place. This may need to be improved in the future if large areas
-of solder paste are required.
-
-Process of determining where to deposit paste:
-
-\begin{enumerate}
-	\item	Vertices of pad stored in array.
-	\item	Area of pad calculated.
-	\item	Center of pad calculated.
-	\item	From the area of the pad, the diameter of the needle, and the required paste thickness, the extrusion distance is calculated.
-	\item	GCODE is written to extrude paste at the center of the pad.
-\end{enumerate}
-
-Retraction:
-
-The belt on the paste extruder is slightly springy. This results in the extruder continuing to extrude a small amount of solder paste after the motor has stopped moving.
-This has an adverse effect on board quality. To counter this, the extruder should be retracted slightly to remove all pressure from the syringe. The distance to retract
-as well as speed of retraction should be experimentally determined for optimum results. Retraction support has been added to the solder paste output of pcb2gcode.
 
 
 %Assuming that x is the required granularity of calibration (the 
