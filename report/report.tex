@@ -1466,6 +1466,28 @@ The steps taken to produce GCODE (e.g. running pcb2gcode) will always need a PC,
 \section{Future Work}
 This section contains envisioned improvements to the machine that were not implemented due to time constraints.
 
+\subsection{Automated inspection}
+When producing circuit boards there is always a danger of poor solder 
+connections or short circuits between pins. These are not difficult issues
+to fix, but they are difficult to identify. If they are not spotted
+before the circuit board is powered on, such faults are liable to cause
+anything from intermittent operation to destruction of one or more
+components on the board. It is possible to check for such errors manually
+with a magnifying glass or microscope, but it is very time-consuming.
+
+USB microscope are inexpensive (less than \pounds 10) and have sufficient
+resolution to spot poor connections. If mounted as a tool on the machine,
+it would be possible to slowly scan the microscope around to generate
+a very high resolution image of the board. At the very least this may
+make checking for errors manually easier by allowing the user to check
+the board more comfortably on a large computer screen. More interestingly,
+it may be possible to detect short circuits automatically. Both solder 
+and copper are highly reflective compared to PCB material (usually FR4 which
+is a dark beige). It may well be possible to effectively "subtract" the
+GERBER design file from a high resolution image of the board to leave
+only undesired solder. 
+
+
 \subsection{Double-sided boards}
 It is common to use double sided PCBs in order to achieve more compact circuits. The machine will not currently have the ability to process such boards, although this would be possible in a later version.
 
