@@ -164,18 +164,51 @@
 \label{smdexample}
 \end{figure}
 
-The aim of this project is to develop ways to assist electronics hobbyists in working with SMD electronic components
-and circuit boards (See Figure \ref{smdexample}). \gls{SMD}s are electronic components which are designed to be soldered to \gls{PCB}s
-(Printed Circuit Boards) without requiring holes to be drilled in the board. Compared to \gls{THT}(Through-hole technology), SMD parts 
-are usually smaller and cheaper and as a result are becoming ubiquitous in many applications. Even when hobbyist users do
-not require the size or cost advantages, many modern devices are only available in SMD packages. Using SMD parts require
-smaller board features (A manufacturing challenge) as well as more advanced soldering techniques. For this project, a machine
-is envisioned which solves some or all of the challenges involved to ease the process of SMD board development.
+The improvement in the electronics industry has led to a reduction in 
+size of many components. Many components are now only available in
+surface mount packages (see figure \ref{smdexample}). The surface mount 
+devices (\gls{SMD}s) are designed to be soldered to \gls{PCB}s without
+requiring holes to be drilled through the board. The combination of
+smaller devices and no drill holes allow a much higher density of
+devices to be placed on a PCB. This is both commercially
+attractive and has facilitated dramatic reductions in the sizes of
+electronic equipment. However, the use of such devices necessitates expensive 
+equipment for assembly as the device placement tolerances are reduced.
 
-\vspace{0.5cm}
+In the prototyping and hobbyist markets, assembly is usually carried
+out by hand, a process which requires significant time and skill. 
+Automated systems (For example that shown in figure \ref{pickandplace}) cost upwards of \pounds 10k, which is cost-prohibitive
+for the majority of users. 
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=70mm]{resources/pickandplace.jpg}
+\caption{Juki KE2010L pick and place machine, approximately \pounds 50000.}
+\label{pickandplace}
+\end{figure}
+
+The aim of this project is to develop ways to assist electronics 
+hobbyists in working with SMD electronic components and circuit boards.
+This must be achieved in a cost-effective way to ensure it is a viable
+option.
+
+
+ 
+%\gls{SMD}s are electronic components which are designed to be soldered 
+%to \gls{PCB}s without requiring holes to be drilled in the board. Compared to \gls{THT}(Through-hole technology), SMD parts 
+%are usually smaller and cheaper and as a result are becoming ubiquitous in many applications. Even when hobbyist users do
+%not require the size or cost advantages, many modern devices are only available in SMD packages. Using SMD parts require
+%smaller board features (A manufacturing challenge) as well as more advanced soldering techniques. For this project, a machine
+%is envisioned which solves some or all of the challenges involved to ease the process of SMD board development.
+
+
+
+
+%\vspace{0.5cm}
 As an example of the need for such a machine, see Figure \ref{usbisolator}. A USB isolator was required (to make USB connections to devices with non-isolated
 power supplies), which uses an ADUM3160 SOIC-28 part (See full schematic, Figure \ref{usbisolatorschem}). Without an automated method of board manufacture, the
-traces were hand drawn in etch-resist on each side of a double-sided board, and manually soldered all SMD parts. This was slow, and as figure \ref{usbisolator} shows, does not give
+traces had to be hand drawn in etch-resist on each side of a double-sided board. Each component had to be carefully
+placed with tweezers and then soldered. This was slow, and as figure \ref{usbisolator} shows, does not give
 neat results.
 
 
@@ -189,7 +222,7 @@ neat results.
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=120mm]{resources/usbisolator.jpg}
-\caption{My USB isolator.}
+\caption{A USB isolator PCB with hand-drawn traces.}
 \label{usbisolator}
 \end{figure}
 
