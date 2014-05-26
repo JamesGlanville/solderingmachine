@@ -213,8 +213,9 @@ for the majority of users.
 The aim of this project is to develop ways to assist electronics 
 hobbyists in working with SMD electronic components and circuit boards.
 This must be achieved in a cost-effective way to ensure it is a viable
-option.
-
+option. The use of complex or expensive tools (eg a lathe or mill) for
+manufacture or assembly of the machine should not be required as not all
+end-users have these facilities.
 
  
 %\gls{SMD}s are electronic components which are designed to be soldered 
@@ -443,6 +444,27 @@ work possible, as well as the most similar axis characteristics. This
 was later important during testing so it was not necessary to separately
 characterise the errors of each axis.
 
+For the machine to be practical, there are some limitations on the 
+maximum time that a board can take to manufacture. This is particularly 
+true of the device placement stage, as this requires
+human intervention. The total time is dominated by the time taken by axis
+movement so the axis speed should be as high as possible to compensate.
+
+%\begin{itemize}%
+%	\item	X/Y travel.
+	%\item	X/Y cutting.
+	%\item	Z movement.
+	%%\item	Picking/placing components.
+%	\item	Hot air reflow.
+%\end{itemize}
+
+%The X/Y travel will take the most time in total, so the estimated times should be calculated and optimised if possible. Assuming a travel speed of 10mm/s, the total
+%time is simply total distance (mm) / 10.
+
+
+
+
+
 %
 %\subsection{Z axis}
 %The Z axis requires the same precision as the X and Y (Isolation routing bits are conical, therefore trace width error is proportional to height error). 
@@ -531,6 +553,28 @@ mechanism is required. Three such mechanisms were considered:
 
 Drawer slides were chosen because of their cost advantages as well as the fact
 they can easily be coupled to flat boards.
+
+
+\subsection{Zeroing the axes}
+
+When the machine is used it is necessary to "zero" the axes to a known datum point on the board. This is particularly important when swapping tools, as there may
+be a small variation in tool location compared to toolholder location between tools.
+
+\subsubsection{X and Y axes}
+
+In order to zero the machine in the X and Y directions, an "L-shaped" piece of metal has been added to the bed (insert pictures/diagrams). All of the tools are metal,
+and therefore conductive. The axes are first manually moved to be near-zero. The tips of the tools are all electrically connected to an input pin on the AVR, with a weak (10K) internal pullup to 5V.
+The "L-shaped" piece of metal is connected to ground. When instructed, the firmware slowly moves the X or Y axis in the negative direction until a contact is made, and the input goes LOW. At this point,
+the exact position of the tool is known. For convenience it is important that the location of the centre of the tool is known, this can simply be calculated as the diameters of all of the tools are known and fixed.
+
+\subsubsection{Z axis}
+
+Slightly different mechanisms are used for the zeroing of the Z axis when used for different tools. 
+For the vacuum needle, a small microswitch is placed above the needle while is free to move 
+slightly in the vertical direction. It is triggered when the needle is touching either the bed or the top of a component. As a result, zeroing can be carried out simply by 
+moving the tool downwards until it is triggered.
+The other tools are zeroing electrically using the same mechanism as for the X and Y axes. The tools are lowered until contact is made between the PCB and the tool. A temporary contact must be made from ground
+to the copper pcb, this is achieved with an alligator clip.
 
 %\subsubsection{Chosen design}
 
@@ -647,6 +691,7 @@ Here a level translation IC was chosen.
 
 
 \subsection{Firmware}
+\label{firmwarestuff}
 The microcontroller requires firmware which can fulfil all of the subsystem
 requirements. Usefully such firmware already exists to drive 3d printers
 and other CNC machines, so this could be used without significant
@@ -798,6 +843,79 @@ point the vacuum pump can be switched on.
 A power MOSFET is used to control the pump, with a reverse-biased
 diode to suppress back-EMF. The MOSFET was chosen to have a small V$_{GS}$
 so that it could be fully switched on by the 5V microcontroller output.
+
+
+\subsection{Managing devices prior to placement}
+There was a need to be able to place the devices in a known position, so they can then be picked up and placed in their final locations.
+Commercial pick and place machines take the parts directly from the reels they are supplied in. While this is optimal for that application in that
+it is fast, the cost of reel dispensers is prohibitive for this machine. Instead, the parts will have to be roughly placed
+by hand. There are a number of ways this could be done:
+
+\begin{itemize} \itemsep0em
+	\item	Embossed outlines of all necessary device footprints.
+	\item	Rectangular embossed outline, devices to be located in one corner.
+\end{itemize}
+
+It was decided that the former would be simplest to implement. A
+brass plate was milled to have indentations to suit a variety of SMD
+footprints. The parts are placed into the indentations by the user
+when required.
+
+PCB CAD programs are able to export a list of components along with their
+physical locations on the board. Kicad supports this by exporting a \textbf{.pos}
+file in human-readable format. Pcb2gcode has been modified (see \textbf{pnp.cpp}
+and \textbf{pnp.hpp}) to parse this file and extract the necessary data.
+From this, the appropriate indentation in the component plate can be 
+chosen based on the device package type. The user is informed of where
+to place the device, and the machine can then pick it up and place in onto
+the board.
+
+\subsection{Prototype}
+To test how effectively small parts could be placed with a vacuum, a simple test setup was fabricated:
+
+\begin{itemize} \itemsep0em
+	\item	12V diaphragm air pump (\pounds 8.89 - eBay)
+	\item	6mm OD/4mm ID silicone tube (\pounds 2.69/m - eBay)
+	\item	various needles (need more info here)
+	\item	MOSFET
+	\item	330$\Omega$ resistor
+\end{itemize}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/pump_and_hose.jpg}
+\caption{Pump with hose and needle.}
+\label{hose and needle}
+\end{figure}
+
+The pump draws ~200mA at 12V, which is easily controlled with a MOSFET. Using a 1.8mm ID needle, SOIC-20 parts were picked up, 
+and had significant friction against the needle - essential to avoid slipping or rotating. It was important to place the needle 
+as centrally as possible on the part to avoid generating any imbalance that allowed the part to fall. 
+
+\subsection{Conclusions}
+A vacuum needle solution is workable, and a good choice for this project. Things that need to be considered for use in the final project:
+
+\begin{itemize}
+	\item	The pump takes a certain time to generate a vacuum because of the relatively large internal volume of the pump
+		and silicon tube. It will be important to measure this, and add a margin of error so that full suction is applied
+		to each device before any movement takes place. Similarly, when turning off the pump, the pressure must return to
+		atmospheric before the device can be considered to have been placed successfully. In testing, the pump took
+		less than a second to leak sufficiently for this to occur, but if another pump were to be used, it may be necessary
+		to place a tiny hole in the air line so that pressure drops quickly.
+	\item	It is important to place the needle very near to the centre of mass of the device. The majority of devices will be
+		symmetrical, which will make this easier.
+	\item	The needle must be able to be raised and lowered to the correct heights. It may be possible to push the needle down
+		with a weak spring, with a micro servo that raises it - this would remove any need to know the exact height of each
+		device. This will need to be tested.
+\end{itemize}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/needle_with_resistor.jpg}
+\caption{SMD resistor being picked up.}
+\label{overflow}
+\end{figure}
+
 
 \section{Spindle}
 The spindle is used for isolating routing, milling and drilling operations.
@@ -959,6 +1077,7 @@ The following settings were used to mill the green acrylic gear (Figure ~\ref{fi
 
 
 \section{Hot air tool}
+\label{lastsection}
 Once the board has been pasted and the parts deposited, the solder paste needs to be heated up so that it will melt and form good connections.
 There are a few possibilities for this process:
 
@@ -1026,14 +1145,170 @@ A hot air tool used for soldering has the following requirements:
 
 Refer to Appendix \ref{heatcalc} for the heater calculations.
 
-
-
-
-
-\section{Machine Handbook}
+\section{Machine testing and use}
 As the machine operation is complex, a handbook has been produced that
 detail the steps needed to operate it. This forms a separate document
-which is attached to this report.
+which is attached to this report, although an overview of the operating
+process is given in figure \ref{tikzoverview}.
+
+\subsection{Operating Steps}
+
+% Define block styles
+\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+    text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
+    text width=14em, text centered, rounded corners, minimum height=3em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=7cm,
+    minimum height=2em]
+    
+\begin{tikzpicture}[align=center,node distance = 1.6cm,auto]
+\label{tikzoverview}
+    % Place nodes
+    \node [block] (pcb2gcode) {run pcb2gcode to generate GCODE};
+    \node [cloud, left of=pcb2gcode, align=center] (designfiles) {PCB designs exported\\ from design package\\ in GERBER format};
+    
+    \node [block, below of=pcb2gcode] (isolationinit) {attach spindle, load isolation milling bit, zero};
+    \node [block, below of=isolationinit] (isolation) {send routing GCODE to machine};
+    \node [block, below of=isolation, fill=orange!70] (isolationcheck) {visually check board for errors};
+    
+    \node [block, below of=isolationcheck] (drillinit) {load drill bit, zero};
+    \node [block, below of=drillinit] (drill) {send drilling GCODE to machine};
+    \node [block, below of=drill, fill=orange!70] (drillcheck) {visually check board for errors};
+    
+    \node [block, below of=drillcheck] (pasteinit) {load paste extruder};
+    \node [block, below of=pasteinit] (paste) {send solder paste GCODE to machine};
+    \node [block, below of=paste, fill=orange!70] (pastecheck) {visually check board for errors};
+    
+    \node [block, below of=pastecheck] (vacuuminit) {load vacuum needle};
+    \node [block, below of=vacuuminit] (vacuum) {send pick and place GCODE to machine};
+    \node [block, below of=vacuum, fill=orange!70] (vacuumcheck) {visually check board for errors};
+    
+    \node [block, below of=vacuumcheck] (reflow) {Heat board to melt solder paste};
+    % Draw edges
+    \path [line,dashed] (designfiles) -- (pcb2gcode);
+    \path [line] (pcb2gcode) -- (isolationinit);
+    \path [line] (isolationinit) -- (isolation);
+    \path [line] (isolation) -- (isolationcheck);
+    \path [line] (isolationcheck) -- (drillinit);
+    \path [line] (drillinit) -- (drill);
+    \path [line] (drill) -- (drillcheck);
+    \path [line] (drillcheck) -- (pasteinit);
+    \path [line] (pasteinit) -- (paste);
+    \path [line] (paste) -- (pastecheck);
+    \path [line] (pastecheck) -- (vacuuminit);
+    \path [line] (vacuuminit) -- (vacuum);
+    \path [line] (vacuum) -- (vacuumcheck);
+
+    \path [line] (vacuumcheck) -- (reflow);
+ %   \path [line] (isolation) -- (isolationcheck);
+ %   \path [line] (isolationcheck) -- (drillinit);
+
+\end{tikzpicture}
+
+%\section{Measuring Accuracy}
+
+
+%It is important to measure the accuracy of the axes to ensure that they can reach the specified +-0.05mm. This will need to be measured
+%at all points on the bed (as the accuracy will worsen when the bed is central due to increased rod deflection.). Of particular concern will be
+%the deflection under the load of the isolation routing bit. The solder paste and device placement will not involve any significant force. The 
+%drilling will generate a force, but the tolerance required of a 1mm hole is not nearly as demanding as that of the isolation routing cutter.
+%The exact forces exerted by the routing bit have yet to be measured, but are estimated to be 5-10N. This means that the anti-backlash nut
+%will need to exert the same or greater force to ensure that the board does not move. This in turn places extra resistance on the motor movement.
+
+\subsection{Testing methodology}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/dialgauge.png}
+\caption{Measurement setup (This is a placeholder image).}
+\label{dialgauge}
+\end{figure}
+
+In order to characterise the accuracy of the machine, it is important to have a consistent measuring regime. A dial gauge is used to measure
+relative positions of the axes. See Figure ~\ref{dialgauge} for the experimental setup. It is important to ensure the worst-case error is acceptable. The causes of error and their effects are:
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=100mm]{resources/errors.png}
+\caption{Measurement setup, showing error notation.}
+\label{errornotation}
+\end{figure}
+
+Effects are shown with reference to Figure ~\ref{errornotation}, noting that the X and Y referred to in the figure do not necessarily represent the machine axes.
+\begin{itemize} \itemsep0em
+	\item	Z displacement: It is possible the surface of the bed will move in the vertical direction, something that should not happen ideally. This 
+			will occur if the surface over which the idler bearing runs is not flat, or due to manufacturing tolerances in the linear slides.
+	\item	Rotation: The drawer slides do not eliminate rotation completely, and this error dominates. Rotation is relative to the small ball bearing array which slides along
+			the drawer slides, so this source of error depends on the absolute slide position. Figure ~\ref{errornotation} shows the largest error possible, with the ball bearings
+			far away from the location of maximum error, where rotation effects dominate.
+	\item	Motion parallel to the axis direction. This error is mostly caused by flex in the stepper motor mounts, the motor-\textgreater threaded rod couplers and the anti-backlash nuts.
+	\item	Motion perpendicular to the axis direction. This error is caused by small amounts of slop in the drawer slides.
+\end{itemize}
+
+As it is only important to measure the worst-case error, the point shown in purple in Figure ~\ref{errornotation} is the only point which will be measured. 
+
+In figure \ref{visualtest}, a TQFP-32 SMD was moved in 0.6mm increments, a distance
+equivalent to the device's pitch. A USB microscope was fixed to the machine,
+and pictures taken at each point. A cross-hair overlay way added in the same
+position to each image. As shown, the centre of the cross-hairs all line
+up perfectly with the centre of each pin. This was a successful visual test.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=170mm]{resources/registration.png}
+\caption{Visual alignment test using one side of a TQFP-32 Atmega328.}
+\label{visualtest}
+\end{figure}
+
+\subsection{Machine Performance}
+The greatest challenge has been to ensure that the machine's operation is reliable.
+All machine subsystems operate correctly, but for convenient operation
+user interaction must be minimised. 
+
+\subsubsection{Machine axes}
+Obtaining the requires $\pm$ 0.05mm accuracy has been mostly achieved. It has
+proved hard to eliminate the occasional $\pm$ 0.07mm error. While this is not
+ideal, the accuracy appears sufficient for the parts that have been tested.
+
+During the planning stage, linear bearings were considered as a possible
+axis slide. These were measured to have a smaller error than the drawer
+slides, but the extra cost was not felt to be justified. The error inherent
+in the drawer slides however suggest it may have been better to use the 
+linear bearings. The machine design is however conducive to replacing
+the slides with bearings with little redesign.
+
+\subsubsection{Spindle}
+The novel spindle design has proven to perform excellently. It is greatly
+superior to the bearing design used in inexpensive rotary tools (eg the Dremel)
+that are sometimes used in CNC projects. In the course of the project, the
+limitation of the shaft size needing to be 3mm diameter has not proved to
+be a hindrance. While outside the scope of this project, it would be
+interesting to evaluate the relative performance of the design against
+the preloaded single-bearing spindles of desktop CNC mills.
+
+\subsubsection{Isolation Routing}
+The machine has proved as capable at PCB milling as the reference CNC
+mill used for comparison (A converted Proxxon MF-70 CNC mill). The
+inexpensive brushless motor had sufficient power to cut through the copper
+at high speed. In a production version of the machine, it is likely that
+the cost could be reduced by using a less powerful motor and speed
+controller.
+
+\subsubsection{Pick and place}
+The pick and place tool has been shown to operate satisfactorily. One
+improvement that is suggested would be to introduce a small rubber shroud
+for the vacuum nozzle to ensure a tighter seal and hence stronger force.
+This should reduce the movement of the part relative to the needle.
+
+\subsubsection{Hot air tool}
+The hot air tool has not proved to operate satisfactorily. Various
+attempted designs have suffered from overheating of the nichrome wire,
+or insufficient heat transfer to the air. This was however an extended
+project goal, and it is entirely possible to use a commercial hot air tool
+by hand to reflow the parts. It is likely that a future improvement would
+be to replace the hand made hot air tool with a commercial product.
+
 
 \section{Host computer software}
 Software will have to be written to translate board cad data to gcode. Some of this already exists in the public domain, some will have to be made
@@ -1107,11 +1382,6 @@ The belt on the paste extruder is slightly springy. This results in the extruder
 This has an adverse effect on board quality. To counter this, the extruder should be retracted slightly to remove all pressure from the syringe. The distance to retract
 as well as speed of retraction should be experimentally determined for optimum results. Retraction support has been added to the solder paste output of pcb2gcode.
 
-\section{Tools}
-In the course of this project, access to a small mill, a 3d printer and a lathe was essential. It may be worth considering that a lot of people/schools have
-access to a laser cutter and perhaps mill/lathe, so if possible all custom components could be 3d printed or 
-laser cut.
-
 
 %Assuming that x is the required granularity of calibration (the 
 %maximum amount of solder paste that will be wasted), and y is the retraction distance, the following example GCODE will carry out this calibration:
@@ -1128,354 +1398,15 @@ laser cut.
 %//when the user has indicated extrusion:
 %G92 E{y}
 %\end{lstlisting}
-	  
-\section{Managing devices prior to placement}
-There will need to be a way to place the devices in a known position, so they can then be picked up and placed in their final locations.
-Commercial pick and place machines take the parts directly from the reels they are supplied in. While this is optimal for that application in that
-it is a very fast way to operate, the cost of reel dispensers is prohibitive for this machine. Instead, the parts will have to be roughly placed
-by hand. There are a number of ways this could be done:
+	 
 
-\begin{itemize} \itemsep0em
-	\item	Embossed outlines of all necessary device footprints.
-	\item	Rectangular embossed outline, devices to be located in one corner.
-\end{itemize}
-
-It was decided that the latter would be simplest to implement. A rectangular hole will be milled into the bed. Each part can then
-be manually placed inside, then pushed to one corner. A consistent system will be needed to ensure correct orientation. The following set of rules
-is to be used:
-
-\begin{itemize} \itemsep0em
-	\item	ICs will be placed with pin 1 touching the datum corner.
-	\item	Devices will always be placed with the longest side (if applicable) touching the long side of the rectangle.
-	\item	Devices such as MOSFETs will be placed with the corner between the longest side and side with most pins touching the datum corner.
-	\item	Polar 2-lead devices with always have the anode nearest the datum corner.
-\end{itemize}
-
-Given the current component to be placed, and the device footprint, it will be trivial to find the coordinates of the centre of the part. Some
-consideration will have to be given as to how to determine the centre of mass of parts which are not symmetrical in two directions (e.g. MOSFETs).
-	   
-\section{Vacuum Placing}
-\subsection{Prototype}
-To test how effectively small parts could be placed with a vacuum, a simple test setup was fabricated:
-
-\begin{itemize} \itemsep0em
-	\item	12V diaphragm air pump (\pounds 8.89 - eBay)
-	\item	6mm OD/4mm ID silicone tube (\pounds 2.69/m - eBay)
-	\item	various needles (need more info here)
-	\item	MOSFET
-	\item	330$\Omega$ resistor
-\end{itemize}
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/pump_and_hose.jpg}
-\caption{Pump with hose and needle.}
-\label{hose and needle}
-\end{figure}
-
-The pump draws ~200mA at 12V, which is easily controlled with a MOSFET. Using a 1.8mm ID needle, SOIC-20 parts were picked up, 
-and had significant friction against the needle - essential to avoid slipping or rotating. It was important to place the needle 
-as centrally as possible on the part to avoid generating any imbalance that allowed the part to fall. 
-
-\subsection{Conclusions}
-A vacuum needle solution is workable, and a good choice for this project. Things that need to be considered for use in the final project:
-
-\begin{itemize}
-	\item	The pump takes a certain time to generate a vacuum because of the relatively large internal volume of the pump
-		and silicon tube. It will be important to measure this, and add a margin of error so that full suction is applied
-		to each device before any movement takes place. Similarly, when turning off the pump, the pressure must return to
-		atmospheric before the device can be considered to have been placed successfully. In testing, the pump took
-		less than a second to leak sufficiently for this to occur, but if another pump were to be used, it may be necessary
-		to place a tiny hole in the air line so that pressure drops quickly.
-	\item	It is important to place the needle very near to the centre of mass of the device. The majority of devices will be
-		symmetrical, which will make this easier.
-	\item	The needle must be able to be raised and lowered to the correct heights. It may be possible to push the needle down
-		with a weak spring, with a micro servo that raises it - this would remove any need to know the exact height of each
-		device. This will need to be tested.
-\end{itemize}
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/needle_with_resistor.jpg}
-\caption{SMD resistor being picked up.}
-\label{overflow}
-\end{figure}
-
-\section{Operating Speed}
-For the machine to be practical, there are some limitations on the maximum time that a board can take to manufacture. This is particularly true of the device placement stage, as this requires
-human intervention. The total time can be divided into a few main sections:
-
-\begin{itemize}
-	\item	X/Y travel.
-	\item	X/Y cutting.
-	\item	Z movement.
-	\item	Picking/placing components.
-	\item	Hot air reflow.
-\end{itemize}
-
-The X/Y travel will take the most time in total, so the estimated times should be calculated and optimised if possible. Assuming a travel speed of 10mm/s, the total
-time is simply total distance (mm) / 10.
-
-\section{Measuring Accuracy}
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=170mm]{resources/registration.png}
-\caption{Visual alignment test using one side of a TQFP-32 Atmega328.}
-\label{overflow}
-\end{figure}
-
-It is important to measure the accuracy of the axes to ensure that they can reach the specified +-0.05mm. This will need to be measured
-at all points on the bed (as the accuracy will worsen when the bed is central due to increased rod deflection.). Of particular concern will be
-the deflection under the load of the isolation routing bit. The solder paste and device placement will not involve any significant force. The 
-drilling will generate a force, but the tolerance required of a 1mm hole is not nearly as demanding as that of the isolation routing cutter.
-The exact forces exerted by the routing bit have yet to be measured, but are estimated to be 5-10N. This means that the anti-backlash nut
-will need to exert the same or greater force to ensure that the board does not move. This in turn places extra resistance on the motor movement.
-
-\subsection{Testing methodology}
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/dialgauge.png}
-\caption{Measurement setup (This is a placeholder image).}
-\label{dialgauge}
-\end{figure}
-
-In order to characterise the accuracy of the machine, it is important to have a consistent measuring regime. A dial gauge is used to measure
-relative positions of the axes. See Figure ~\ref{dialgauge} for the experimental setup. It is important to ensure the worst-case error is acceptable. The causes of error and their effects are:
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=150mm]{resources/errors.png}
-\caption{Measurement setup, showing error notation.}
-\label{errornotation}
-\end{figure}
-
-Effects are shown with reference to Figure ~\ref{errornotation}, noting that the X and Y referred to in the figure do not necessarily represent the machine axes.
-\begin{itemize} \itemsep0em
-	\item	Z displacement: It is possible the surface of the bed will move in the vertical direction, something that should not happen ideally. This 
-			will occur if the surface over which the idler bearing runs is not flat, or due to manufacturing tolerances in the linear slides.
-	\item	Rotation: The drawer slides do not eliminate rotation completely, and this error dominates. Rotation is relative to the small ball bearing array which slides along
-			the drawer slides, so this source of error depends on the absolute slide position. Figure ~\ref{errornotation} shows the largest error possible, with the ball bearings
-			far away from the location of maximum error, where rotation effects dominate.
-	\item	Motion parallel to the axis direction. This error is mostly caused by flex in the stepper motor mounts, the motor-\textgreater threaded rod couplers and the anti-backlash nuts.
-	\item	Motion perpendicular to the axis direction. This error is caused by small amounts of slop in the drawer slides.
-\end{itemize}
-
-As it is only important to measure the worst-case error, the point shown in purple in Figure ~\ref(errornotation) is the only point which will be measured. 
-
-
-
-\section{Operating Steps}
-
-% Define block styles
-\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
-    text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
-\tikzstyle{block} = [rectangle, draw, fill=blue!20, 
-    text width=14em, text centered, rounded corners, minimum height=3em]
-\tikzstyle{line} = [draw, -latex']
-\tikzstyle{cloud} = [draw, ellipse,fill=red!20, node distance=7cm,
-    minimum height=2em]
-    
-\begin{tikzpicture}[align=center,node distance = 1.6cm,auto]
-    % Place nodes
-    \node [block] (pcb2gcode) {run pcb2gcode to generate GCODE};
-    \node [cloud, left of=pcb2gcode, align=center] (designfiles) {PCB designs exported\\ from design package\\ in GERBER format};
-    
-    \node [block, below of=pcb2gcode] (isolationinit) {attach spindle, load isolation milling bit, zero};
-    \node [block, below of=isolationinit] (isolation) {send routing GCODE to machine};
-    \node [block, below of=isolation, fill=orange!70] (isolationcheck) {visually check board for errors};
-    
-    \node [block, below of=isolationcheck] (drillinit) {load drill bit, zero};
-    \node [block, below of=drillinit] (drill) {send drilling GCODE to machine};
-    \node [block, below of=drill, fill=orange!70] (drillcheck) {visually check board for errors};
-    
-    \node [block, below of=drillcheck] (pasteinit) {load paste extruder};
-    \node [block, below of=pasteinit] (paste) {send solder paste GCODE to machine};
-    \node [block, below of=paste, fill=orange!70] (pastecheck) {visually check board for errors};
-    
-    \node [block, below of=pastecheck] (vacuuminit) {load vacuum needle};
-    \node [block, below of=vacuuminit] (vacuum) {send pick and place GCODE to machine};
-    \node [block, below of=vacuum, fill=orange!70] (vacuumcheck) {visually check board for errors};
-    
-    \node [block, below of=vacuumcheck] (reflow) {Heat board to melt solder paste};
-    % Draw edges
-    \path [line,dashed] (designfiles) -- (pcb2gcode);
-    \path [line] (pcb2gcode) -- (isolationinit);
-    \path [line] (isolationinit) -- (isolation);
-    \path [line] (isolation) -- (isolationcheck);
-    \path [line] (isolationcheck) -- (drillinit);
-    \path [line] (drillinit) -- (drill);
-    \path [line] (drill) -- (drillcheck);
-    \path [line] (drillcheck) -- (pasteinit);
-    \path [line] (pasteinit) -- (paste);
-    \path [line] (paste) -- (pastecheck);
-    \path [line] (pastecheck) -- (vacuuminit);
-    \path [line] (vacuuminit) -- (vacuum);
-    \path [line] (vacuum) -- (vacuumcheck);
-
-    \path [line] (vacuumcheck) -- (reflow);
- %   \path [line] (isolation) -- (isolationcheck);
- %   \path [line] (isolationcheck) -- (drillinit);
-
-\end{tikzpicture}
-
-
-
-
-
-
-
-
-On the host pc, custom software will have to be written to translate the design into a GCODE file to be sent to the machine. Usefully however,
-the machine's firmware will not need to be written or modified significantly.
-
-
-\section{User interface}
-%\label{lcdUI}
-The machine has two main user interfaces: the interface used for the machine in 
-standalone operation (see ~\ref{lcdUI}), and that used when connected to a host computer.
-As the standalone operation has already been described, this section will only
-detail the host computer interface.
-
-\subsection{Pronterface}
-Pronterface was chosen as the user interface as it is a mature GCODE visualiser
-and sender.
-
-INSERT PICTURE
-
-Once the correct serial port and baud rate have been selected, pronterface will connect
-to the machine. GCODE can be loaded using the \textbf{Load file} button. It is 
-rendered to the center of the window (however some operations are not shown correctly).
-The program is primarily intended for operating 3d printers, so to send the GCODE
-to the machine the \textbf{Print} button must be used.
-
-
-
-
-\section{Zeroing the axes}
-
-When the machine is used it is necessary to "zero" the axes to a known datum point on the board. This is particularly important when swapping tools, as there may
-be a small amount of slop in the tool mounts which will vary between tools.
-
-\subsection{X and Y axes}
-
-In order to zero the machine in the X and Y directions, an "L-shaped" piece of metal has been added to the bed (insert pictures/diagrams). All of the tools are metal,
-and therefore conductive. The axes are first manually moved to be near-zero. The tips of the tools are all electrically connected to an input pin on the AVR, with a weak (10K) pullup to 5V.
-The "L-shaped" piece of metal is connected to ground. When instructed, the firmware slowly moves the X or Y axis in the negative direction until a contact is made, and the input goes LOW. At this point,
-the exact position of the tool is known. For convenience it is important that the location of the centre of the tool is known, this can simply be calculated as the diameters of all of the tools are known and fixed.
-
-\subsection{Z axis}
-
-Slightly different mechanisms are used for the zeroing of the Z axis when used for different tools:
-
-\subsubsection{Vacuum needle}
-
-A small microswitch is part of the vacuum needle assembly. It is triggered when the needle is touching either the bed or the top of a component. As a result, zeroing can be carried out simply by 
-moving the tool downwards until it is triggered.
-
-\subsubsection{All other tools}
-
-The other tools are zeroing electrically using the same mechanism as for the X and Y axes. The tools are lowered until contact is made between the PCB and the tool. A temporary contact must be made from ground
-to the copper pcb, this is achieved with an alligator clip.
-
-\section{Future Work}
-This section contains envisioned improvements to the machine that were not implemented due to time constraints.
-
-\subsection{Double-sided boards}
-It is common to use double sided PCBs in order to achieve more compact circuits. The machine will not currently have the ability to process such boards, although this would be possible in a later version.
-
-\subsubsection{Challenges}
-There are a number of challenges associated with working with dual sided boards:
-
-\begin{enumerate}
-	\item	Clamping the PCB to the bed of the machine is more complex with the second side of a double sided board. The components that have
-			already been populated will not allow the board to sit flat and level.
-	\item	The PCB material is a moderately good conductor of heat. When the second side of the board is heated to melt the solder paste, there
-			is a danger that components on the bottom will be loosened and fall off.
-	\item	Both sides of the board must be precisely aligned so that any through-holes or vias line up.
-	\item	Any vias that are required will add considerable complexity. Commercially they are manufactured in a multi-stage chemical process
-			which is not feasible for the hobbyist.
-\end{enumerate}
-
-\subsubsection{Envisioned solutions}
-
-\begin{enumerate}
-	\item	As isolation routing places the greatest stresses on the board mounts, it is unlikely that the reverse side of the board can be manufactured
-			after the first side has been populated with components. Therefore the isolation routing should be carried out on both sides first. Any holes
-			through the board should also be drilled, and cutting the board out also (leaving tabs to hold it in place). When this has been done, the
-			rest of the manufacturing process can be continued with less secure mounting from the board edges.
-	\item	Melting solder on one side of the board while leaving the other side solid will require active cooling of the bottom of the board. Commercially
-			components are often glued so that all the solder paste can be reflowed in one process, but the application of adhesive adds a complex extra
-			process to the machine which should be avoided.
-	\item	Alignment may be achieved by the use of a small USB microscope. The user would be able to see an image of the board, and select datum points (for
-			example the center of a pad). Once the board was flipped, the same datum points could be located. From this, a transformation matrix can simply
-			be computed and applied to the coordinates of the GCODE.
-	\item	A reasonable substitute for vias is to drill a hole through the board, place a short piece of wire into it and solder both sides to the copper.
-			It is likely that the only practical way to achieve this is manually once the board has been manufactured. The ability to perform light milling
-			operations with the machine could be used to mill the ends of the wire much closer to the surface of the PCB than could be achieved with wire cutters.
-			In this way it is likely that thermal vias under components could be achieved (Vias used for the purpose of heatsinking are placed under the thermal
-			tab of an SMD component to conduct heat to copper on the reverse side of the board).
-\end{enumerate}
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=160mm]{resources/finished.jpg}
-\caption{Finished wooden version of the machine.}
-\label{fig:finished}
-\end{figure}
 
 \section{Conclusions}
-As this has been a complex project, the conclusions are separated into a number of sections:
+The conclusions to this report are split between a conclusion
+and evaluation of the project's implementation, and on the use of automation
+to aid PCB manufacture and population.
 
-\subsection{Machine Performance}
-The greatest challenge has been to ensure that the machine's operation is reliable.
-All machine subsystems operate correctly, but for convenient operation
-user interaction must be minimised. 
-
-\subsubsection{Machine axes}
-Obtaining the requires $\pm$ 0.05mm accuracy has been mostly achieved. It has
-proved hard to eliminate the occasional $\pm$ 0.07mm error. While this is not
-ideal, the accuracy appears sufficient for the parts that have been tested.
-
-During the planning stage, linear bearings were considered as a possible
-axis slide. These were measured to have a smaller error than the drawer
-slides, but the extra cost was not felt to be justified. The error inherent
-in the drawer slides however suggest it may have been better to use the 
-linear bearings. The machine design is however conducive to replacing
-the slides with bearings with little redesign.
-
-\subsubsection{Spindle}
-The novel spindle design has proven to perform excellently. It is greatly
-superior to the bearing design used in inexpensive rotary tools (eg the Dremel)
-that are sometimes used in CNC projects. In the course of the project, the
-limitation of the shaft size needing to be 3mm diameter has not proved to
-be a hindrance. While outside the scope of this project, it would be
-interesting to evaluate the relative performance of the design against
-the preloaded single-bearing spindles of desktop CNC mills.
-
-\subsubsection{Isolation Routing}
-The machine has proved as capable at PCB milling as the reference CNC
-mill used for comparison (A converted Proxxon MF-70 CNC mill). The
-inexpensive brushless motor had sufficient power to cut through the copper
-at high speed. In a production version of the machine, it is likely that
-the cost could be reduced by using a less powerful motor and speed
-controller.
-
-\subsubsection{Pick and place}
-The pick and place tool has been shown to operate satisfactorily. One
-improvement that is suggested would be to introduce a small rubber shroud
-for the vacuum nozzle to ensure a tighter seal and hence stronger force.
-This should reduce the movement of the part relative to the needle.
-
-\subsubsection{Hot air tool}
-The hot air tool has not proved to operate satisfactorily. Various
-attempted designs have suffered from overheating of the nichrome wire,
-or insufficient heat transfer to the air. This was however an extended
-project goal, and it is entirely possible to use a commercial hot air tool
-by hand to reflow the parts. It is likely that a future improvement would
-be to replace the hand made hot air tool with a commercial product.
-
-\subsection{Project Management}
+\subsection{Project implementation}
 A recurring theme during the project has been that while all of the machine
 aims were attainable, it took more time than was expected to improve
 the processes to be user-friendly and reliable. In hindsight it may
@@ -1530,6 +1461,51 @@ would be worthwhile to characterise its performance in more demanding applicatio
 however this is outside the scope of the current project.
 The steps taken to produce GCODE (e.g. running pcb2gcode) will always need a PC, but once the GCODE has been produced it is possible for the machine to read this from connected storage.
 
+\section{Future Work}
+This section contains envisioned improvements to the machine that were not implemented due to time constraints.
+
+\subsection{Double-sided boards}
+It is common to use double sided PCBs in order to achieve more compact circuits. The machine will not currently have the ability to process such boards, although this would be possible in a later version.
+
+\subsubsection{Challenges}
+There are a number of challenges associated with working with dual sided boards:
+
+\begin{enumerate}
+	\item	Clamping the PCB to the bed of the machine is more complex with the second side of a double sided board. The components that have
+			already been populated will not allow the board to sit flat and level.
+	\item	The PCB material is a moderately good conductor of heat. When the second side of the board is heated to melt the solder paste, there
+			is a danger that components on the bottom will be loosened and fall off.
+	\item	Both sides of the board must be precisely aligned so that any through-holes or vias line up.
+	\item	Any vias that are required will add considerable complexity. Commercially they are manufactured in a multi-stage chemical process
+			which is not feasible for the hobbyist.
+\end{enumerate}
+
+\subsubsection{Envisioned solutions}
+
+\begin{enumerate}
+	\item	As isolation routing places the greatest stresses on the board mounts, it is unlikely that the reverse side of the board can be manufactured
+			after the first side has been populated with components. Therefore the isolation routing should be carried out on both sides first. Any holes
+			through the board should also be drilled, and cutting the board out also (leaving tabs to hold it in place). When this has been done, the
+			rest of the manufacturing process can be continued with less secure mounting from the board edges.
+	\item	Melting solder on one side of the board while leaving the other side solid will require active cooling of the bottom of the board. Commercially
+			components are often glued so that all the solder paste can be reflowed in one process, but the application of adhesive adds a complex extra
+			process to the machine which should be avoided.
+	\item	Alignment may be achieved by the use of a small USB microscope. The user would be able to see an image of the board, and select datum points (for
+			example the center of a pad). Once the board was flipped, the same datum points could be located. From this, a transformation matrix can simply
+			be computed and applied to the coordinates of the GCODE.
+	\item	A reasonable substitute for vias is to drill a hole through the board, place a short piece of wire into it and solder both sides to the copper.
+			It is likely that the only practical way to achieve this is manually once the board has been manufactured. The ability to perform light milling
+			operations with the machine could be used to mill the ends of the wire much closer to the surface of the PCB than could be achieved with wire cutters.
+			In this way it is likely that thermal vias under components could be achieved (Vias used for the purpose of heatsinking are placed under the thermal
+			tab of an SMD component to conduct heat to copper on the reverse side of the board).
+\end{enumerate}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=160mm]{resources/finished.jpg}
+\caption{Finished wooden version of the machine.}
+\label{fig:finished}
+\end{figure}
 
 \newpage
 \appendix
