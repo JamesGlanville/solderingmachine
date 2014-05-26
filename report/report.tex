@@ -233,11 +233,34 @@ neat results.
 \label{usbisolatorschem}
 \end{figure}
 
-\section{Existing Solutions}
-There are a number of hobbyist solutions to deal with SMD parts:
+\section{Project Concept}
+The focus of this project is easing both the placement and the soldering
+of SMDs. To this end a small machine was envisioned to automate the two
+tasks. This would reduce the amount of time taken to populate PCBs, and
+be of use to end-users who do not wish to carry out the manufacturing
+process by hand. The envisioned end user of such a machine is a
+hobbyist or academic user who wishes to produce small numbers of boards
+with as little user time taken up as possible.
 
-\subsection{Hand soldering}
-Despite the increased complexity, many SMD parts can be soldered by hand. There are three main methodologies for this process:
+
+%\section{Project Idea}
+%It was decided to approach the project by building a machine which can extrude solder paste accurately, and then place
+%the surface mount devices on top. It should achieve this with minimal human interaction. The machine should also be able to
+%drill holes for through-hole devices, as well as be equipped with a milling bit for isolation routing through copper-clad PCBs.
+
+\subsection{Existing Solutions}
+In order to identify potential improvements in manufacturing SMD boards
+research was carried out in to the current methods used by hobbyists.
+The methods were broadly divided into two categories: those using standard
+solder in wire form and those using solder paste. %Solder paste consists of 
+%powdered metal solder suspended in flux. It is used commercially to
+%manufacture boards with SMD components, and used
+
+\subsubsection{Methods using solder in wire form}
+Despite the increased complexity, many SMD parts can be soldered by hand.
+This is the lowest cost process which requires the least equipment: a
+finer soldering iron tip may be all that is required. There are three 
+main methodologies for this process:
 
 \begin{itemize}
 	\item	The pins are soldered individually. This is mainly suitable for larger SMD parts. A steady hand is required, as well as good eyesight.
@@ -260,15 +283,16 @@ to solder the connections by hand.
 \label{handsolder}
 \end{figure}
 
-\subsection{Solder paste}
+\subsubsection{Methods using solder paste}
 
 Solder paste consists of powdered metal solder suspended in flux. It is used commercially to manufacture boards with SMD components. The solder paste is applied to the board where
 connections are to be made. The devices are then placed on top (the paste has slight adhesive properties which limits undesirable component movement). Finally the paste is heated either directly
 or indirectly which causes it to melt and form solder joints. The paste is placed in a number of ways:
 
 \begin{itemize}
-			\item	Solder stencils: A thin stencil is manufactured, usually from Mylar (trade name for BoPET) or stainless steel. It has holes which correspond to locations on the board that require solder.
-					Solder paste is then roughly applied to the top of the stencil before being scraped off. This forces controlled volumes of paste into the holes.
+			\item	Solder stencils: A thin stencil is manufactured, usually from Mylar (trade name for BoPET) or stainless steel, with holes which correspond to locations on the board that require solder.
+					This is used to screen print solder paste to the board.
+%					Solder paste is then roughly applied to the top of the stencil before being scraped off. This forces controlled volumes of paste into the holes.
 					This a very quick process, and suitable for production quantities, but has the expensive set-up costs of stencil manufacture.
 			\item	Solder paste can be applied by hand using a syringe. However, this requires high accuracy while placing paste and is time consuming.
 			\item	Automated solder paste extrusion uses a CNC (Computer Numerical Control) platform to manoeuvre a solder paste extruder around the board. Small amounts of paste
@@ -284,74 +308,196 @@ Once the solder paste has been placed and the devices placed on top, it must be 
 					converted toaster oven.
 \end{itemize}
 			
-\section{Project Idea}
-It was decided to approach the project by building a machine which can extrude solder paste accurately, and then place
-the surface mount devices on top. It should achieve this with minimal human interaction. The machine should also be able to
-drill holes for through-hole devices, as well as be equipped with a milling bit for isolation routing through copper-clad PCBs.
+\subsection{Evaluation of project approach}
+It was decided that automating the soldering of devices using solder wire
+would prove too challenging, as the various methods all require a great
+deal of feedback and error correction to correct poor connections or shorts.
 
-\parskip 0.18in
+%Therefore a method was required to place the solder paste in the correct
+%places and the components on top of it.
 
-When finished, the machine should be able to be connected to a computer via a USB port. A custom GUI will load the necessary 
-design files (for example the holes to be drilled, pads to be soldered), generate the necessary GCODE, and send it to the printer.
+The project approach was therefore to be a CNC machine which could both place the 
+solder paste and the devices. This was to be achieved with minimal human
+interaction. The solder paste would be placed by extruding it through
+a sufficiently small needle that could be moved in three dimensions
+compared to the board.
+%It was decided to approach the project by building a machine which can extrude solder paste accurately, and then place
+%the surface mount devices on top. It should achieve this with minimal human interaction. The machine should also be able to
+%drill holes for through-hole devices, as well as be equipped with a milling bit for isolation routing through copper-clad PCBs.
+%\parskip 0.18in
 
-\section{Requirements}
+%When finished, the machine should be able to be connected to a computer via a USB port. A custom GUI will load the necessary 
+%design files (for example the holes to be drilled, pads to be soldered), generate the necessary GCODE, and send it to the printer.
 
-\subsection{X/Y axes}
-A device pitch of 0.4mm (distance from centre of one pin to the next) is on the lower end of SMD ICs. Using solder paste,
-devices will shift slightly upon heating to self-align. A requirement is that the device should be placed to a
+\subsection{Possible expansions of project scope}
+Once the project concept had been chosen as a CNC machine with a syringe
+tool and a placement tool it became clear that such a machine may be 
+capable of manufacturing the PCB itself without a great increase in cost
+or complexity if an extra spindle tool could be designed. This would
+allow the use of a milling bit for isolation routing through copper-clad
+PCBs, and a drilling bit to drill any holes for through-hole devices.
+
+\subsection{Project specifications}
+
+
+%\section{Requirements}
+
+\subsubsection{Device placement}
+\label{devplacement}
+A device pitch (distance from centre of one pin to the next) of 0.4mm is typical of small SMDs. Using solder paste,
+devices will shift slightly upon heating to self-align due to liquid solder's surface tension. A requirement is that the device should be placed to a
 small fraction of its pitch, so there is no danger of incorrect connections. An accuracy of $\pm$ 0.05mm
 in placement was chosen as a project goal. This should be sufficient to ensure the correct connections are made, but may be difficult to achieve in practice.
 
-\subsection{Board size}
+\subsubsection{Board size}
 A maximum board size of 100x100mm would be sufficient for the vast majority of boards. 100x100mm was chosen because that
 is the maximum board size using the free version of EAGLE, a popular design package. As a result, there are a lot of designs
 that use the maximum size, and it would be useful if this project allowed those designs to be populated.
+The PCBs needed for the IDP fit within the 100x100mm area, so this project
+may be of use in the engineering department for IDP board manufacture.
 
-The PCBs needed for the IDP fit within the 100x100mm area.
-
-\subsection{Rigidity}
-The sideways forces generated by the isolation routing bits were measured to be less than 2N. It is important that the $\pm$ 0.05mm
-accuracy requirement is met under this condition.
-
-\subsection{User interaction}
+\subsubsection{User interaction}
 User interaction should be minimal. While this will not be an entirely 
-automated process (for example the SMD parts must be manually loaded
+automated process (for example the SMD parts may need to be manually loaded
 into a tray) the less attended time required the better. All user
 interfaces should be user-friendly, and all processes designed to reduce
 the user's workload.
 
+
+
+
 \section{Design}
 
-\subsection{X/Y axes}
+The design of the machine is split into a number of subsystems that are
+described in sections \ref{firstsection} through \ref{lastsection}. These
+are:
 
-The X/Y axes have the same requirements: $\pm$ 0.05mm accuracy. There is the choice between moving the various tools over a stationary
-bed, or keeping the tools stationary and moving the bed. Only the bed will be moved, because it means that the pick
-and place functionality does not have to move the parts, simply lift and lower them. This should reduce the risk of the parts
-shifting on the needle, or falling off. It also allows for the use of more tools since weight is no longer a concern.
-
-The bed will need travel distances of at least 100mm in both directions so that the entire bed can be accessed by tools. However,
-there should also be space to place devices before they are automatically placed. An area of 100x30mm was chosen as a compromise
-between maximum device storage and total machine size.
-
-\subsubsection{Possible kinematic mechanisms}
 \begin{itemize}
-	\item	Toothed belts and pulleys: These are simple and inexpensive. However, despite the fibreglass or steel strengthening cables, they will
-			still elongate under load. As a result, they are not suitable for any routing/milling operations.
-	\item	Threaded rod + ordinary nuts: This is an inexpensive solution that relies on the threaded rod having a constant pitch. Strong springs 
-			are added between each pair of nuts to provide an anti-backlash effect.
-	\item	Ball screws: These are similar in operation to threaded rod and ordinary nuts, but use ball bearings between the nut and rod for smoother
-			operation. These are sprung against the rod for an anti-backlash effects. They are higher performance, but more expensive.
+	\item Machine motion. A three-axis CNC subsystem is required to move
+		the various tools in three dimensions relative to the PCB.
+	\item Electronics. An electronic module is required which can drive
+		both the machine's axes and the tools, while responding to user
+		interaction.
+	\item Solder paste extruder. This must be capable of accurately
+		dispensing small volumes of solder paste.
+	\item Device placement tool. This must be capable of picking up and
+		placing the SMDs in their required locations.
+	\item Spindle. This powers the milling and drilling bits to manufacture
+		the PCB itself.
 \end{itemize}
 
-\subsubsection{Possible drive mechanisms}
+
+%electronics, axes, paste, place, spindle
+
+\section{Machine motion}
+\label{firstsection}
+This section describes the requirements for machine motion and how they 
+are implemented in the design. There was the choice between moving the various tools over a stationary
+bed, or keeping the tools stationary and moving the bed. For this project
+only the bed will be moved, because it means that the pick
+and place functionality does not have to move the parts, simply lift and lower them. This should reduce the risk of the parts
+shifting on the needle, or falling off.% It also allows for the use of more tools since weight is no longer a concern. 
+
+\subsection{Requirements}
+The axes all have the same requirements of $\pm$ 0.05mm accuracy (as 
+described in section \ref{devplacement}). The greatest forces are
+encountered during the isolation routing operations, which were
+measured to be less than 2N. The system accuracy must be maintained
+under this condition.
+
+The Z axis has the smallest required travel distance as the tools
+need only move high enough to clear any devices. A minimum travel of 50mm
+was chosen which is more than sufficient for the tallest devices. The
+X and Y axes must not only be capable of moving over the maximum 100x100mm
+board, they must also allow travel to where the devices are stored prior
+to final placement. A total area of 100x130mm was chosen as a compromise
+between maximum device storage and total machine size.
+
+A major design philosophy was to be that all of the axes should be as
+similar as possible. This would result in the least amount of development
+work possible, as well as the most similar axis characteristics. This 
+was later important during testing so it was not necessary to separately
+characterise the errors of each axis.
+
+%
+%\subsection{Z axis}
+%The Z axis requires the same precision as the X and Y (Isolation routing bits are conical, therefore trace width error is proportional to height error). 
+%
+%\subsubsection{Potential mechanisms}
+
+%\begin{itemize}
+%	\item	Hinged Z using micro servos: cheap (\pounds 2 on eBay). Require no drivers, and simple to drive. Z axis potentially
+%		does not need to be linear so rotary-\textgreater linear mechanism simpler. If not linear,
+%		then hinging out of the way is a cheaper mechanism than slides.
+%	\item	Using an identical threaded rod mechanism to the X and Y axes. This has the advantage of requiring less design work.
+%\end{itemize}
+
+%\subsubsection{Chosen design}
+%The same mechanism (threaded rod and stepper motors) was chosen for the Z axis. Ideally the axes will be as similar as possible which will result
+%in less work characterising the errors in the mechanisms.
+
+%
+
+
+
+%\subsection{X/Y axes}
+%\subsection{Rigidity}
+%The sideways forces generated by the isolation routing bits were measured to be less than 2N. It is important that the $\pm$ 0.05mm
+%accuracy requirement is met under this condition.
+
+%The X/Y axes have the same requirements: $\pm$ 0.05mm accuracy.
+
+
+
+%The bed will need travel distances of at least 100mm in both directions so that the entire bed can be accessed by tools. However,
+%there should also be space to place devices before they are automatically placed. An area 
+
+\subsection{Design selection}
+Two possible drive methods were considered for use in this project:
 \begin{itemize}
 	\item	Stepper motors: These are brushless motors which can be controlled down to the nearest "step" (commonly 1.8\textsuperscript{0}). They require
 			stepper motor drivers to provide the alternating magnetic field. Provided the maximum torque is not exceeded, they can be run open-loop.
 	\item	DC motors + feedback: A feedback mechanism such as a rotational encoder or linear potentiometer can be used to provide feedback for closed-
 			loop control of DC motors. A microcontroller adjusts the current to the motor accounting for its current position and desired position.
 \end{itemize}
+Stepper motors were chosen as they facilitate a simple implementation.
+Coupled to the drive mechanism, they are driven open-loop under the
+assumption they will rotate precisely proportional to the number of 
+electrical pulses. Their extra cost compared to DC motors is offset
+by the simpler design and lack of feedback elements to consider. They
+also have the advantage that they can easily be controlled by existing
+electronic module firmware (see section \ref{firmwarestuff}). The type
+of motor was chosen to be a type of NEMA17 (standard motor size) motor
+with a 2.2kg/cm holding torque. This was found to be sufficient for an 
+axis speed of 10mm/s without any skipping of steps.
+%Having chosen to use small stepper motors to control the axes, the choice of stepper motor is now important. Some NEMA17 motors were tested,
+% which claim a 2.2Kg/cm holding torque. Tests were run to see what their maximum
+%speed without skipping steps was, with a result of 10mm/s. This is sufficient for use in the
+%project (where speed is not a great concern), but it was thought that it would not be beneficial to use a smaller motor. 
 
-\subsubsection{Possible slide mechanisms}
+
+A number of methods are available to translate the rotational driving
+ motion to the linear motion required for the axes. Those
+considered for this project are as follows:
+
+\begin{itemize}
+	\item	Toothed belts and pulleys: These are simple and inexpensive. However, despite the fibreglass or steel strengthening cables, they will
+			still elongate under load. As a result, they are not suitable for any routing/milling operations.
+	\item	Threaded rod and ordinary nuts: This is an inexpensive solution that relies on the threaded rod having a constant pitch. Strong springs 
+			are added between each pair of nuts to provide an anti-backlash effect.
+	\item	Ball screws: These are similar in operation to threaded rod and ordinary nuts, but use ball bearings between the nut and rod for smoother
+			operation. These are sprung against the rod for an anti-backlash effects. They are higher performance, but more expensive.
+\end{itemize}
+Threaded rod and ordinary nuts were chosen for use in this project because
+of their low cost compared to ball screws, and their strength compared
+to toothed belts. A thread size of M8 was chosen as it provided sufficient
+accuracy at a high enough speed.
+
+The axes are required to move the bed in three dimensions. However the 
+threaded rod is only capable of providing accurate motion if the bed
+is constrained to move only in the axis direction. To this end a slide
+mechanism is required. Three such mechanisms were considered:
+
 \begin{itemize}
 	\item	Drawer slides: Inexpensive drawer slides contain pre-loaded ball bearings which reduce wobble.
 	\item	3d printed bushings and steel rod: If 3d printer existence assumed, then very cheap solution. These bearings
@@ -359,31 +505,16 @@ between maximum device storage and total machine size.
 	\item	LM8UUs and steel rod: About 50p each, simple to use and accurate.
 \end{itemize}
 
-\subsubsection{Chosen design}
+Drawer slides were chosen because of their cost advantages as well as the fact
+they can easily be coupled to flat boards.
 
-M8 threaded rod was chosen as the linear actuators, coupled to stepper motors. This simplifies control compared to a closed-loop solution, and is readily
-supported by existing microcontroller firmware. Drawer slides will be used because they are the cheapest option, and are easy to mount to flat boards.
+%\subsubsection{Chosen design}
 
-Having chosen to use small stepper motors to control the axes, the choice of stepper motor is now important. Some NEMA17 motors were tested,
- which claim a 2.2Kg/cm holding torque. Tests were run to see what their maximum
-speed without skipping steps was, with a result of 10mm/s. This is sufficient for use in the
-project (where speed is not a great concern), but it was thought that it would not be beneficial to use a smaller motor. 
+%M8 threaded rod was chosen as the linear actuators, coupled to stepper motors. This simplifies control compared to a closed-loop solution, and is readily
+%supported by existing microcontroller firmware. Drawer slides will be used because they are the cheapest option, and are easy to mount to flat boards.
 
-\subsection{Z axis}
-The Z axis requires the same precision as the X and Y (Isolation routing bits are conical, therefore trace width error is proportional to height error). 
 
-\subsubsection{Potential mechanisms}
 
-\begin{itemize}
-	\item	Hinged Z using micro servos: cheap (\pounds 2 on eBay). Require no drivers, and simple to drive. Z axis potentially
-		does not need to be linear so rotary-\textgreater linear mechanism simpler. If not linear,
-		then hinging out of the way is a cheaper mechanism than slides.
-	\item	Using an identical threaded rod mechanism to the X and Y axes. This has the advantage of requiring less design work.
-\end{itemize}
-
-\subsubsection{Chosen design}
-The same mechanism (threaded rod and stepper motors) was chosen for the Z axis. Ideally the axes will be as similar as possible which will result
-in less work characterising the errors in the mechanisms.
 
 \subsection{Part placement}
 
