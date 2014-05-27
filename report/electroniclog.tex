@@ -1,0 +1,1012 @@
+% File name: report/technicalabstract.tex
+
+\documentclass[a4paper,11pt]{article}  % Standard document class
+\usepackage[english]{babel}            % Set document language
+\usepackage{fullpage}                  % Set up page for small margins etc
+\usepackage{listings}
+\usepackage{graphicx}                  % For including images in document
+
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
+
+\usepackage{appendix}
+\usepackage{color}
+\usepackage{hyperref}
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+%\usepackage{placeins}                  % Allows use of \FloatBarrier
+% to avoid images or tables
+% moving into next section
+%\usepackage{subfig}                    % For subfigures...
+
+\usepackage{amsmath}                   % For improving maths/formula typesetting
+%\usepackage{tabular}                  % Table changing package
+
+%\usepackage{algpseudocode}             % For producing algorithms/flowcharts
+
+\usepackage{listings}                  % For including source code in document
+\lstset{
+	basicstyle=\ttfamily\tiny,
+%  basicstyle = \tiny,
+  breaklines=true
+}
+
+% Provide command for scientific notation
+\providecommand{\e}[1]{\ensuremath{\times10^{#1}}}
+\providecommand{\degrees}{\ensuremath{^{\circ}}}
+
+\setlength{\parindent}{0in}
+\setlength{\parskip}{\baselineskip}%
+
+
+% Define title here:
+\title{Project Logbook: Source control commits} %C-PJGL2-7
+%\title{4th Year Project: Automated soldering/solder paste machine (C-PJGL2-7) \\ \vspace{2 mm} {\large Technical Abstract}}
+\author{James Glanville (EM)}
+\date{27th May 2013}
+
+\hypersetup{
+    colorlinks,
+    allcolors=blue,
+    linktoc=all,
+}
+
+\begin{document}
+
+% generate title
+\maketitle
+
+%\begin{figure}[ht!]
+%\centering
+%\includegraphics[width=100mm]{resources/render.png}
+%\label{render}
+%\end{figure}
+This document lists the "commits" to version control of the files used
+by this project. It accompanies the written part of the project logbook.
+\\
+
+\begin{lstlisting}[frame=single]
+commit be9773fd95359448ba6e1b0b9881eb9a851a26a7
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue May 27 06:15:57 2014 +0100
+
+    added description of project files
+
+commit 28ff3205dc246fd875f4cb3878c7ed79d1afa49c
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue May 27 03:01:59 2014 +0100
+
+    updated images
+
+commit 476ecbe7e7f1f283968c100f1ee979bc9f67e0e1
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue May 27 02:59:08 2014 +0100
+
+    flake
+
+commit e32a4bd9ff6db6cf4059d3faa9e53f1b95406e21
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue May 27 02:56:19 2014 +0100
+
+    added dial
+
+commit 616ecdbc339f8bf927f12ab760dc1f0b43402ae0
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue May 27 02:46:24 2014 +0100
+
+    worm
+
+commit 72672f258b2fcf44f7d100846fd0704006c909e7
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue May 27 02:40:41 2014 +0100
+
+    added extruder pictures
+
+commit e7970595bdd7b260f28a00d4215287a26ea9bf71
+Merge: 58bbcb8 0511d8e
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue May 27 02:02:59 2014 +0100
+
+    Merge branch 'master' of https://github.com/JamesGlanville/solderingmachine
+
+commit 58bbcb8d9fd98e9d139f64d4f3de9cd00f90b198
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue May 27 02:01:08 2014 +0100
+
+    added paste extrusion picture
+
+commit 0511d8e939e501d34b8781562124ce1a2bca20e7
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon May 26 08:44:57 2014 +0100
+
+    added automated inspection
+
+commit 8de54763df7afcf1d26e6472f1e15ba3c3143124
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon May 26 08:05:45 2014 +0100
+
+    moved software up in report
+
+commit 4a7f587850cca424a8524f9275320fc2fe82cb78
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon May 26 08:04:32 2014 +0100
+
+    mostly finished rejigging of report
+
+commit a97f863c943e20164e02c5c7e8743267b815f8b2
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon May 26 06:57:33 2014 +0100
+
+    compiled
+
+commit 203ca830efe49617a1706961417f2e3c89a27517
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon May 26 06:57:20 2014 +0100
+
+    commited loads of report improvements
+
+commit 3cf259b4cd249746ace46c3ec7bf40359cc838fe
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon May 26 03:45:46 2014 +0100
+
+    rewrote axis design
+
+commit 4d31fec4270bd1621447bab43c613ada1886aa69
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon May 26 01:48:11 2014 +0100
+
+    rewritten intro
+
+commit 66d4e6cdde2fb10fa00ef4ed94bb8608006e49be
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 04:34:25 2014 +0100
+
+    added fuse comment
+
+commit e3bc0cc851bd645197c29d3c5325652885c1fad7
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 04:32:45 2014 +0100
+
+    neatened report, added worm extruder reference, explained usb serial choice
+
+commit 1e831b2986c1fd2a3bdcdd91cb48a41b62d96aaa
+Merge: a4ad5c4 d3171ec
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 04:28:03 2014 +0100
+
+    Merge branch 'master' of https://github.com/JamesGlanville/solderingmachine
+
+commit a4ad5c429a81810bf6ad2ead2db8f36edb7dd5a9
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 04:27:41 2014 +0100
+
+    added worm extruder placeholder
+
+commit d3171ec8936d1d461cfe51ea6031ff6cb2dac292
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 04:17:27 2014 +0100
+
+    added user interaction section
+
+commit a1f12c71f88fea607e8d9774bea5166479b83729
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 04:14:20 2014 +0100
+
+    added more evalution comments
+
+commit c1b7b607e3a364a0dccd6bf65bfe79414a4e228f
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 04:05:41 2014 +0100
+
+    compiled handbook
+
+commit e3355d8447857030645731c2350ea6d7b86bafd4
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 04:05:24 2014 +0100
+
+    mentioned handbook
+
+commit b522dc28eaa77633fa11a85b3ac2e91a94aabcd3
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 04:03:17 2014 +0100
+
+    added untracked breakout board files
+
+commit ba433ed3ce99d598b5ac8b4de548c37e96060617
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 04:02:50 2014 +0100
+
+    actually compile the report...
+
+commit 9e93da7c5f4e92970121ae5def530fde1f812e15
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 04:02:31 2014 +0100
+
+    added pronterface section
+
+commit 85c41c7319bc6a8934fb4cb32eed78d3c5c5ad85
+Merge: f436821 cbd1418
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 03:56:44 2014 +0100
+
+    Merge branch 'master' of github.com:JamesGlanville/solderingmachine
+
+commit cbd14187e11b4bf5369daa967be959ba6e89e8ee
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 03:55:42 2014 +0100
+
+    added spindle photo
+
+commit f43682134f939154fae1c43896d61b38c1136235
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 03:51:09 2014 +0100
+
+    added lcd UI
+
+commit 49f3991783dfdeecb39ee95a6a4f3768d4bc4dd5
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 03:42:07 2014 +0100
+
+    moved heat calculations to appendix
+
+commit 0d07de97507b127832cc0239fdccfd9346fd806e
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 03:36:32 2014 +0100
+
+    added pictures of breakout board
+
+commit 0412bffa3e5bea952975070e7549eac3c1fd925b
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 03:28:24 2014 +0100
+
+    added breakout photos
+
+commit a5dc4798a3e10d7496a0726b3b5f9d2d26393806
+Merge: 7d7e808 35b980e
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 03:28:10 2014 +0100
+
+    Merge branch 'master' of https://github.com/JamesGlanville/solderingmachine
+
+commit 7d7e808927a195a16875be549ab1147f070852a0
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 03:27:25 2014 +0100
+
+    added errors.svg
+
+commit 35b980ec1b7423b2353f8e5350f772dd9ce1696a
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 02:08:56 2014 +0100
+
+    technical abstract draft finished.
+
+commit 8a1beb511428a30156d1ba1e9aa6f0312bc11391
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri May 23 02:01:36 2014 +0100
+
+    added technical abstract pdf
+
+commit 2f40e8bfa781e01af44ac7bf3dd144642e42f60f
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu May 22 15:49:14 2014 +0100
+
+    added sample technical abstract, added risk assessment to the report and updated compile script
+
+commit d4a779859c2188cc790e3c0d28d26c9f6520c456
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu May 22 13:56:20 2014 +0100
+
+    compiled updated conclusion
+
+commit 006f2bd7823ca2892cd49389e3d8a693e2cb48dd
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu May 22 13:50:16 2014 +0100
+
+    project management section added
+
+commit 079d2832cc88e67b81c26c107b5a8fb8b0b10ee1
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu May 22 13:38:10 2014 +0100
+
+    added conclusions
+
+commit 6a108d951b5270d891d28bf401e7a40dc0cb3b83
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu May 22 13:21:18 2014 +0100
+
+    added conclusion section, needs work
+
+commit ca13f70176eef75e5390e2d8dd90728513e91dbb
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu May 22 12:13:28 2014 +0100
+
+    added handbook
+
+commit cf1945bfe2ab65d7c7fad71bd334f011fe0f679c
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu May 22 12:12:38 2014 +0100
+
+    added pictures, and fixed report
+
+commit 2b3fb1fa7d50fe98ad7f8588141b3d3315fd3f7c
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu May 22 11:11:20 2014 +0100
+
+    fixed handbook formatting for compilation
+
+commit 618cfd3c311580fdb87df2ef2e190ec1576721f8
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu May 22 10:43:49 2014 +0100
+
+    added some operating steps
+
+commit fbffecc58c31d3f0134e111f67b9e107517c3bed
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue May 20 05:49:09 2014 +0100
+
+    moved install instructions to handbook
+
+commit 3b4688e24a0eeff2abe04dc419f119ab75937a57
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue May 20 05:48:33 2014 +0100
+
+    Updated compilation script
+
+commit d79154fd04b495797574b7da922594de38a830a5
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon May 12 15:06:21 2014 +0100
+
+    improved report from feedback comments
+
+commit c76163ba03a5387687effa5b3ee43cf089438768
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon May 12 14:28:26 2014 +0100
+
+    added glossary
+
+commit e89db8e494c88a2e6dee63557bc22b3d07df7af3
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon May 12 14:10:19 2014 +0100
+
+    added compilation script, a lot of spelling errors fixed and a few more citations added
+
+commit a251931ab1762315b1421c3b589faf6221faad96
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon May 12 02:56:46 2014 +0100
+
+    started tidying up equations
+
+commit eef4a8468600c7bfc24dcb5605e7fdbd6d555516
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon May 12 01:38:02 2014 +0100
+
+    added error testing sketch
+
+commit 304eccce41f63b2bf7874fe243c9382fc79cede0
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon May 12 01:30:57 2014 +0100
+
+    added sketch of errors
+
+commit a613c2290fa402f886735841eedf68a3b67d0be3
+Merge: 6d3572c 413baf2
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon May 12 01:10:22 2014 +0100
+
+    Merge branch 'master' of github.com:JamesGlanville/solderingmachine
+
+commit 6d3572cea29c17fd0f7add2b1bd1b51d0da1a29e
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon May 12 01:10:06 2014 +0100
+
+    adding report sections
+
+commit 413baf239f36214d61e3466aee61b93bad3cd797
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon May 12 01:09:29 2014 +0100
+
+    add placeholder dial gauge photo
+
+commit ce4ff19cb3719f1cabce3f93bf2f33d76f32f741
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon May 12 01:02:14 2014 +0100
+
+    added terminology section
+
+commit 2b606287cb2c345ea5f0a73f5f2bd3110190aeef
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Sun May 11 23:34:39 2014 +0100
+
+    microscope pics
+
+commit 6b9476e21f310840f136928d2a7788ce0b658ccb
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Sun Apr 27 12:07:51 2014 +0100
+
+    added microscope pictures for later use in report
+
+commit feaa46bf5add809bbe41f1cd8ef11f675c2ced78
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Sun Apr 27 12:07:38 2014 +0100
+
+    various boards and part updates
+
+commit 1f6a0fe7b88d24762fab9ebfacc2ddb848be56c5
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri Apr 4 02:55:34 2014 +0100
+
+    added usb isolator stuff
+
+commit c1d7159f5b995da61e6ad6ceaed02d56e41f4b9b
+Merge: 2b94900 9cb561c
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri Apr 4 02:42:43 2014 +0100
+
+    Merge branch 'master' of https://github.com/JamesGlanville/solderingmachine
+
+commit 2b9490062f7ec1a77effa032e1eb1e6ce5f708a3
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri Apr 4 02:42:13 2014 +0100
+
+    added usbisolator schem
+
+commit 9cb561cf713c94b6086a79830c16756d2c1ffc4b
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 09:08:35 2014 +0100
+
+    added some speed stuff, need more
+
+commit 39a06cd42f4d7dde3f992bbea79089458be64e4b
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 08:36:49 2014 +0100
+
+    added render of machine
+
+commit ca871987b4c4e934171a2da9ce1b135ee693479d
+Merge: a2ed30a aecdaf6
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 08:19:46 2014 +0100
+
+    Merge branch 'master' of https://github.com/JamesGlanville/solderingmachine
+
+commit a2ed30a0d17c2f7cd74921aaca8ff509bce146fd
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 08:19:28 2014 +0100
+
+    added sample render
+
+commit aecdaf619c5698b2cbedcfca2310b85efd06970f
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 08:04:31 2014 +0100
+
+    Rewrote a lot of the decision making part of the report
+
+commit 64e9964a4a49196e9696ccb34e4201480461e552
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 08:03:56 2014 +0100
+
+    added old breakout picture
+
+commit ba1fb672a9f7494deb1cc488ec78a30a6c4ca82c
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 08:00:31 2014 +0100
+
+    annotated hc-05 breakout
+
+commit 213c948e1befb752ca86b38a3b0fc897f9150d1b
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 07:55:47 2014 +0100
+
+    added hc-05 breakout
+
+commit 7914d034bc4462fe269a283aafa2ae2959b13bb5
+Merge: b03a1bf 7fd0fe6
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 07:12:33 2014 +0100
+
+    Merge branch 'master' of https://github.com/JamesGlanville/solderingmachine
+
+commit b03a1bf40ca6a9156e7c719f71aa5ed686c8211d
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 07:12:29 2014 +0100
+
+    added soldering pictures
+
+commit 7fd0fe6d1dbfbf937102e76e23691b2458226198
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 05:12:00 2014 +0100
+
+    added some figures
+
+commit 85ef3c34d211fac340e8363f88a43efbed0d1702
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 05:11:20 2014 +0100
+
+    added example smd solder
+
+commit 727d97c680497ac6f0ea81b4a4b6b7a8e2f05c86
+Merge: 1995c10 0f5404a
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 05:04:19 2014 +0100
+
+    Merge branch 'master' of https://github.com/JamesGlanville/solderingmachine
+
+commit 1995c10c55fc432992f7e25e1d7d63b7479172d0
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 05:02:25 2014 +0100
+
+    added example smd board
+
+commit 0f5404a53d34854adae5df6f32065c38dfcef879
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 04:53:08 2014 +0100
+
+    added i2c lcd backpack schem
+
+commit 0af3886c2b1c009f7fd3cdeedfceea9076dbe31b
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 04:45:27 2014 +0100
+
+    redrew servo exceriser
+
+commit 767ad3c8e54a992af75df8db46a9cc6539f3d338
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 04:15:29 2014 +0100
+
+    added electronics folder
+
+commit 212cf5ce064a38eac4a181e1c5b646e6e40f169a
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 04:14:56 2014 +0100
+
+    added lcd_backpack schem
+
+commit 37d6f7fb0bf62e9ad469130d11cb6d975c1f55c0
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 03:37:58 2014 +0100
+
+    exported all drawings as pdfs
+
+commit 072841141b5ca9eebe0a47c296fa42e98c8e5e78
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 02:33:07 2014 +0100
+
+    started exporting drawings
+
+commit cc394e398bfef7f910a55c81e5fc8eedc7815aaf
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Apr 3 02:32:57 2014 +0100
+
+    started exporting drawings
+
+commit c465eb2c03f916c359abcbec1561a64029786ac4
+Merge: ef57b4b 7ee3419
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Apr 2 23:24:01 2014 +0100
+
+    Merge branch 'master' of https://github.com/JamesGlanville/solderingmachine
+
+commit 7ee3419902dd162c178f0bbdc626980d09970457
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Apr 2 22:22:56 2014 +0100
+
+    added sample part list to report with instructions
+
+commit ef57b4b872d4856eed4ecb1708bf2d5c8312d34d
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Apr 2 22:10:23 2014 +0100
+
+    added part list
+
+commit 4f5018dacff4a62981d91909c9b9601c9a48c1a6
+Merge: d3443a3 078eb29
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Apr 2 03:39:04 2014 +0100
+
+    Merge branch 'master' of github.com:JamesGlanville/solderingmachine
+
+commit d3443a329b814df63e86c67b972e11d74accac33
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Apr 2 03:38:58 2014 +0100
+
+    added milling settings
+
+commit 078eb2937f3ac4105ae0566ceb84c7d7c582deed
+Merge: 264199b 6ec9bdb
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Apr 2 02:57:54 2014 +0100
+
+    Merge branch 'master' of https://github.com/JamesGlanville/solderingmachine
+
+commit 6ec9bdb145909a4640336e932c95728d5be47c50
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Apr 2 00:06:04 2014 +0100
+
+    actually added gear photos
+
+commit c937b8c52d916f70aeeaf111df390344a1c6d670
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Apr 2 00:05:50 2014 +0100
+
+    added milled gear photos
+
+commit 264199bd74c4cb89a0102dab460ce60e21a26fe7
+Merge: 1352f96 25e94a2
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Apr 1 23:54:10 2014 +0100
+
+    Merge branch 'master' of https://github.com/JamesGlanville/solderingmachine
+
+commit 1352f9601abcbaebe65abb4e5cd6cc59548017d3
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Apr 1 23:40:05 2014 +0100
+
+    added xt60 panelmount and spindle updates
+
+commit 9c2ed89c48e1be0418d418a591f5e7dfdf1e8c30
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Apr 1 23:39:54 2014 +0100
+
+    Added milling gcode
+
+commit 25e94a244e91335a4034e2efaadfad5df91625fb
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Apr 1 12:30:18 2014 +0100
+
+    updated report
+
+commit 1a7247ea6d4350585adab43c8ce28b0980be43a3
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon Mar 31 20:44:52 2014 +0100
+
+    added test board
+
+commit 5af473526038cf38707fde57f5b6acada2420617
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Sat Mar 29 04:58:22 2014 +0000
+
+    update for backup
+
+commit b03f2fbe5228414ce4c10733fdfd839c95752be2
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Mar 27 07:32:48 2014 +0000
+
+    added pcb2gcode improvements
+
+commit 259ea119b03991260f2e3d9044925353466cb6df
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Mar 27 07:32:44 2014 +0000
+
+    added pcb2gcode improvements
+
+commit 0de7cea95e0a1e5799b0b486c7e35454e71f7387
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Mar 27 01:14:26 2014 +0000
+
+    added hot air tool to report, as well as milling
+
+commit 0b25339b404f890f1fa8c227de0df18592a31fa2
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Mar 26 23:40:44 2014 +0000
+
+    added milling andhotair
+
+commit a60209a842c2cbff807938777e72cc80d0ebf685
+Merge: 48d04f9 d7c54e4
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Mar 26 02:26:30 2014 +0000
+
+    Merge branch 'master' of github.com:JamesGlanville/solderingmachine
+
+commit 48d04f9987a086ea6f2a8ff029ca999b55cc0db9
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Mar 26 02:26:21 2014 +0000
+
+    remembered to track report resources
+
+commit d7c54e4e5a834b1aa3498991676604d33ba61ff1
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Mar 26 02:16:08 2014 +0000
+
+    started adding new improvements
+
+commit 0915a81c481847fed21396b86eed042d216b8d98
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Mar 26 01:27:59 2014 +0000
+
+    started double-sided board thoughts
+
+commit ad9c52f55fa9de11ef6f2c7ce468a20278e7c6d1
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Mar 26 01:00:40 2014 +0000
+
+    added section on hot air tool
+
+commit 5e5aa922f6169703d9ec9c99e752722ba8775e5a
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon Mar 24 05:04:42 2014 +0000
+
+    added brief text about newer extruders
+
+commit 136d43fd59ee8eac9eaa1692a2fef18563956856
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon Mar 24 04:54:49 2014 +0000
+
+    added zeroing
+
+commit 560ceae18f4e5ac740c1104781b4d8d10957a7e2
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon Mar 24 04:44:31 2014 +0000
+
+    added calliper mod
+
+commit bd54b731dbf1b178aafecaa7e80c6e5a0e64ad2f
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon Mar 24 04:10:29 2014 +0000
+
+    added example SMD sizes
+
+commit 5a27fead53d157085e0dd23098bc6634fb8fc7b3
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon Mar 24 03:37:51 2014 +0000
+
+    added servo tester stuff
+
+commit 7244441d2854335681b8af89c23ce5e617f5663b
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon Mar 24 02:43:52 2014 +0000
+
+    redid solder methods
+
+commit ec74cb442cc665ea6ccaec55702b5132bfddc9b2
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon Mar 24 02:00:52 2014 +0000
+
+    added bluetooth module details and usb serial stuff
+
+commit 91d0b75b8d5105e181b609b9e2dd019ff96c9623
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Mar 11 02:18:25 2014 +0000
+
+    lots of creo updates
+
+commit 78b99e37022ec90172d33f83652f04e9852f9aaa
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri Feb 7 05:32:28 2014 +0000
+
+    parts drawing
+
+commit ad10d73a66347ca155ff32fb754a0b8c858a150d
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Feb 6 13:11:26 2014 +0000
+
+    added drawing for meeting
+
+commit 3f9ecf50705048f4fb529493a464ea41a931297e
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Feb 6 11:24:38 2014 +0000
+
+    gahg
+
+commit 6889c5fd28da512f8e373a499b2822e64ba0551a
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Feb 6 01:59:23 2014 +0000
+
+    Lots of creo updates
+
+commit f36dc4aedd5b1acf776d62424101660d98bf7ee2
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Sat Dec 21 14:04:21 2013 +0000
+
+    new design
+
+commit 11e46ab9fe18899f90091d495350d12311ef1d2b
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri Dec 6 03:18:37 2013 +0000
+
+    added mounting z blocks
+
+commit e293275a3b50f3734729fb3946270197da9b7c57
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri Dec 6 02:17:27 2013 +0000
+
+    added dimensioned drawings
+
+commit 1a92d773227dd1d32aa5eea4f738a52e85f69185
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Nov 20 20:03:54 2013 +0000
+
+    new design
+
+commit 3863ca0f691c599abbbc39ae92a2541552aca6e4
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Nov 13 15:36:19 2013 +0000
+
+    drew z axis
+
+commit db8a031faed4d26dc56d767c6a47c4428376eeca
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Nov 12 19:04:57 2013 +0000
+
+    added zip
+
+commit 648e0bb36c235c3b0fc9f06beb646555b59f1da0
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Nov 12 17:23:13 2013 +0000
+
+    added creo parts
+
+commit 5eb41ef7fd0e03b9dafab3e72ca3dbbe1cbdfc3a
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Nov 12 04:11:20 2013 +0000
+
+    added rules+pdf
+
+commit aedaf89cafdc827e4cf2fa69869580058c834b53
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Nov 12 04:11:14 2013 +0000
+
+    added rules
+
+commit c4975c9fa71d72f1f46a79c48d0dddfe251375cc
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Nov 12 03:58:46 2013 +0000
+
+    added solder paste extrusion section
+
+commit 966450451b30f18176a93f2584b4d3c14b8938d4
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Nov 12 03:11:12 2013 +0000
+
+    added some new parts
+
+commit 00d08af5d5c47f771799bf693ee3d5379cbdf927
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Fri Nov 1 13:57:06 2013 +0000
+
+    improved corner.scad to reduce height
+
+commit 40c1fc93e21f56e2e2cb881131f6b12d90484834
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon Nov 4 16:45:11 2013 +0000
+
+    added testing notes
+
+commit e4582495e609ef54304441d01e1b62c521d32966
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon Nov 4 16:40:09 2013 +0000
+
+    added section on host software
+
+commit ea528e57aff970bb4940372d6bfa913c05bda992
+Merge: a0487f2 5d02d67
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon Nov 4 16:22:10 2013 +0000
+
+    Merge branch 'master' of github.com:JamesGlanville/solderingmachine
+
+commit a0487f238f614c7c9bc2bd01cae3bb28b988fad0
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Mon Nov 4 16:21:58 2013 +0000
+
+    added section on heating solder paste
+
+commit 5d02d679339fea788f9c524c9ecf487aaedb8998
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Oct 24 20:03:00 2013 +0100
+
+    added a bit more to the new axes design
+
+commit 30c9604535660280b6d38be67deb8addef95d4f7
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Thu Oct 24 14:48:29 2013 +0100
+
+    added new design
+
+commit 6dc26074ee9204b9d7c7d808612b26897c3579b5
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Oct 22 16:57:07 2013 +0100
+
+    tex->pdf, and added line about host pc
+
+commit 73314f430c00afda991f0f91ca93c2d8ca4e80c8
+Merge: 5eb1dd3 dfbd73d
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Oct 22 16:56:42 2013 +0100
+
+    Merge branch 'master' of github.com:JamesGlanville/solderingmachine
+
+commit 5eb1dd374b9a21a3422756d3e1cc7c642e398596
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Oct 22 16:52:56 2013 +0100
+
+    added isolation routing to report
+
+commit dfbd73d5ce2b40ad09d4ee8b3fbd29ddc2ec3754
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Oct 16 16:30:12 2013 +0100
+
+    added design renders
+
+commit 58537b08411651220cd0a6d16b6a5683380b1f9e
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Wed Oct 16 16:19:43 2013 +0100
+
+    added design sketch
+
+commit bb2eeecc2ec3841b2c8ea8936952e26ccdf8e848
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Oct 15 23:00:46 2013 +0100
+
+    tidied up report.tex
+
+commit fc3708a89d70b917f48943102fd79b574d35ce59
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Oct 15 23:00:42 2013 +0100
+
+    tidied up report.tex
+
+commit 677069188d5c4397c44d98691b1eb2c9a555692b
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Oct 15 23:00:18 2013 +0100
+
+    tidied up report.tex
+
+commit 3077b319bc52e9c2ae9b2a5185e157c3be68eaac
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Oct 15 21:10:20 2013 +0100
+
+    added .gitignore for latex
+
+commit 736c48e145c3b2971ccb5778597896a2c191b241
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Oct 15 20:48:55 2013 +0100
+
+    added photos + requirements
+
+commit ed8ab29ea90f96413ae85cb95efe12673eb7b667
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Oct 15 19:09:48 2013 +0100
+
+    Added photos
+
+commit cc219b5ae430d8bb9c8d63d77a3c5918aaa930fe
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Oct 15 17:53:30 2013 +0100
+
+    Added driven corner stl
+
+commit 0a278f4fea8670b4b886ca9b7fa5f14d42bd8dc4
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Oct 15 17:52:32 2013 +0100
+
+    Added prototype part designs
+
+commit 21e62bd672b965d0cc58bee7af8a667e70a3de97
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Sep 10 22:45:32 2013 +0100
+
+    started adding info about vacuum pump
+
+commit 2a54d57bae07dee31ac218bf5d75b6f36aabdc2d
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Jun 11 16:25:49 2013 +0100
+
+    added design subsections
+
+commit 5e8ed99ada07b41216d7b6d73360ba16cb37341f
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Jun 11 15:35:54 2013 +0100
+
+    Started report
+
+commit fc72ba47fe29fec48c7edab8aada2aa4b8a57510
+Author: James Glanville <james.n.glanville@gmail.com>
+Date:   Tue Jun 11 06:47:46 2013 -0700
+
+    Initial commit
+\end{lstlisting}
+
+\end{document}
