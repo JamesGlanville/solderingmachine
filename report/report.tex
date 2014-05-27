@@ -740,6 +740,14 @@ pins in total.
 The solder paste extruder is a tool which dispenses controlled volumes
 of solder paste on to the board. 
 
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=70mm]{resources/pasteextrusion.png}
+\caption{Paste extruder shown extruding required paste for a TSSOP16 chip.}
+\label{pasteextrusion}
+\end{figure}
+
+
 \subsection{Requirements}
 The tool must be capable of accurately extruding very small volumes of 
 solder paste. As an example, a 0.4x0.2mm pad to be coated with a thickness
@@ -793,28 +801,20 @@ is similar between all designs however.
 \subsubsection{Paste extruder using bevel gears}
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=90mm]{resources/extruder_bevel.png}
-\caption{Placeholder image of bevel extruder}
+\includegraphics[width=170mm]{resources/extruders.png}
+\caption{Extruder from drawing to render to 3d printed item.}
 \label{overflow}
 \end{figure}
 
 The first attempt to reduce the size of the extruder used bevel gears to shrink the size of the gearbox. 
-
-\subsubsection{Paste extruder using worm gears}
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/extruder_worm.png}
-\caption{Placeholder image of worm extruder}
-\label{overflow}
-\end{figure}
 
 Worm gears would give the same gear ratio in a smaller gearbox, so a new design was made using them. The improved design is as small as possible and performs as well as the much larger extruder that
 was originally used. See figure (~\ref{wormextruder}) for a rendering.
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=90mm]{resources/extruder_worm.png}
-\caption{Placeholder image of worm extruder}
+\includegraphics[width=90mm]{resources/worm.png}
+\caption{Extruder using worm gearing.}
 \label{wormextruder}
 \end{figure}
 
@@ -1293,8 +1293,8 @@ process is given in figure \ref{tikzoverview}.
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=90mm]{resources/dialgauge.png}
-\caption{Measurement setup (This is a placeholder image).}
+\includegraphics[width=90mm]{resources/dial.jpg}
+\caption{Measurement setup using a dial gauge to check accuracy.}
 \label{dialgauge}
 \end{figure}
 
@@ -1418,11 +1418,21 @@ so that the tool heads could be used and tested at an earlier stage.
 \subsection{Evaluation of method of PCB manufacture/population}
 
 \subsubsection{PCB manufacture}
+
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=70mm]{resources/flake.jpg}
+\caption{Closeup of milled PCB, showing copper flaking.}
+\label{flake}
+\end{figure}
+
+
 There are limitations inherent in milling PCBs (compared to the more
 usual chemical etching) - the process is incredibly sensitive to positional
 errors. It proved difficult to reliably manufacture traces of less than 0.03mm
 wide. This was also true of the reference PCB mill. Small flakes of milled
-copper have a tendency to bridge traces, and are difficult to reliably remove.
+copper have a tendency to bridge traces (See figure \ref{flake}), and are difficult to reliably remove.
 
 While the machine is capable of manufacturing boards with undemanding
 features, it has not been shown to be better than a wet chemical etch.
