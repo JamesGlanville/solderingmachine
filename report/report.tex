@@ -19,6 +19,12 @@
 	author = {James Glanville},
 	title = {JamesGlanville / pcb2gcode-metric}}
 	
+@ONLINE {solderingmachine,
+	url = {https://github.com/JamesGlanville/solderingmachine},
+	urldate = {2014-05-27},
+	author = {James Glanville},
+	title = {JamesGlanville / solderingmachine}}
+	
 @ONLINE {imodela,
 	url = {http://www.imodela.co.uk/},
 	urldate = {2014-05-12},
@@ -144,6 +150,7 @@
 
 \usepackage{listings}                  % For including source code in document
 \lstset{
+	basicstyle=\ttfamily,
   basicstyle = \small
 }
 
@@ -1742,7 +1749,36 @@ and no accidents occurred at any point. If starting the project again, no
 changes would be made to the risk assessment.
 
 \newpage
+\section{Description of project files}
+This appendix details the files that were created during the course
+of this project. Files are available online: \cite{solderingmachine}.
 
+\begin{lstlisting}[frame=single]
+GCODE/	
+	Contains utility GCODE files for zeroing and spindle control.
+
+electronics/
+	Contains a number of KiCad projects.
+	
+microscope/	
+	Contains microscope images of machine operation.
+	
+milling/
+	Contains files used to test milling.
+
+parts/
+	Contains CAD files for the machine, created using Creo.
+	
+report/
+	Contains the \LaTeX files used to create this report.
+	
+testboards/
+	Contains a number of CAD files for various PCBs.
+\end{lstlisting}
+
+
+
+\newpage
 \printglossaries
 
 \nocite{*}
