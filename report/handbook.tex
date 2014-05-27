@@ -144,6 +144,24 @@ The following steps described the various stages involved in producing
 a populated and soldered circuit board. Some steps (such as drilling)
 may be omitted if not required.
 
+\subsection{Using pronterface}
+The machine has two main user interfaces: the interface used for the machine in 
+standalone operation and that used when connected to a host computer.
+
+Pronterface was chosen as the PC user interface as it is a mature GCODE visualiser
+and sender.
+
+
+Once the correct serial port and baud rate have been selected, pronterface will connect
+to the machine. GCODE can be loaded using the \textbf{Load file} button. It is 
+rendered to the center of the window (however some operations are not shown correctly).
+The program is primarily intended for operating 3d printers, so to send the GCODE
+to the machine the \textbf{Print} button must be used.
+
+The following instructions assume the SD card interface is being utilised,
+but if PC control is required, simply send the GCODE using pronterface as described above instead.
+
+
 \subsection{Attaching the PCB}
 Attach copper-clad PCB to machine using double sided tape. It is important that the PCB is level,
 so care must be taken ensure the tape is not bunched or folded. The PCB should be firmly

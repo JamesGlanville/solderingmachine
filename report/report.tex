@@ -54,6 +54,24 @@
 	urldate = {2014-05-22},
 	author = {Richard Horne},
 	title = {Universal Paste Extruder for 3d printers}}
+	
+@ONLINE {marlin,
+	url = {https://github.com/ErikZalm/Marlin},
+	urldate = {2014-05-26},
+	author = {Eric Zalm},
+	title = {Marlin 3d Printer Firmware}}
+	
+@ONLINE {dxf2gcode,
+	url = {https://code.google.com/p/dxf2gcode/},
+	urldate = {2014-05-26},
+	author = {various},
+	title = {dxf2gcode: A program to convert a dxf drawing into G-Code}}
+	
+@ONLINE {Cambam,
+	url = {http://www.cambam.info/},
+	urldate = {2014-05-26},
+	author = {HexRay Ltd},
+	title = {Cambam}}
 \end{filecontents}
 
 \documentclass[a4paper,11pt]{article}  % Standard document class
@@ -107,6 +125,11 @@
 {
 	name=CNC,
 	description = {Computer numerical control. Refers to the automation of machine tools with programmed commands.}
+}
+\newglossaryentry{ESC}
+{
+	name=ESC,
+	description = {Electronic speed control. A device which controls a high-current motor from a logic input.}
 }
 
 %\usepackage{placeins}                  % Allows use of \FloatBarrier
@@ -164,18 +187,52 @@
 \label{smdexample}
 \end{figure}
 
-The aim of this project is to develop ways to assist electronics hobbyists in working with SMD electronic components
-and circuit boards (See Figure \ref{smdexample}). \gls{SMD}s are electronic components which are designed to be soldered to \gls{PCB}s
-(Printed Circuit Boards) without requiring holes to be drilled in the board. Compared to \gls{THT}(Through-hole technology), SMD parts 
-are usually smaller and cheaper and as a result are becoming ubiquitous in many applications. Even when hobbyist users do
-not require the size or cost advantages, many modern devices are only available in SMD packages. Using SMD parts require
-smaller board features (A manufacturing challenge) as well as more advanced soldering techniques. For this project, a machine
-is envisioned which solves some or all of the challenges involved to ease the process of SMD board development.
+The improvement in the electronics industry has led to a reduction in 
+size of many components. Many components are now only available in
+surface mount packages (see figure \ref{smdexample}). The surface mount 
+devices (\gls{SMD}s) are designed to be soldered to \gls{PCB}s without
+requiring holes to be drilled through the board. The combination of
+smaller devices and no drill holes allow a much higher density of
+devices to be placed on a PCB. This is both commercially
+attractive and has facilitated dramatic reductions in the sizes of
+electronic equipment. However, the use of such devices necessitates expensive 
+equipment for assembly as the device placement tolerances are reduced.
 
-\vspace{0.5cm}
+In the prototyping and hobbyist markets, assembly is usually carried
+out by hand, a process which requires significant time and skill. 
+Automated systems (For example that shown in figure \ref{pickandplace}) cost upwards of \pounds 10k, which is cost-prohibitive
+for the majority of users. 
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=70mm]{resources/pickandplace.jpg}
+\caption{Juki KE2010L pick and place machine, approximately \pounds 50000.}
+\label{pickandplace}
+\end{figure}
+
+The aim of this project is to develop ways to assist electronics 
+hobbyists in working with SMD electronic components and circuit boards.
+This must be achieved in a cost-effective way to ensure it is a viable
+option. The use of complex or expensive tools (eg a lathe or mill) for
+manufacture or assembly of the machine should not be required as not all
+end-users have these facilities.
+
+ 
+%\gls{SMD}s are electronic components which are designed to be soldered 
+%to \gls{PCB}s without requiring holes to be drilled in the board. Compared to \gls{THT}(Through-hole technology), SMD parts 
+%are usually smaller and cheaper and as a result are becoming ubiquitous in many applications. Even when hobbyist users do
+%not require the size or cost advantages, many modern devices are only available in SMD packages. Using SMD parts require
+%smaller board features (A manufacturing challenge) as well as more advanced soldering techniques. For this project, a machine
+%is envisioned which solves some or all of the challenges involved to ease the process of SMD board development.
+
+
+
+
+%\vspace{0.5cm}
 As an example of the need for such a machine, see Figure \ref{usbisolator}. A USB isolator was required (to make USB connections to devices with non-isolated
 power supplies), which uses an ADUM3160 SOIC-28 part (See full schematic, Figure \ref{usbisolatorschem}). Without an automated method of board manufacture, the
-traces were hand drawn in etch-resist on each side of a double-sided board, and manually soldered all SMD parts. This was slow, and as figure \ref{usbisolator} shows, does not give
+traces had to be hand drawn in etch-resist on each side of a double-sided board. Each component had to be carefully
+placed with tweezers and then soldered. This was slow, and as figure \ref{usbisolator} shows, does not give
 neat results.
 
 
@@ -189,7 +246,7 @@ neat results.
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=120mm]{resources/usbisolator.jpg}
-\caption{My USB isolator.}
+\caption{A USB isolator PCB with hand-drawn traces.}
 \label{usbisolator}
 \end{figure}
 
@@ -200,11 +257,34 @@ neat results.
 \label{usbisolatorschem}
 \end{figure}
 
-\section{Existing Solutions}
-There are a number of hobbyist solutions to deal with SMD parts:
+\section{Project Concept}
+The focus of this project is easing both the placement and the soldering
+of SMDs. To this end a small machine was envisioned to automate the two
+tasks. This would reduce the amount of time taken to populate PCBs, and
+be of use to end-users who do not wish to carry out the manufacturing
+process by hand. The envisioned end user of such a machine is a
+hobbyist or academic user who wishes to produce small numbers of boards
+with as little user time taken up as possible.
 
-\subsection{Hand soldering}
-Despite the increased complexity, many SMD parts can be soldered by hand. There are three main methodologies for this process:
+
+%\section{Project Idea}
+%It was decided to approach the project by building a machine which can extrude solder paste accurately, and then place
+%the surface mount devices on top. It should achieve this with minimal human interaction. The machine should also be able to
+%drill holes for through-hole devices, as well as be equipped with a milling bit for isolation routing through copper-clad PCBs.
+
+\subsection{Existing Solutions}
+In order to identify potential improvements in manufacturing SMD boards
+research was carried out in to the current methods used by hobbyists.
+The methods were broadly divided into two categories: those using standard
+solder in wire form and those using solder paste. %Solder paste consists of 
+%powdered metal solder suspended in flux. It is used commercially to
+%manufacture boards with SMD components, and used
+
+\subsubsection{Methods using solder in wire form}
+Despite the increased complexity, many SMD parts can be soldered by hand.
+This is the lowest cost process which requires the least equipment: a
+finer soldering iron tip may be all that is required. There are three 
+main methodologies for this process:
 
 \begin{itemize}
 	\item	The pins are soldered individually. This is mainly suitable for larger SMD parts. A steady hand is required, as well as good eyesight.
@@ -227,15 +307,16 @@ to solder the connections by hand.
 \label{handsolder}
 \end{figure}
 
-\subsection{Solder paste}
+\subsubsection{Methods using solder paste}
 
 Solder paste consists of powdered metal solder suspended in flux. It is used commercially to manufacture boards with SMD components. The solder paste is applied to the board where
 connections are to be made. The devices are then placed on top (the paste has slight adhesive properties which limits undesirable component movement). Finally the paste is heated either directly
 or indirectly which causes it to melt and form solder joints. The paste is placed in a number of ways:
 
 \begin{itemize}
-			\item	Solder stencils: A thin stencil is manufactured, usually from Mylar (trade name for BoPET) or stainless steel. It has holes which correspond to locations on the board that require solder.
-					Solder paste is then roughly applied to the top of the stencil before being scraped off. This forces controlled volumes of paste into the holes.
+			\item	Solder stencils: A thin stencil is manufactured, usually from Mylar (trade name for BoPET) or stainless steel, with holes which correspond to locations on the board that require solder.
+					This is used to screen print solder paste to the board.
+%					Solder paste is then roughly applied to the top of the stencil before being scraped off. This forces controlled volumes of paste into the holes.
 					This a very quick process, and suitable for production quantities, but has the expensive set-up costs of stencil manufacture.
 			\item	Solder paste can be applied by hand using a syringe. However, this requires high accuracy while placing paste and is time consuming.
 			\item	Automated solder paste extrusion uses a CNC (Computer Numerical Control) platform to manoeuvre a solder paste extruder around the board. Small amounts of paste
@@ -251,74 +332,218 @@ Once the solder paste has been placed and the devices placed on top, it must be 
 					converted toaster oven.
 \end{itemize}
 			
-\section{Project Idea}
-It was decided to approach the project by building a machine which can extrude solder paste accurately, and then place
-the surface mount devices on top. It should achieve this with minimal human interaction. The machine should also be able to
-drill holes for through-hole devices, as well as be equipped with a milling bit for isolation routing through copper-clad PCBs.
+\subsection{Evaluation of project approach}
+It was decided that automating the soldering of devices using solder wire
+would prove too challenging, as the various methods all require a great
+deal of feedback and error correction to correct poor connections or shorts.
 
-\parskip 0.18in
+%Therefore a method was required to place the solder paste in the correct
+%places and the components on top of it.
 
-When finished, the machine should be able to be connected to a computer via a USB port. A custom GUI will load the necessary 
-design files (for example the holes to be drilled, pads to be soldered), generate the necessary GCODE, and send it to the printer.
+The project approach was therefore to be a CNC machine which could both place the 
+solder paste and the devices. This was to be achieved with minimal human
+interaction. The solder paste would be placed by extruding it through
+a sufficiently small needle that could be moved in three dimensions
+compared to the board.
+%It was decided to approach the project by building a machine which can extrude solder paste accurately, and then place
+%the surface mount devices on top. It should achieve this with minimal human interaction. The machine should also be able to
+%drill holes for through-hole devices, as well as be equipped with a milling bit for isolation routing through copper-clad PCBs.
+%\parskip 0.18in
 
-\section{Requirements}
+%When finished, the machine should be able to be connected to a computer via a USB port. A custom GUI will load the necessary 
+%design files (for example the holes to be drilled, pads to be soldered), generate the necessary GCODE, and send it to the printer.
 
-\subsection{X/Y axes}
-A device pitch of 0.4mm (distance from centre of one pin to the next) is on the lower end of SMD ICs. Using solder paste,
-devices will shift slightly upon heating to self-align. A requirement is that the device should be placed to a
+\subsection{Possible expansions of project scope}
+Once the project concept had been chosen as a CNC machine with a syringe
+tool and a placement tool it became clear that such a machine may be 
+capable of manufacturing the PCB itself without a great increase in cost
+or complexity if an extra spindle tool could be designed. This would
+allow the use of a milling bit for isolation routing through copper-clad
+PCBs, and a drilling bit to drill any holes for through-hole devices.
+
+\subsection{Project specifications}
+
+
+%\section{Requirements}
+
+\subsubsection{Device placement}
+\label{devplacement}
+A device pitch (distance from centre of one pin to the next) of 0.4mm is typical of small SMDs. Using solder paste,
+devices will shift slightly upon heating to self-align due to liquid solder's surface tension. A requirement is that the device should be placed to a
 small fraction of its pitch, so there is no danger of incorrect connections. An accuracy of $\pm$ 0.05mm
 in placement was chosen as a project goal. This should be sufficient to ensure the correct connections are made, but may be difficult to achieve in practice.
 
-\subsection{Board size}
+\subsubsection{Board size}
 A maximum board size of 100x100mm would be sufficient for the vast majority of boards. 100x100mm was chosen because that
 is the maximum board size using the free version of EAGLE, a popular design package. As a result, there are a lot of designs
 that use the maximum size, and it would be useful if this project allowed those designs to be populated.
+The PCBs needed for the IDP fit within the 100x100mm area, so this project
+may be of use in the engineering department for IDP board manufacture.
 
-The PCBs needed for the IDP fit within the 100x100mm area.
-
-\subsection{Rigidity}
-The sideways forces generated by the isolation routing bits were measured to be less than 2N. It is important that the $\pm$ 0.05mm
-accuracy requirement is met under this condition.
-
-\subsection{User interaction}
+\subsubsection{User interaction}
 User interaction should be minimal. While this will not be an entirely 
-automated process (for example the SMD parts must be manually loaded
+automated process (for example the SMD parts may need to be manually loaded
 into a tray) the less attended time required the better. All user
 interfaces should be user-friendly, and all processes designed to reduce
 the user's workload.
 
+
+
+
 \section{Design}
 
-\subsection{X/Y axes}
+The design of the machine is split into a number of subsystems that are
+described in sections \ref{firstsection} through \ref{lastsection}. These
+are:
 
-The X/Y axes have the same requirements: $\pm$ 0.05mm accuracy. There is the choice between moving the various tools over a stationary
-bed, or keeping the tools stationary and moving the bed. Only the bed will be moved, because it means that the pick
-and place functionality does not have to move the parts, simply lift and lower them. This should reduce the risk of the parts
-shifting on the needle, or falling off. It also allows for the use of more tools since weight is no longer a concern.
-
-The bed will need travel distances of at least 100mm in both directions so that the entire bed can be accessed by tools. However,
-there should also be space to place devices before they are automatically placed. An area of 100x30mm was chosen as a compromise
-between maximum device storage and total machine size.
-
-\subsubsection{Possible kinematic mechanisms}
 \begin{itemize}
-	\item	Toothed belts and pulleys: These are simple and inexpensive. However, despite the fibreglass or steel strengthening cables, they will
-			still elongate under load. As a result, they are not suitable for any routing/milling operations.
-	\item	Threaded rod + ordinary nuts: This is an inexpensive solution that relies on the threaded rod having a constant pitch. Strong springs 
-			are added between each pair of nuts to provide an anti-backlash effect.
-	\item	Ball screws: These are similar in operation to threaded rod and ordinary nuts, but use ball bearings between the nut and rod for smoother
-			operation. These are sprung against the rod for an anti-backlash effects. They are higher performance, but more expensive.
+	\item Machine motion. A three-axis CNC subsystem is required to move
+		the various tools in three dimensions relative to the PCB.
+	\item Electronics. An electronic module is required which can drive
+		both the machine's axes and the tools, while responding to user
+		interaction.
+	\item Solder paste extruder. This must be capable of accurately
+		dispensing small volumes of solder paste.
+	\item Device placement tool. This must be capable of picking up and
+		placing the SMDs in their required locations.
+	\item Spindle. This powers the milling and drilling bits to manufacture
+		the PCB itself.
+	\item Hot air tool. This heats the solder paste to reflow it and form connections.
 \end{itemize}
 
-\subsubsection{Possible drive mechanisms}
+
+%electronics, axes, paste, place, spindle
+
+\section{Machine motion}
+\label{firstsection}
+This section describes the requirements for machine motion and how they 
+are implemented in the design. There was the choice between moving the various tools over a stationary
+bed, or keeping the tools stationary and moving the bed. For this project
+only the bed will be moved, because it means that the pick
+and place functionality does not have to move the parts, simply lift and lower them. This should reduce the risk of the parts
+shifting on the needle, or falling off.% It also allows for the use of more tools since weight is no longer a concern. 
+
+\subsection{Requirements}
+The axes all have the same requirements of $\pm$ 0.05mm accuracy (as 
+described in section \ref{devplacement}). The greatest forces are
+encountered during the isolation routing operations, which were
+measured to be less than 2N. The system accuracy must be maintained
+under this condition.
+
+The Z axis has the smallest required travel distance as the tools
+need only move high enough to clear any devices. A minimum travel of 50mm
+was chosen which is more than sufficient for the tallest devices. The
+X and Y axes must not only be capable of moving over the maximum 100x100mm
+board, they must also allow travel to where the devices are stored prior
+to final placement. A total area of 100x130mm was chosen as a compromise
+between maximum device storage and total machine size.
+
+A major design philosophy was to be that all of the axes should be as
+similar as possible. This would result in the least amount of development
+work possible, as well as the most similar axis characteristics. This 
+was later important during testing so it was not necessary to separately
+characterise the errors of each axis.
+
+For the machine to be practical, there are some limitations on the 
+maximum time that a board can take to manufacture. This is particularly 
+true of the device placement stage, as this requires
+human intervention. The total time is dominated by the time taken by axis
+movement so the axis speed should be as high as possible to compensate.
+
+%\begin{itemize}%
+%	\item	X/Y travel.
+	%\item	X/Y cutting.
+	%\item	Z movement.
+	%%\item	Picking/placing components.
+%	\item	Hot air reflow.
+%\end{itemize}
+
+%The X/Y travel will take the most time in total, so the estimated times should be calculated and optimised if possible. Assuming a travel speed of 10mm/s, the total
+%time is simply total distance (mm) / 10.
+
+
+
+
+
+%
+%\subsection{Z axis}
+%The Z axis requires the same precision as the X and Y (Isolation routing bits are conical, therefore trace width error is proportional to height error). 
+%
+%\subsubsection{Potential mechanisms}
+
+%\begin{itemize}
+%	\item	Hinged Z using micro servos: cheap (\pounds 2 on eBay). Require no drivers, and simple to drive. Z axis potentially
+%		does not need to be linear so rotary-\textgreater linear mechanism simpler. If not linear,
+%		then hinging out of the way is a cheaper mechanism than slides.
+%	\item	Using an identical threaded rod mechanism to the X and Y axes. This has the advantage of requiring less design work.
+%\end{itemize}
+
+%\subsubsection{Chosen design}
+%The same mechanism (threaded rod and stepper motors) was chosen for the Z axis. Ideally the axes will be as similar as possible which will result
+%in less work characterising the errors in the mechanisms.
+
+%
+
+
+
+%\subsection{X/Y axes}
+%\subsection{Rigidity}
+%The sideways forces generated by the isolation routing bits were measured to be less than 2N. It is important that the $\pm$ 0.05mm
+%accuracy requirement is met under this condition.
+
+%The X/Y axes have the same requirements: $\pm$ 0.05mm accuracy.
+
+
+
+%The bed will need travel distances of at least 100mm in both directions so that the entire bed can be accessed by tools. However,
+%there should also be space to place devices before they are automatically placed. An area 
+
+\subsection{Design selection}
+Two possible drive methods were considered for use in this project:
 \begin{itemize}
 	\item	Stepper motors: These are brushless motors which can be controlled down to the nearest "step" (commonly 1.8\textsuperscript{0}). They require
 			stepper motor drivers to provide the alternating magnetic field. Provided the maximum torque is not exceeded, they can be run open-loop.
 	\item	DC motors + feedback: A feedback mechanism such as a rotational encoder or linear potentiometer can be used to provide feedback for closed-
 			loop control of DC motors. A microcontroller adjusts the current to the motor accounting for its current position and desired position.
 \end{itemize}
+Stepper motors were chosen as they facilitate a simple implementation.
+Coupled to the drive mechanism, they are driven open-loop under the
+assumption they will rotate precisely proportional to the number of 
+electrical pulses. Their extra cost compared to DC motors is offset
+by the simpler design and lack of feedback elements to consider. They
+also have the advantage that they can easily be controlled by existing
+electronic module firmware (see section \ref{firmwarestuff}). The type
+of motor was chosen to be a type of NEMA17 (standard motor size) motor
+with a 2.2kg/cm holding torque. This was found to be sufficient for an 
+axis speed of 10mm/s without any skipping of steps.
+%Having chosen to use small stepper motors to control the axes, the choice of stepper motor is now important. Some NEMA17 motors were tested,
+% which claim a 2.2Kg/cm holding torque. Tests were run to see what their maximum
+%speed without skipping steps was, with a result of 10mm/s. This is sufficient for use in the
+%project (where speed is not a great concern), but it was thought that it would not be beneficial to use a smaller motor. 
 
-\subsubsection{Possible slide mechanisms}
+
+A number of methods are available to translate the rotational driving
+ motion to the linear motion required for the axes. Those
+considered for this project are as follows:
+
+\begin{itemize}
+	\item	Toothed belts and pulleys: These are simple and inexpensive. However, despite the fibreglass or steel strengthening cables, they will
+			still elongate under load. As a result, they are not suitable for any routing/milling operations.
+	\item	Threaded rod and ordinary nuts: This is an inexpensive solution that relies on the threaded rod having a constant pitch. Strong springs 
+			are added between each pair of nuts to provide an anti-backlash effect.
+	\item	Ball screws: These are similar in operation to threaded rod and ordinary nuts, but use ball bearings between the nut and rod for smoother
+			operation. These are sprung against the rod for an anti-backlash effects. They are higher performance, but more expensive.
+\end{itemize}
+Threaded rod and ordinary nuts were chosen for use in this project because
+of their low cost compared to ball screws, and their strength compared
+to toothed belts. A thread size of M8 was chosen as it provided sufficient
+accuracy at a high enough speed.
+
+The axes are required to move the bed in three dimensions. However the 
+threaded rod is only capable of providing accurate motion if the bed
+is constrained to move only in the axis direction. To this end a slide
+mechanism is required. Three such mechanisms were considered:
+
 \begin{itemize}
 	\item	Drawer slides: Inexpensive drawer slides contain pre-loaded ball bearings which reduce wobble.
 	\item	3d printed bushings and steel rod: If 3d printer existence assumed, then very cheap solution. These bearings
@@ -326,53 +551,509 @@ between maximum device storage and total machine size.
 	\item	LM8UUs and steel rod: About 50p each, simple to use and accurate.
 \end{itemize}
 
-\subsubsection{Chosen design}
+Drawer slides were chosen because of their cost advantages as well as the fact
+they can easily be coupled to flat boards.
 
-M8 threaded rod was chosen as the linear actuators, coupled to stepper motors. This simplifies control compared to a closed-loop solution, and is readily
-supported by existing microcontroller firmware. Drawer slides will be used because they are the cheapest option, and are easy to mount to flat boards.
 
-Having chosen to use small stepper motors to control the axes, the choice of stepper motor is now important. Some NEMA17 motors were tested,
- which claim a 2.2Kg/cm holding torque. Tests were run to see what their maximum
-speed without skipping steps was, with a result of 10mm/s. This is sufficient for use in the
-project (where speed is not a great concern), but it was thought that it would not be beneficial to use a smaller motor. 
+\subsection{Zeroing the axes}
 
-\subsection{Z axis}
-The Z axis requires the same precision as the X and Y (Isolation routing bits are conical, therefore trace width error is proportional to height error). 
+When the machine is used it is necessary to "zero" the axes to a known datum point on the board. This is particularly important when swapping tools, as there may
+be a small variation in tool location compared to toolholder location between tools.
 
-\subsubsection{Potential mechanisms}
+\subsubsection{X and Y axes}
 
-\begin{itemize}
-	\item	Hinged Z using micro servos: cheap (\pounds 2 on eBay). Require no drivers, and simple to drive. Z axis potentially
-		does not need to be linear so rotary-\textgreater linear mechanism simpler. If not linear,
-		then hinging out of the way is a cheaper mechanism than slides.
-	\item	Using an identical threaded rod mechanism to the X and Y axes. This has the advantage of requiring less design work.
+In order to zero the machine in the X and Y directions, an "L-shaped" piece of metal has been added to the bed (insert pictures/diagrams). All of the tools are metal,
+and therefore conductive. The axes are first manually moved to be near-zero. The tips of the tools are all electrically connected to an input pin on the AVR, with a weak (10K) internal pullup to 5V.
+The "L-shaped" piece of metal is connected to ground. When instructed, the firmware slowly moves the X or Y axis in the negative direction until a contact is made, and the input goes LOW. At this point,
+the exact position of the tool is known. For convenience it is important that the location of the centre of the tool is known, this can simply be calculated as the diameters of all of the tools are known and fixed.
+
+\subsubsection{Z axis}
+
+Slightly different mechanisms are used for the zeroing of the Z axis when used for different tools. 
+For the vacuum needle, a small microswitch is placed above the needle while is free to move 
+slightly in the vertical direction. It is triggered when the needle is touching either the bed or the top of a component. As a result, zeroing can be carried out simply by 
+moving the tool downwards until it is triggered.
+The other tools are zeroing electrically using the same mechanism as for the X and Y axes. The tools are lowered until contact is made between the PCB and the tool. A temporary contact must be made from ground
+to the copper pcb, this is achieved with an alligator clip.
+
+%\subsubsection{Chosen design}
+
+%M8 threaded rod was chosen as the linear actuators, coupled to stepper motors. This simplifies control compared to a closed-loop solution, and is readily
+%supported by existing microcontroller firmware. Drawer slides will be used because they are the cheapest option, and are easy to mount to flat boards.
+
+\section{Electronics}
+The electronics subsystem must be capable of driving the machine's axes
+and tools, carry out the required commands for PCB manufacture, and 
+respond to the user's input and provide feedback. This section includes
+the firmware which will run on the electronics system. 
+
+\subsection{Specification}
+The stepper motors used in the project are rated to a maximum of 2.5A
+drive current which must be provided by the electronics. 
+
+The machine should ideally be capable of standalone operation (i.e. without
+an attached PC). This allows the machine to operate at a further distance
+from the user which would alleviate concerns about noise and dust.
+This will require the use of some form of storage for
+the manufacturing commands.
+
+The spindle motor is a brushless motor with a maximum current draw of 20A.
+This requires a controller to provide the necessary switching signals.
+
+The PC interface should be compatible with all major operating systems.
+
+\subsection{Power Supply}
+The operating voltage of the stepper motor drivers and the spindle motor
+is 12V. Assuming the current draw from the electronics is small, the 
+peak current can be calculated to be 27.5A (20A for the spindle, 2.5A for each axis).
+In practice the average current will be far lower as the spindle draws 
+a much smaller current when not accelerating. A 12V 30A power supply was
+chosen to power the machine. It has over-current and overheating protection built in, but as a failsafe, a 30A fuse is added in-line with the +12V cable. 
+An automotive-style fuse was used for the lowest cost, and ready availability of suitable fuse ratings.
+
+\subsection{Stepper motor drivers}
+Stepper motor drivers are required to translate between logic-level
+motion commands and the high current pulses required to drive the stepper
+motors. This type of drive is frequently required in commercial products
+such as printers, scanners and automated machinery and as a result a 
+great number of suitable ICs are available.
+
+For this project Toshiba TB6560AHQ drivers were selected as the lowest
+cost part with sufficient drive current. These need only two input
+signals from the electronics module, \textbf{step} and \textbf{direction}
+and provide the necessary control to the motor. They require minimal 
+support circuitry, merely decoupling capacitors and current sensing resistors.
+
+\subsection{PC interface}
+For simplicity, the communication between the PC and the electronics board is implemented as a serial link. An arbitrary baud rate of 57600 has been
+chosen, this is sufficiently fast so that the electronics board is not slowed by waiting for instructions (as the firmware buffers incoming commands in
+a small buffer in RAM), and sufficiently slow that the error rate is assumed to be zero. The operating voltage of the microcontroller is 5V, so the
+serial link is not RS232-compliant. Instead either a USB-\textgreater serial cable or a bluetooth module is required:
+
+\subsubsection{USB-serial cable}
+A USB to serial cable based on the FTDI FT232R chipset can be plugged into the serial header on the electronics board. This is a cheap (\textless \pounds 5) device that is 
+a complete solution. Driver support for the FT232R is available for all platforms that have been considered (Windows/OS X/Linux/Android). A usb serial cable
+was chosen instead of an integrated chip because it allows more flexibility for using other interfaces instead. For example, a real RS232 port may be used with a trivial
+MAX232 level shifter.
+
+\subsubsection{Bluetooth link}
+A bluetooth module can be installed to provide wireless communication which may be more convenient. The HC-05 bluetooth module was
+chosen because of its low cost (\pounds 3.50) and simplicity. The board requires a 3.3V supply, which is not present on the electronics board. A small
+breakout board was manufactured for the module, including an AMS1117-3.3 3.3V linear regulator (\pounds 0.10) and link status LEDs. The 3.3V TX output from the module is sufficient
+for the AVR despite its higher 5V supply. To avoid damage to the bluetooth module, a potential divider consisting of two 1k resistors is used. This 2.5V output is
+again sufficient for the bluetooth module.
+
+To configure the baud rate for the bluetooth module, it was connected to a pc using a USB-serial cable. The bluetooth module is powered up whilst the "KEY" pin is held high (3.3V).
+This starts the module in AT configuration mode. The baud rate was then set by sending the string "AT+UART=57600,1,0" at 38400 baud. This configuration is only required once,
+the module stores all configuration in non-volatile storage.
+
+\subsection{Microcontroller and firmware}
+The electronics subsystem requires a microcontroller running firmware
+that can translate incoming commands from the serial port into commands
+to the three axes and the various tools. 
+
+An Atmel ATmega1284P chip was chosen as the controller for the following reasons:
+
+\begin{itemize} \itemsep0em
+	\item	It has sufficient pins to drive all of the stepper motors, tools and user interface.
+	\item	It is capable of running at the 5V logic voltage of the stepper motor drivers.
+	\item	It is a common choice for running CNC tools, and as a result a great deal
+			of existing firmware is available to hasten development.
+%	Cost: an atmega328 is \pounds 2-3, a USB-serial chip is \textless \pounds 2, which is not much.
+%	\item	Mature open source firmware (GRBL, https://github.com/grbl/grbl) is available for GCODE-\textgreater stepper
+%		conversion, which leaves more time to focus on other parts of this project.
 \end{itemize}
 
-\subsubsection{Chosen design}
-The same mechanism (threaded rod and stepper motors) was chosen for the Z axis. Ideally the axes will be as similar as possible which will result
-in less work characterising the errors in the mechanisms.
+%\section{Standalone Operation}
+%It may be useful to operate the machine without a connected PC. In the case of manufacturing a large number of boards, it may be impractical to dedicate a PC simply to sending GCODE.
+%In addition, some functions of the machine produce dust, and are noisy. Allowing the machine to operate in a more remote location could be convenient. 
 
-\subsection{Part placement}
 
-\begin{itemize}
-	\item	Manual placement using tweezers: Much more of a problem for a large number of SMD resistors/capacitors etc, than
-		larger components. 
-	\item	Vacuum "tweezers": A vacuum pump provides a vacuum at the end of a small, hollow needle. Mechanically this is relatively simple, but the machine must be capable
-			of knowing when the device has been successfully picked up, and placed at the correct height. The parts must also be stored in a known location before they can be
-			collected.
+\subsection{Command storage}
+In standalone mode the required commands must be stored on the machine. 
+SD cards are ideal for use with microcontrollers, as they have a simple protocol 
+(SPI), and are inexpensive. They also have wide compatibility with other devices. It would be useful if 
+the GCODE could be stored on an SD card and read by the machine.
+
+SD cards can operate in SPI mode, using only four connections (MISO, MOSI, CLK, CS). However, they operate at 3.3V, and the AVR operates at 5V. To power the card, an AMS1117-3.3 linear regulator
+is used. Level translation must be used to convert the four connections to the required voltages. There are three options for this process:
+
+\begin{itemize} \itemsep0em
+	\item	Potential dividers. This is the simplest option, using only resistors. The CS, MOSI and CLK connections send data to the SD card. A potential divider is used to reduce the voltages
+			from 5V to 3.3V. The MISO connection receives data from the SD card. The AVR has a high input threshold of above 2.6V. MISO can therefore be connected as it operates up to 3.3V. 
+			Although this is the simplest option, the high impedance output from the potential divider can cause problems at fast SPI speeds, as the SD card presents a relatively high
+			capacitive loading.
+	\item	Discrete transistors can be used to translate between 3.3V and 5V. This has the advantage of faster operation, and increasing the noise margins (reduced when using 3.3V with a 5V chip).
+			Two transistors are needed for each connection to ensure the signal is not inverted.
+	\item	A level translation IC can be used. This needs no additional components (except from a decoupling capacitor).
+\end{itemize}
+Here a level translation IC was chosen.
+
+
+\subsection{Firmware}
+\label{firmwarestuff}
+The microcontroller requires firmware which can fulfil all of the subsystem
+requirements. Usefully such firmware already exists to drive 3d printers
+and other CNC machines, so this could be used without significant
+modification. The "Marlin" firmware (\cite{marlin}) was chosen as it readily supports
+operation from SD cards, as well as an LCD interface.
+
+\subsection{LCD and user interface}
+\label{lcdUI}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=70mm]{resources/lcd_real.jpg}
+\caption{LCD user interface.}
+\label{lcdreal}
+\end{figure}
+
+If the machine is to be used in a standalone capacity, there must be a way for the user to choose which GCODE file to send.
+Figure (~\ref{lcdreal}) shows the machine's user interface.
+
+\subsubsection{Hardware}
+A 4x20 LCD is used to display information about the current job, as well as allow the user to select GCODE files. This is an inexpensive part based on the ubiquitous HD44780 controller chip.
+It is operated in 4-bit mode (as opposed to 8-bit mode, which requires four additional microcontroller pins). Six connections are required to the microcontroller: RS, EN, D4, D5, D6, D7. As
+the electronics board does not have many spare connections, it was decided to use an MCP23017 i2c port expander to connect the LCD. The Marlin firmware already supports this, and needs just
+two connections (SDA and SCL) to the driver board. See Figure ~\ref{lcd_backpack} for the schematic.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=160mm]{resources/lcd_backpack.png}
+\caption{Schematic of i2c -\textgreater LCD board.}
+\label{lcd_backpack}
+\end{figure}
+
+A rotary encoder is used to provide input. This uses quadrature outputs to determine motion. The encoder also has a push switch inside for selecting options. This therefore require three microcontroller
+pins in total.
+
+
+
+
+
+
+
+
+
+
+\section{Solder paste extruder}
+The solder paste extruder is a tool which dispenses controlled volumes
+of solder paste on to the board. 
+
+\subsection{Requirements}
+The tool must be capable of accurately extruding very small volumes of 
+solder paste. As an example, a 0.4x0.2mm pad to be coated with a thickness
+of 0.4mm of paste requires just 32nl of paste.
+
+Solder paste deteriorates in contact with the air. It is supplied in
+syringes from which it should be directly extruded, avoiding transfer
+to other containers.
+
+The tool must not extrude in places it is not required to, i.e. dribble.
+The pressure applied to the syringe must therefore be rapidly released at the end
+of extrusion.
+
+\subsection{Initial tool}
+
+Initially, a freely available design for the paste extruder was used \cite{thingipaste}.
+
+The extruder works by applying pressure to the top of the solder paste syringe. Pressure is applied by tightening a pulley made
+of T5 timing belt with a geared stepper motor. This design was chosen because the extruder is compact, and the design allows for
+fast reduction of pressure, important for clean extrusion and to avoid the solder paste dribbling. 
+
+To calibrate the extruder, two parameters are needed: steps/volume extruded and retraction steps. The first is easy to calculate:
+
+(All dimensions in mm,mm\textsuperscript{2},mm\textsuperscript{3})
+
+The solder paste is supplied in a 2.5ml syringe, with a 66.1276mm\textsuperscript{2} cross-sectional area.
+
+\begin{eqnarray}
+\text{Volume extruded / step} &=& \frac{\text{cross-sectional area of syringe} \times \text{T5 pitch} \times \text{number of teeth of T5 pulley}}{\text{number of microsteps} \times \text{steps/revolution} \times \text{gear reduction ratio}} \nonumber \\
+&=&\frac{66.1276 \times 5 \times 10}{16 \times 200 \times 12} \nonumber \\
+&=&0.0861mm\textsuperscript{3} \nonumber \\
+	\text{Steps / mm\textsuperscript{3}} &=& \frac{1} {\text{volume extruded / step}} \nonumber \\
+	&=& \frac{1}{ 0.0861} \nonumber \\
+	&=& 11.61 \nonumber
+\end{eqnarray}
+
+The retraction steps must be experimentally determined. The choice is a trade-off between minimising solder paste dribble (large number
+of retraction steps) and reducing total process time (small number of retraction steps). It must be enough that negligible pressure is
+exerted on the syringe when retracted.
+
+Some method to "prime" the extruder will be needed. Assuming the extruder is initially hand-tightened so that the belt has little slack,
+a possible method is to repeatedly advance the extruder and then retract by a slightly smaller amount, until the user notifies the machine
+that solder paste has been extruded. At this point, the extruder should pause after retracting. The solder paste deposition process can
+then commence since the exact point of extrusion has been established. 
+
+\subsection{Design improvements}
+The solder paste extruder design that was initially used was unnecessarily bulky and complex. This made it both harder to fit to the tool mounting mechanism, and increased the
+distance between the mount and the tool, amplifying any wobble in the mount. It was therefore deemed necessary to redesign it, optimising for size. Operation and performance
+is similar between all designs however.
+
+\subsubsection{Paste extruder using bevel gears}
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/extruder_bevel.png}
+\caption{Placeholder image of bevel extruder}
+\label{overflow}
+\end{figure}
+
+The first attempt to reduce the size of the extruder used bevel gears to shrink the size of the gearbox. 
+
+\subsubsection{Paste extruder using worm gears}
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/extruder_worm.png}
+\caption{Placeholder image of worm extruder}
+\label{overflow}
+\end{figure}
+
+Worm gears would give the same gear ratio in a smaller gearbox, so a new design was made using them. The improved design is as small as possible and performs as well as the much larger extruder that
+was originally used. See figure (~\ref{wormextruder}) for a rendering.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/extruder_worm.png}
+\caption{Placeholder image of worm extruder}
+\label{wormextruder}
+\end{figure}
+
+
+
+\section{Device placement tool}
+In order to precisely place the SMDs on to the board, a tool is required
+which can lift them from a known location and deposit them where necessary.
+
+\subsection{Requirements}
+The components must be placed to the specified $\pm$ 0.05mm.
+
+\subsection{Design}
+A vacuum pump was chosen to power a fine hollow needle. The needle
+is placed over an SMD, and the vacuum pump switched on. The device
+is then "stuck" to the needle, which can be then lifted and moved to
+the correct position. Once there, the pump is switched off and the
+device will remain stuck to the solder paste in position. This is an
+inexpensive solution, and also that used by commercial pick and place
+machines.
+
+As each component has a different height, a microswitch is used above
+the needle to detect component physical contact to the needle. At this
+point the vacuum pump can be switched on.
+
+A power MOSFET is used to control the pump, with a reverse-biased
+diode to suppress back-EMF. The MOSFET was chosen to have a small V$_{GS}$
+so that it could be fully switched on by the 5V microcontroller output.
+
+
+\subsection{Managing devices prior to placement}
+There was a need to be able to place the devices in a known position, so they can then be picked up and placed in their final locations.
+Commercial pick and place machines take the parts directly from the reels they are supplied in. While this is optimal for that application in that
+it is fast, the cost of reel dispensers is prohibitive for this machine. Instead, the parts will have to be roughly placed
+by hand. There are a number of ways this could be done:
+
+\begin{itemize} \itemsep0em
+	\item	Embossed outlines of all necessary device footprints.
+	\item	Rectangular embossed outline, devices to be located in one corner.
 \end{itemize}
 
-\subsubsection{Chosen design}
-The "vacuum tweezer" method will be used to pick and place the parts. This is the usual method to move parts commercially, so it is a known and tested solution.
+It was decided that the former would be simplest to implement. A
+brass plate was milled to have indentations to suit a variety of SMD
+footprints. The parts are placed into the indentations by the user
+when required.
 
-%\subsection{Heated Bed}
-%Soldering to a hot board is easier (smaller temperature difference). This is now irrelevant as I shall not be soldering pin-by-pin.
+PCB CAD programs are able to export a list of components along with their
+physical locations on the board. Kicad supports this by exporting a \textbf{.pos}
+file in human-readable format. Pcb2gcode has been modified (see \textbf{pnp.cpp}
+and \textbf{pnp.hpp}) to parse this file and extract the necessary data.
+From this, the appropriate indentation in the component plate can be 
+chosen based on the device package type. The user is informed of where
+to place the device, and the machine can then pick it up and place in onto
+the board.
 
-%\subsection{Flux application}
-%Solder paste includes flux, so this does not need an extra step. This is a useful consequence of using solder paste as opposed to solder,
-%where it would involve an additional placement step
+\subsection{Prototype}
+To test how effectively small parts could be placed with a vacuum, a simple test setup was fabricated:
 
-\subsection{Drilling and isolation routing}
+\begin{itemize} \itemsep0em
+	\item	12V diaphragm air pump (\pounds 8.89 - eBay)
+	\item	6mm OD/4mm ID silicone tube (\pounds 2.69/m - eBay)
+	\item	various needles (need more info here)
+	\item	MOSFET
+	\item	330$\Omega$ resistor
+\end{itemize}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/pump_and_hose.jpg}
+\caption{Pump with hose and needle.}
+\label{hose and needle}
+\end{figure}
+
+The pump draws ~200mA at 12V, which is easily controlled with a MOSFET. Using a 1.8mm ID needle, SOIC-20 parts were picked up, 
+and had significant friction against the needle - essential to avoid slipping or rotating. It was important to place the needle 
+as centrally as possible on the part to avoid generating any imbalance that allowed the part to fall. 
+
+\subsection{Conclusions}
+A vacuum needle solution is workable, and a good choice for this project. Things that need to be considered for use in the final project:
+
+\begin{itemize}
+	\item	The pump takes a certain time to generate a vacuum because of the relatively large internal volume of the pump
+		and silicon tube. It will be important to measure this, and add a margin of error so that full suction is applied
+		to each device before any movement takes place. Similarly, when turning off the pump, the pressure must return to
+		atmospheric before the device can be considered to have been placed successfully. In testing, the pump took
+		less than a second to leak sufficiently for this to occur, but if another pump were to be used, it may be necessary
+		to place a tiny hole in the air line so that pressure drops quickly.
+	\item	It is important to place the needle very near to the centre of mass of the device. The majority of devices will be
+		symmetrical, which will make this easier.
+	\item	The needle must be able to be raised and lowered to the correct heights. It may be possible to push the needle down
+		with a weak spring, with a micro servo that raises it - this would remove any need to know the exact height of each
+		device. This will need to be tested.
+\end{itemize}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/needle_with_resistor.jpg}
+\caption{SMD resistor being picked up.}
+\label{overflow}
+\end{figure}
+
+
+\section{Spindle}
+The spindle is used for isolating routing, milling and drilling operations.
+
+Isolation routing is a method to mill traces from copper-clad pcb. A conical engraving bit is used to cut very narrow tracks through
+the copper, to leave disconnected pads as required. Figures \ref{breakout} and \ref{breakout_closeup} show a small SOIC breakout board that has been isolation routed using the machine. 
+
+
+Milling operations would be useful to cut the final PCB to size and to
+cut out any larger interior holes. While not the central focus of this
+project, the use of the machine to perform light milling operations
+would be significantly useful for many users.
+
+Drilling holes in pcbs is a time-consuming process to do by hand. It can also be difficult to locate the holes precisely, which can be a problem
+for holes for small vias, or when holes must be aligned exactly (for example to fit a row of header pins). If this machine could drill the holes automatically,
+it would reduce the total time taken significantly.
+
+\subsection{Requirements}
+When isolation routing, the fine tip of the bit has very small flutes. As a result it can only manage
+small chip loads (the amount of material cut by each pass of a flute). To cut in reasonable time, a high speed spindle is required - up to 40000rpm.
+
+The bits experience significant sideways forces (Approximately 2N when isolation routing, and 10N when milling). The spindle
+should have minimal runout under these conditions.
+
+\subsection{Design}
+A small brushless motor is ideal for such a spindle. The hobbyist radio
+controlled aircraft market provides low cost, high speed brushless motors
+along with the necessary speed controllers. A 25 Amp \gls{ESC} 
+(Turnigy plush 25A, \pounds 9) powering a small brushless motor 
+(Turnigy 2217 20turn 860kv 22A outrunner, \pounds 10) is capable of milling
+steel (in the author's experience), so smaller, cheaper motors should be 
+capable of routing/drilling copper. For this project a 3800KV motor was
+chosen for a maximum unloaded spindle speed of 45600rpm. In practice the
+achieveable speed will be lower due to losses in the ESC, as well as load
+from the cutting operations.
+
+The biggest design challenge was to mechanically couple the motor to the
+required bit. There is almost zero allowance for axial misalignment, as 
+the fine bits are liable to shatter otherwise.
+
+An alternative design would be to use a low cost rotary tool, which already has the bearings, collet and spindle motor. 
+However this approach would likely be too bulky, and many rotary tools
+do not have sufficiently low runout for use with fine bits.
+
+\subsection{Prior art}
+Many CNC mills use a collet to hold the bits. This is tightened
+around the bit, holding it in place with friction. The problem with this
+application is that using a collet system would require custom metal work,
+something not necessarily available to the envisioned end user.
+
+The iModela cnc (\cite{imodela}) is an example of an inexpensive desktop
+CNC mill. This uses a small ball bearing for the shaft, with custom machined shafts. The milling bits fit inside the shaft, and
+are secured with a single grub screw. This seems to work, though it would need a very carefully machined shaft so that axial misalignment
+did not shear the end of the milling bit, particularly with the very
+fine tools in use for this project.
+
+\subsection{Chosen design}
+A novel design was tested for the spindle. Instead of securing
+the bit in a collet surrounded by a ball bearing, the bit would 
+surrounded by a number of ball bearings, sprung to provide a strong clamping
+force against the bit. The rotational coupling was achieved with
+a thick elastic O-ring, which allowed for the motor to be misaligned
+whilst still transferring rotation to the bit. In testing this performed
+excellently, and was capable of routing fine tracks without measureable runout.
+
+\subsection{Improvements}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/spindle.png}
+\caption{Rendering of improved spindle design}
+\label{spindle}
+\end{figure}
+
+The spindle was redesigned to be stronger and neater. See figure (~\ref{spindle}) for a rendering.
+The new design encloses the moving parts more for safety.
+
+\subsection{Milling}
+There are a number of uses for a machine capable of light milling:
+
+\begin{itemize} \itemsep0em
+	\item	Manufacturing PCBs with arbitrary shapes. For example, It is possible to build connectors from PCBs that lie on the circuit board if they can be milled to the correct shape.
+			For example, USB connectors. This reduces part cost.
+	\item	Improving the finish of 3d printed components. In cases where the rough edges of 3d printed parts are not satisfactory, a milling pass over the piece can increase the flatness
+			of edges.
+	
+\end{itemize}
+
+The spindle on the machine is quite capable of light milling, with some limitations:
+
+\begin{itemize} \itemsep0em
+	\item	Milling bits only protrude from the spindle by approximately 8mm (depending on the bit). This means that this is the deepest cut the machine is capable of making.
+	\item	The axes do not have the rigidity required for milling tough materials. Plastics and wood are possible, while metals are not.
+	\item	The spindle only supports parts with a 3mm shank.
+	\item	The spindle speed is variable from 1000-\textgreater40000rpm unloaded. The speed controller attempts to maintain the rotational speed setpoint, however it prioritises
+			correct motor commutation. Therefore at higher speeds under heavy loads care must be taken that the spindle speed does not drop significantly. In practice this is unlikely
+			to be a problem, as the motor has a maximum power of 250W and has significant moment of inertia.
+\end{itemize}
+
+As this functionality is not a central focus of this project, only a simple demonstration of milling ability was carried out. The spur gear used in the gear extruder is cut from 6mm acrylic:
+
+\subsubsection {Gear CAD}
+The Creo design was exported as a .DXF file. The closed source program Cambam (\cite{Cambam}) was used to generate
+GCODE for milling due to the author's familiarity with the software, but many open-source alternatives are available
+(eg dxf2gcode \cite{dxf2gcode}).
+
+\subsubsection {Milling Settings}
+
+The following settings were used to mill the green acrylic gear (Figure ~\ref{fig:gearcomparison}):
+
+\begin{center}
+	\begin{tabular}{| l | l | p{8cm} |}
+	\hline
+	Setting & Value & Comments \\ \hline
+	Sheet material & 3mm green acrylic & \\ \hline
+	Cutting bit & 1mm diameter endmill & Cambam estimated maximum endmill size to be ~1.4mm diameter. \\ \hline
+	%conventional milling
+	Depth increment & 1mm & Chosen to produce part quickly at the expense of edge quality. \\ \hline
+%	12mm clearance plane
+	Cut feedrate & 70mm/min & Very slow feedrate chosen for initial tests. \\ \hline
+	Plunge feedrate & 70mm/min & Slow feedrate to avoid chips clogging.\\
+	\hline
+	\end{tabular}
+\end{center}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/gear_cambam.png}
+\caption{Gear outline shown in red. Toolpath shown in green/blue.}
+\label{overflow}
+\end{figure}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=90mm]{resources/gear_comparison.jpg}
+\caption{Milled gear (left) compared to original gear (right).}
+\label{fig:gearcomparison}
+\end{figure}
 
 
 \begin{figure}
@@ -392,32 +1073,11 @@ The "vacuum tweezer" method will be used to pick and place the parts. This is th
 \end{minipage}%
 \end{figure}
 
-Isolation routing is a method to mill traces from copper-clad pcb. A conical engraving bit is used to cut very narrow tracks through
-the copper, to leave disconnected pads as required. The fine tip of the bit has very small flutes, and as a result can only manage
-small chip loads (the amount of material cut by each pass of a flute). To cut in reasonable time, a high speed spindle is required.
 
-Drilling holes in pcbs is a time-consuming process to do by hand. It can also be difficult to locate the holes precisely, which can be a problem
-for holes for small vias, or when holes must be aligned exactly (for example to fit a row of header pins). If this machine could drill the holes automatically,
-it would reduce the total time taken significantly. A small brushless motor with a collet would be enough. The biggest challenge
-will be mechanically coupling the motor to the drill bit. This is not intrinsically difficult, but if possible it should be made in a way that
-is accessible to people without the use of a lathe.
 
-A 25 Amp ESC (Turnigy plush 25A, \pounds 9) powering a small brushless motor (Turnigy 2217 20turn 860kv 22A outrunner, \pounds 10) is capable of milling
-steel easily, so smaller, cheaper motors should be fine for routing/drilling copper.
 
-The iModela cnc (\cite{imodela}) appears to use a small ball bearing for the shaft, with custom machined shafts. The milling bits fit inside the shaft, and
-are secured with a single grub screw. This seems to work, though it would need a very carefully machined shaft so that axial misalignment
-did not shear the end of the milling bit.
-
-An alternative design would be to use a low cost rotary tool, which already has the bearings, collet and spindle motor. 
-
-Figures \ref{breakout} and \ref{breakout_closeup} show a small SOIC breakout board that has been isolation routed using the machine. 
-
-\subsection{Soldering iron}
-Designing a mount for a cheap and widely available soldering iron may well have been the simplest approach. However, using solder paste, 
-this part of the design is not needed.
-
-\subsection{Melting solder paste}
+\section{Hot air tool}
+\label{lastsection}
 Once the board has been pasted and the parts deposited, the solder paste needs to be heated up so that it will melt and form good connections.
 There are a few possibilities for this process:
 
@@ -460,121 +1120,30 @@ There are a few possibilities for this process:
 \end{figure}	
 			
 The choice of method to heat the solder paste may well depend on the end-user - one solution is not clearly superior to the others. During the
-course of this project the hand-held hot air gun will be used most often due to equipment availability.
+course of this project the hand-held hot air gun will be used most often due to equipment availability. It would however
+be useful if this aspect of board manufacture could also be automated.
+A hot air tool has been designed that travels over the board, reflowing
+all of the connections.
 
-\subsection{Electronics/Firmware}
-An AVR chip will be used to translate GCODE to stepper motor commands for the following reasons:
+\subsection{Requirements}
+A hot air tool used for soldering has the following requirements:
 
 \begin{itemize} \itemsep0em
-	\item	Cost: an atmega328 is \pounds 2-3, a USB-serial chip is < \pounds 2, which is not much.
-	\item	Mature open source firmware (GRBL, https://github.com/grbl/grbl) is available for GCODE-\textgreater stepper
-		conversion, which leaves more time to focus on other parts of this project.
+	\item	Ability to heat solder paste up to $240\,^{\circ}\mathrm{C}$
+	\item	Slow, steady airflow
+	\item	Controllable temperature (i.e. not open-loop)
 \end{itemize}
 
-On the host pc, custom software will have to be written to translate the design into a GCODE file to be sent to the machine. Usefully however,
-the machine's firmware will not need to be written or modified significantly.
-
-\section{Improved designs}
-
-\subsection{Solder paste extruder}
-
-The solder paste extruder design that was initially used was unnecessarily bulky and complex. This made it both harder to fit to the tool mounting mechanism, and increased the
-distance between the mount and the tool, amplifying any wobble in the mount. It was therefore deemed necessary to redesign it, optimising for size. Operation and performance
-is similar between all designs however.
-
-\subsubsection{Paste extruder using bevel gears}
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=90mm]{resources/extruder_bevel.png}
-\caption{Placeholder image of bevel extruder}
+\includegraphics[width=90mm]{resources/hotair.png}
+\caption{Simplified diagram of hot air tool.}
 \label{overflow}
 \end{figure}
 
-The first attempt to reduce the size of the extruder used bevel gears to shrink the size of the gearbox. 
+\subsection{Calculations}
 
-\subsubsection{Paste extruder using worm gears}
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/extruder_worm.png}
-\caption{Placeholder image of worm extruder}
-\label{overflow}
-\end{figure}
-
-Worm gears would give the same gear ratio in a smaller gearbox, so a new design was made using them. The improved design is as small as possible and performs as well as the much larger extruder that
-was originally used.
-
-\subsection{Spindle}
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/spindle.png}
-\caption{Rendering of improved spindle design}
-\label{spindle}
-\end{figure}
-
-The spindle was redesigned to be stronger and neater. See figure (~\ref{spindle}) for a rendering.
-The new design encloses the moving parts more for safety.
-
-\section{Serial interface}
-For simplicity, the communication between the PC and the electronics board is implemented as a serial link. An arbitrary baud rate of 57600 has been
-chosen, this is sufficiently fast so that the electronics board is not slowed by waiting for instructions (as the firmware buffers incoming commands in
-a small buffer in RAM), and sufficiently slow that the error rate is assumed to be zero.
-
-\subsection{USB-serial cable}
-A USBserial cable based on the FTDI FT232R chipset can be plugged into the serial header on the electronics board. This is a cheap (<\pounds 5) device that is 
-a complete solution. Driver support for the FT232R is available for all platforms that have been considered (Windows/OS X/Linux/Android).
-
-%\subsection{Bluetooth serial link}
-%\begin{figure}[ht!]
-%\centering
-%\includegraphics[width=90mm]{resources/bluetoothmodule.jpg}
-%\caption{Bluetooth module mounted on breakout board.}
-%\label{overflow}
-%\end{figure}
-
-%\begin{figure}[ht!]
-%\centering
-%\includegraphics[width=160mm]{resources/hc05breakout.png}
-%\caption{Bluetooth breakout module schematic.}
-%\label{overflow}
-%\end{figure}
-
-As an alternative to a USB-serial cable, a bluetooth link can be used. Depending on the end user, this may be more convenient. The HC-05 bluetooth module was
-chosen because of its low cost (\pounds 3.50) and simplicity. The board requires a 3.3V supply, which is not present on the electronics board. A small
-breakout board was manufactured for the module, including an AMS1117-3.3 3.3V linear regulator (\pounds 0.10) and link status LEDs. The 3.3V TX output from the module is sufficient
-for the AVR despite its higher 5V supply. To avoid damage to the bluetooth module, a potential divider consisting of two 1k resistors is used. This 2.5V output is
-again sufficient for the bluetooth module.
-
-To configure the baud rate for the bluetooth module, it was connected to a pc using a USB-serial cable. The bluetooth module is powered up whilst the "KEY" pin is held high (3.3V).
-This starts the module in AT configuration mode. The baud rate was then set by sending the string "AT+UART=57600,1,0" at 38400 baud. This configuration is only required once,
-the module stores all configuration in non-volatile storage.
-
-\section{User interface}
-%\label{lcdUI}
-The machine has two main user interfaces: the interface used for the machine in 
-standalone operation (see ~\ref{lcdUI}), and that used when connected to a host computer.
-As the standalone operation has already been described, this section will only
-detail the host computer interface.
-
-\subsection{Pronterface}
-Pronterface was chosen as the user interface as it is a mature GCODE visualiser
-and sender.
-
-INSERT PICTURE
-
-Once the correct serial port and baud rate have been selected, pronterface will connect
-to the machine. GCODE can be loaded using the \textbf{Load file} button. It is 
-rendered to the center of the window (however some operations are not shown correctly).
-The program is primarily intended for operating 3d printers, so to send the GCODE
-to the machine the \textbf{Print} button must be used.
-
-\section{Power Supply}
-The machine is powered with a 12V 30A power supply. It has over-current and overheating protection built in, but as a failsafe, a 20A fuse is added inline with the +12V cable. 
-
-\section{Machine Handbook}
-As the machine operation is complex, a handbook has been produced that
-detail the steps needed to operate it. This forms a separate document
-which is attached to this report.
+Refer to Appendix \ref{heatcalc} for the heater calculations.
 
 \section{Host computer software}
 Software will have to be written to translate board cad data to gcode. Some of this already exists in the public domain, some will have to be made
@@ -648,340 +1217,14 @@ The belt on the paste extruder is slightly springy. This results in the extruder
 This has an adverse effect on board quality. To counter this, the extruder should be retracted slightly to remove all pressure from the syringe. The distance to retract
 as well as speed of retraction should be experimentally determined for optimum results. Retraction support has been added to the solder paste output of pcb2gcode.
 
-\section{Tools}
-In the course of this project, access to a small mill, a 3d printer and a lathe was essential. It may be worth considering that a lot of people/schools have
-access to a laser cutter and perhaps mill/lathe, so if possible all custom components could be 3d printed or 
-laser cut.
 
-\section{Solder paste extrusion}
-Initially, a freely available design for the paste extruder was used \cite{thingipaste}.
+\section{Machine testing and use}
+As the machine operation is complex, a handbook has been produced that
+detail the steps needed to operate it. This forms a separate document
+which is attached to this report, although an overview of the operating
+process is given in figure \ref{tikzoverview}.
 
-The extruder works by applying pressure to the top of the solder paste syringe. Pressure is applied by tightening a pulley made
-of T5 timing belt with a geared stepper motor. This design was chosen because the extruder is compact, and the design allows for
-fast reduction of pressure, important for clean extrusion and to avoid the solder paste dribbling. 
-
-To calibrate the extruder, two parameters are needed: steps/volume extruded and retraction steps. The first is easy to calculate:
-
-(All dimensions in mm,mm\textsuperscript{2},mm\textsuperscript{3})
-
-The solder paste is supplied in a 2.5ml syringe, with a 66.1276mm\textsuperscript{2} cross-sectional area.
-
-\begin{eqnarray}
-\text{Volume extruded / step} &=& \frac{\text{cross-sectional area of syringe} \times \text{T5 pitch} \times \text{number of teeth of T5 pulley}}{\text{number of microsteps} \times \text{steps/revolution} \times \text{gear reduction ratio}} \nonumber \\
-&=&\frac{66.1276 \times 5 \times 10}{16 \times 200 \times 12} \nonumber \\
-&=&0.0861mm\textsuperscript{3} \nonumber \\
-	\text{Steps / mm\textsuperscript{3}} &=& \frac{1} {\text{volume extruded / step}} \nonumber \\
-	&=& \frac{1}{ 0.0861} \nonumber \\
-	&=& 11.61 \nonumber
-\end{eqnarray}
-
-The retraction steps must be experimentally determined. The choice is a trade-off between minimising solder paste dribble (large number
-of retraction steps) and reducing total process time (small number of retraction steps). It must be enough that negligible pressure is
-exerted on the syringe when retracted.
-
-Some method to "prime" the extruder will be needed. Assuming the extruder is initially hand-tightened so that the belt has little slack,
-a possible method is to repeatedly advance the extruder and then retract by a slightly smaller amount, until the user notifies the machine
-that solder paste has been extruded. At this point, the extruder should pause after retracting. The solder paste deposition process can
-then commence since the exact point of extrusion has been established. 
-%Assuming that x is the required granularity of calibration (the 
-%maximum amount of solder paste that will be wasted), and y is the retraction distance, the following example GCODE will carry out this calibration:
-
-%\begin{lstlisting}[frame=single]
-%//values in braces {} are to be evaluated on the host
-%
-%//Start loop here:
-%G92 E{y} //Set extruder position in firmware to be y
-%G1 E{x+y} //Extrude x amount of paste
-%G1 E{y} //Retract
-%//if user has not indicated extrusion then loop again
-%
-%//when the user has indicated extrusion:
-%G92 E{y}
-%\end{lstlisting}
-	  
-\section{Managing devices prior to placement}
-There will need to be a way to place the devices in a known position, so they can then be picked up and placed in their final locations.
-Commercial pick and place machines take the parts directly from the reels they are supplied in. While this is optimal for that application in that
-it is a very fast way to operate, the cost of reel dispensers is prohibitive for this machine. Instead, the parts will have to be roughly placed
-by hand. There are a number of ways this could be done:
-
-\begin{itemize} \itemsep0em
-	\item	Embossed outlines of all necessary device footprints.
-	\item	Rectangular embossed outline, devices to be located in one corner.
-\end{itemize}
-
-It was decided that the latter would be simplest to implement. A rectangular hole will be milled into the bed. Each part can then
-be manually placed inside, then pushed to one corner. A consistent system will be needed to ensure correct orientation. The following set of rules
-is to be used:
-
-\begin{itemize} \itemsep0em
-	\item	ICs will be placed with pin 1 touching the datum corner.
-	\item	Devices will always be placed with the longest side (if applicable) touching the long side of the rectangle.
-	\item	Devices such as MOSFETs will be placed with the corner between the longest side and side with most pins touching the datum corner.
-	\item	Polar 2-lead devices with always have the anode nearest the datum corner.
-\end{itemize}
-
-Given the current component to be placed, and the device footprint, it will be trivial to find the coordinates of the centre of the part. Some
-consideration will have to be given as to how to determine the centre of mass of parts which are not symmetrical in two directions (e.g. MOSFETs).
-	   
-\section{Vacuum Placing}
-\subsection{Prototype}
-To test how effectively small parts could be placed with a vacuum, a simple test setup was fabricated:
-
-\begin{itemize} \itemsep0em
-	\item	12V diaphragm air pump (\pounds 8.89 - eBay)
-	\item	6mm OD/4mm ID silicone tube (\pounds 2.69/m - eBay)
-	\item	various needles (need more info here)
-	\item	MOSFET
-	\item	330$\Omega$ resistor
-\end{itemize}
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/pump_and_hose.jpg}
-\caption{Pump with hose and needle.}
-\label{hose and needle}
-\end{figure}
-
-The pump draws ~200mA at 12V, which is easily controlled with a MOSFET. Using a 1.8mm ID needle, SOIC-20 parts were picked up, 
-and had significant friction against the needle - essential to avoid slipping or rotating. It was important to place the needle 
-as centrally as possible on the part to avoid generating any imbalance that allowed the part to fall. 
-
-\subsection{Conclusions}
-A vacuum needle solution is workable, and a good choice for this project. Things that need to be considered for use in the final project:
-
-\begin{itemize}
-	\item	The pump takes a certain time to generate a vacuum because of the relatively large internal volume of the pump
-		and silicon tube. It will be important to measure this, and add a margin of error so that full suction is applied
-		to each device before any movement takes place. Similarly, when turning off the pump, the pressure must return to
-		atmospheric before the device can be considered to have been placed successfully. In testing, the pump took
-		less than a second to leak sufficiently for this to occur, but if another pump were to be used, it may be necessary
-		to place a tiny hole in the air line so that pressure drops quickly.
-	\item	It is important to place the needle very near to the centre of mass of the device. The majority of devices will be
-		symmetrical, which will make this easier.
-	\item	The needle must be able to be raised and lowered to the correct heights. It may be possible to push the needle down
-		with a weak spring, with a micro servo that raises it - this would remove any need to know the exact height of each
-		device. This will need to be tested.
-\end{itemize}
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/needle_with_resistor.jpg}
-\caption{SMD resistor being picked up.}
-\label{overflow}
-\end{figure}
-
-\section{Operating Speed}
-For the machine to be practical, there are some limitations on the maximum time that a board can take to manufacture. This is particularly true of the device placement stage, as this requires
-human intervention. The total time can be divided into a few main sections:
-
-\begin{itemize}
-	\item	X/Y travel.
-	\item	X/Y cutting.
-	\item	Z movement.
-	\item	Picking/placing components.
-	\item	Hot air reflow.
-\end{itemize}
-
-The X/Y travel will take the most time in total, so the estimated times should be calculated and optimised if possible. Assuming a travel speed of 10mm/s, the total
-time is simply total distance (mm) / 10.
-
-\section{Measuring Accuracy}
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=170mm]{resources/registration.png}
-\caption{Visual alignment test using one side of a TQFP-32 Atmega328.}
-\label{overflow}
-\end{figure}
-
-It is important to measure the accuracy of the axes to ensure that they can reach the specified +-0.05mm. This will need to be measured
-at all points on the bed (as the accuracy will worsen when the bed is central due to increased rod deflection.). Of particular concern will be
-the deflection under the load of the isolation routing bit. The solder paste and device placement will not involve any significant force. The 
-drilling will generate a force, but the tolerance required of a 1mm hole is not nearly as demanding as that of the isolation routing cutter.
-The exact forces exerted by the routing bit have yet to be measured, but are estimated to be 5-10N. This means that the anti-backlash nut
-will need to exert the same or greater force to ensure that the board does not move. This in turn places extra resistance on the motor movement.
-
-\subsection{Testing methodology}
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/dialgauge.png}
-\caption{Measurement setup (This is a placeholder image).}
-\label{dialgauge}
-\end{figure}
-
-In order to characterise the accuracy of the machine, it is important to have a consistent measuring regime. A dial gauge is used to measure
-relative positions of the axes. See Figure ~\ref{dialgauge} for the experimental setup. It is important to ensure the worst-case error is acceptable. The causes of error and their effects are:
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=150mm]{resources/errors.png}
-\caption{Measurement setup, showing error notation.}
-\label{errornotation}
-\end{figure}
-
-Effects are shown with reference to Figure ~\ref{errornotation}, noting that the X and Y referred to in the figure do not necessarily represent the machine axes.
-\begin{itemize} \itemsep0em
-	\item	Z displacement: It is possible the surface of the bed will move in the vertical direction, something that should not happen ideally. This 
-			will occur if the surface over which the idler bearing runs is not flat, or due to manufacturing tolerances in the linear slides.
-	\item	Rotation: The drawer slides do not eliminate rotation completely, and this error dominates. Rotation is relative to the small ball bearing array which slides along
-			the drawer slides, so this source of error depends on the absolute slide position. Figure ~\ref{errornotation} shows the largest error possible, with the ball bearings
-			far away from the location of maximum error, where rotation effects dominate.
-	\item	Motion parallel to the axis direction. This error is mostly caused by flex in the stepper motor mounts, the motor-\textgreater threaded rod couplers and the anti-backlash nuts.
-	\item	Motion perpendicular to the axis direction. This error is caused by small amounts of slop in the drawer slides.
-\end{itemize}
-
-As it is only important to measure the worst-case error, the point shown in purple in Figure ~\ref(errornotation) is the only point which will be measured. 
-
-\section{Hot air tool}
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/hotair.png}
-\caption{Simplified diagram of hot air tool.}
-\label{overflow}
-\end{figure}
-
-Ideally the heating of the solder paste should be carried out automatically by the machine. This section describes a prototype hot air tool.
-
-A hot air tool used for soldering has the following requirements:
-
-\begin{itemize} \itemsep0em
-	\item	Ability to heat solder paste up to $240\,^{\circ}\mathrm{C}$
-	\item	Slow, steady airflow
-	\item	Controllable temperature (i.e. not open-loop)
-\end{itemize}
-
-\subsection{Calculations}
-
-Refer to Appendix \ref{heatcalc} for the heater calculations.
-
-\section{Standalone Operation}
-It may be useful to operate the machine without a connected PC. In the case of manufacturing a large number of boards, it may be impractical to dedicate a PC simply to sending GCODE.
-In addition, some functions of the machine produce dust, and are noisy. Allowing the machine to operate in a more remote location could be convenient. 
-
-The steps taken to produce GCODE (e.g. running pcb2gcode) will always need a PC, but once the GCODE has been produced it is possible for the machine to read this from connected storage.
-
-\subsection{SD card reading}
-SD cards are ideal for use with microcontrollers, as they have a simple protocol (SPI), and are inexpensive. They also have wide compatibility with other devices. It would be useful if 
-the GCODE could be stored on an SD card and read by the machine.
-
-\subsubsection {Hardware}
-SD cards can operate in SPI mode, using only four connections (MISO, MOSI, CLK, CS). However, they operate at 3.3V, and the AVR operates at 5V. To power the card, an AMS1117-3.3 linear regulator
-is used. Level translation must be used to convert the four connections to the required voltages. There are three options for this process:
-
-\begin{itemize} \itemsep0em
-	\item	Potential dividers. This is the simplest option, using only resistors. The CS, MOSI and CLK connections send data to the SD card. A potential divider is used to reduce the voltages
-			from 5V to 3.3V. The MISO connection receives data from the SD card. The AVR has a high input threshold of above 2.6V. MISO can therefore be connected as it operates up to 3.3V. 
-			Although this is the simplest option, the high impedance output from the potential divider can cause problems at fast SPI speeds, as the SD card presents a relatively high
-			capacitive loading.
-	\item	Discrete transistors can be used to translate between 3.3V and 5V. This has the advantage of faster operation, and increasing the noise margins (reduced when using 3.3V with a 5V chip).
-			Two transistors are needed for each connection to ensure the signal is not inverted.
-	\item	A level translation IC can be used. This needs no additional components (except from a decoupling capacitor).
-\end{itemize}
-
-\subsubsection {Firmware}
-The Marlin firmware used in the machine has full support for SD cards, provided they are formatted with the FAT filesystem.
-
-\subsection{LCD + User interface}
-\label{lcdUI}
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=70mm]{resources/lcd_real.jpg}
-\caption{LCD user interface.}
-\label{lcdreal}
-\end{figure}
-
-If the machine is to be used in a standalone capacity, there must be a way for the user to choose which GCODE file to send.
-Figure (~\ref{lcdreal}) shows the machine's user interface.
-
-\subsubsection{Hardware}
-A 4x20 LCD is used to display information about the current job, as well as allow the user to select GCODE files. This is an inexpensive part based on the ubiquitous HD44780 controller chip.
-It is operated in 4-bit mode (as opposed to 8-bit mode, which requires four additional microcontroller pins). Six connections are required to the microcontroller: RS, EN, D4, D5, D6, D7. As
-the electronics board does not have many spare connections, it was decided to use an MCP23017 i2c port expander to connect the LCD. The Marlin firmware already supports this, and needs just
-two connections (SDA and SCL) to the driver board. See Figure ~\ref{lcd_backpack} for the schematic.
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=160mm]{resources/lcd_backpack.png}
-\caption{Schematic of i2c -> LCD board.}
-\label{lcd_backpack}
-\end{figure}
-
-A rotary encoder is used to provide input. This uses quadrature outputs to determine motion. The encoder also has a push switch inside for selecting options. This therefore require three microcontroller
-pins in total.
-
-\subsubsection{Firmware}
-Marlin has support for the LCD and encoder, requiring only a change to Configuration.h and pins.h
-
-
-\section{Milling}
-The spindle on the machine is quite capable of light milling, with some limitations:
-
-\begin{itemize} \itemsep0em
-	\item	Milling bits only protrude from the spindle by approximately 8mm (depending on the bit). This means that this is the deepest cut the machine is capable of making.
-	\item	The axes do not have the rigidity required for milling tough materials. Plastics and wood are possible, while metals are not.
-	\item	The spindle only supports parts with a 3mm shank.
-	\item	The spindle speed is variable from 1000-\textgreater40000rpm unloaded. The speed controller attempts to maintain the rotational speed setpoint, however it prioritises
-			correct motor commutation. Therefore at higher speeds under heavy loads care must be taken that the spindle speed does not drop significantly. In practice this is unlikely
-			to be a problem, as the motor has a maximum power of 250W and has significant moment of inertia.
-\end{itemize}
-
-As this functionality is not a central focus of this project, only a simple demonstration of milling ability was done. The spur gear used in the gear extruder is cut from 6mm acrylic:
-
-\subsubsection {Gear CAD}
-The gear design was copied into a CamBam project. Ideally the Creo design could have been exported as a .DXF file, but errors were encountered while attempting this. CamBam was used to 
-generate GCODE for milling the gear, taking into account the machine's slow travel speeds. The firmware used in the machine does not handle parentheses in the GCODE, so the CamBam 
-output must be checked for them, and the lines removed.
-
-\subsubsection {Milling Settings}
-
-The following settings were used to mill the green acrylic gear (Figure ~\ref{fig:gearcomparison}):
-
-\begin{center}
-	\begin{tabular}{| l | l | p{8cm} |}
-	\hline
-	Setting & Value & Comments \\ \hline
-	Sheet material & 3mm green acrylic & \\ \hline
-	Cutting bit & 1mm diameter endmill & Cambam estimated maximum endmill size to be ~1.4mm diameter. \\ \hline
-	%conventional milling
-	Depth increment & 1mm & Chosen to produce part quickly at the expense of edge quality. \\ \hline
-%	12mm clearance plane
-	Cut feedrate & 70mm/min & Very slow feedrate chosen for initial tests. \\ \hline
-	Plunge feedrate & 70mm/min & Slow feedrate to avoid chips clogging.\\
-	\hline
-	\end{tabular}
-\end{center}
-
-\subsubsection {Envisioned uses for milling}
-{
-There are a number of uses for a machine capable of light milling:
-
-\begin{itemize} \itemsep0em
-	\item	Manufacturing PCBs with arbitrary shapes. For example, It is possible to build connectors from PCBs that lie on the circuit board if they can be milled to the correct shape.
-			For example, USB connectors. This reduces part cost.
-	\item	Improving the finish of 3d printed components. In cases where the rough edges of 3d printed parts are not satisfactory, a milling pass over the piece can increase the flatness
-			of edges.
-	
-\end{itemize}
-}
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/gear_cambam.png}
-\caption{Gear outline shown in red. Toolpath shown in green/blue.}
-\label{overflow}
-\end{figure}
-
-\begin{figure}[ht!]
-\centering
-\includegraphics[width=90mm]{resources/gear_comparison.jpg}
-\caption{Milled gear (left) compared to original gear (right).}
-\label{fig:gearcomparison}
-\end{figure}
-
-\section{Operating Steps}
+\subsection{Operating Steps}
 
 % Define block styles
 \tikzstyle{decision} = [diamond, draw, fill=blue!20, 
@@ -993,6 +1236,7 @@ There are a number of uses for a machine capable of light milling:
     minimum height=2em]
     
 \begin{tikzpicture}[align=center,node distance = 1.6cm,auto]
+\label{tikzoverview}
     % Place nodes
     \node [block] (pcb2gcode) {run pcb2gcode to generate GCODE};
     \node [cloud, left of=pcb2gcode, align=center] (designfiles) {PCB designs exported\\ from design package\\ in GERBER format};
@@ -1035,80 +1279,60 @@ There are a number of uses for a machine capable of light milling:
 
 \end{tikzpicture}
 
-\section{Zeroing the axes}
+%\section{Measuring Accuracy}
 
-When the machine is used it is necessary to "zero" the axes to a known datum point on the board. This is particularly important when swapping tools, as there may
-be a small amount of slop in the tool mounts which will vary between tools.
 
-\subsection{X and Y axes}
+%It is important to measure the accuracy of the axes to ensure that they can reach the specified +-0.05mm. This will need to be measured
+%at all points on the bed (as the accuracy will worsen when the bed is central due to increased rod deflection.). Of particular concern will be
+%the deflection under the load of the isolation routing bit. The solder paste and device placement will not involve any significant force. The 
+%drilling will generate a force, but the tolerance required of a 1mm hole is not nearly as demanding as that of the isolation routing cutter.
+%The exact forces exerted by the routing bit have yet to be measured, but are estimated to be 5-10N. This means that the anti-backlash nut
+%will need to exert the same or greater force to ensure that the board does not move. This in turn places extra resistance on the motor movement.
 
-In order to zero the machine in the X and Y directions, an "L-shaped" piece of metal has been added to the bed (insert pictures/diagrams). All of the tools are metal,
-and therefore conductive. The axes are first manually moved to be near-zero. The tips of the tools are all electrically connected to an input pin on the AVR, with a weak (10K) pullup to 5V.
-The "L-shaped" piece of metal is connected to ground. When instructed, the firmware slowly moves the X or Y axis in the negative direction until a contact is made, and the input goes LOW. At this point,
-the exact position of the tool is known. For convenience it is important that the location of the centre of the tool is known, this can simply be calculated as the diameters of all of the tools are known and fixed.
-
-\subsection{Z axis}
-
-Slightly different mechanisms are used for the zeroing of the Z axis when used for different tools:
-
-\subsubsection{Vacuum needle}
-
-A small microswitch is part of the vacuum needle assembly. It is triggered when the needle is touching either the bed or the top of a component. As a result, zeroing can be carried out simply by 
-moving the tool downwards until it is triggered.
-
-\subsubsection{All other tools}
-
-The other tools are zeroing electrically using the same mechanism as for the X and Y axes. The tools are lowered until contact is made between the PCB and the tool. A temporary contact must be made from ground
-to the copper pcb, this is achieved with an alligator clip.
-
-\section{Future Work}
-This section contains envisioned improvements to the machine that were not implemented due to time constraints.
-
-\subsection{Double-sided boards}
-It is common to use double sided PCBs in order to achieve more compact circuits. The machine will not currently have the ability to process such boards, although this would be possible in a later version.
-
-\subsubsection{Challenges}
-There are a number of challenges associated with working with dual sided boards:
-
-\begin{enumerate}
-	\item	Clamping the PCB to the bed of the machine is more complex with the second side of a double sided board. The components that have
-			already been populated will not allow the board to sit flat and level.
-	\item	The PCB material is a moderately good conductor of heat. When the second side of the board is heated to melt the solder paste, there
-			is a danger that components on the bottom will be loosened and fall off.
-	\item	Both sides of the board must be precisely aligned so that any through-holes or vias line up.
-	\item	Any vias that are required will add considerable complexity. Commercially they are manufactured in a multi-stage chemical process
-			which is not feasible for the hobbyist.
-\end{enumerate}
-
-\subsubsection{Envisioned solutions}
-
-\begin{enumerate}
-	\item	As isolation routing places the greatest stresses on the board mounts, it is unlikely that the reverse side of the board can be manufactured
-			after the first side has been populated with components. Therefore the isolation routing should be carried out on both sides first. Any holes
-			through the board should also be drilled, and cutting the board out also (leaving tabs to hold it in place). When this has been done, the
-			rest of the manufacturing process can be continued with less secure mounting from the board edges.
-	\item	Melting solder on one side of the board while leaving the other side solid will require active cooling of the bottom of the board. Commercially
-			components are often glued so that all the solder paste can be reflowed in one process, but the application of adhesive adds a complex extra
-			process to the machine which should be avoided.
-	\item	Alignment may be achieved by the use of a small USB microscope. The user would be able to see an image of the board, and select datum points (for
-			example the center of a pad). Once the board was flipped, the same datum points could be located. From this, a transformation matrix can simply
-			be computed and applied to the coordinates of the GCODE.
-	\item	A reasonable substitute for vias is to drill a hole through the board, place a short piece of wire into it and solder both sides to the copper.
-			It is likely that the only practical way to achieve this is manually once the board has been manufactured. The ability to perform light milling
-			operations with the machine could be used to mill the ends of the wire much closer to the surface of the PCB than could be achieved with wire cutters.
-			In this way it is likely that thermal vias under components could be achieved (Vias used for the purpose of heatsinking are placed under the thermal
-			tab of an SMD component to conduct heat to copper on the reverse side of the board).
-\end{enumerate}
+\subsection{Testing methodology}
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=160mm]{resources/finished.jpg}
-\caption{Finished wooden version of the machine.}
-\label{fig:finished}
+\includegraphics[width=90mm]{resources/dialgauge.png}
+\caption{Measurement setup (This is a placeholder image).}
+\label{dialgauge}
 \end{figure}
 
-\section{Conclusions}
-As this has been a complex project, the conclusions are separated into a number of sections:
+In order to characterise the accuracy of the machine, it is important to have a consistent measuring regime. A dial gauge is used to measure
+relative positions of the axes. See Figure ~\ref{dialgauge} for the experimental setup. It is important to ensure the worst-case error is acceptable. The causes of error and their effects are:
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=100mm]{resources/errors.png}
+\caption{Measurement setup, showing error notation.}
+\label{errornotation}
+\end{figure}
+
+Effects are shown with reference to Figure ~\ref{errornotation}, noting that the X and Y referred to in the figure do not necessarily represent the machine axes.
+\begin{itemize} \itemsep0em
+	\item	Z displacement: It is possible the surface of the bed will move in the vertical direction, something that should not happen ideally. This 
+			will occur if the surface over which the idler bearing runs is not flat, or due to manufacturing tolerances in the linear slides.
+	\item	Rotation: The drawer slides do not eliminate rotation completely, and this error dominates. Rotation is relative to the small ball bearing array which slides along
+			the drawer slides, so this source of error depends on the absolute slide position. Figure ~\ref{errornotation} shows the largest error possible, with the ball bearings
+			far away from the location of maximum error, where rotation effects dominate.
+	\item	Motion parallel to the axis direction. This error is mostly caused by flex in the stepper motor mounts, the motor-\textgreater threaded rod couplers and the anti-backlash nuts.
+	\item	Motion perpendicular to the axis direction. This error is caused by small amounts of slop in the drawer slides.
+\end{itemize}
+
+As it is only important to measure the worst-case error, the point shown in purple in Figure ~\ref{errornotation} is the only point which will be measured. 
+
+In figure \ref{visualtest}, a TQFP-32 SMD was moved in 0.6mm increments, a distance
+equivalent to the device's pitch. A USB microscope was fixed to the machine,
+and pictures taken at each point. A cross-hair overlay way added in the same
+position to each image. As shown, the centre of the cross-hairs all line
+up perfectly with the centre of each pin. This was a successful visual test.
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=170mm]{resources/registration.png}
+\caption{Visual alignment test using one side of a TQFP-32 Atmega328.}
+\label{visualtest}
+\end{figure}
 
 \subsection{Machine Performance}
 The greatest challenge has been to ensure that the machine's operation is reliable.
@@ -1158,7 +1382,33 @@ project goal, and it is entirely possible to use a commercial hot air tool
 by hand to reflow the parts. It is likely that a future improvement would
 be to replace the hand made hot air tool with a commercial product.
 
-\subsection{Project Management}
+
+
+
+%Assuming that x is the required granularity of calibration (the 
+%maximum amount of solder paste that will be wasted), and y is the retraction distance, the following example GCODE will carry out this calibration:
+
+%\begin{lstlisting}[frame=single]
+%//values in braces {} are to be evaluated on the host
+%
+%//Start loop here:
+%G92 E{y} //Set extruder position in firmware to be y
+%G1 E{x+y} //Extrude x amount of paste
+%G1 E{y} //Retract
+%//if user has not indicated extrusion then loop again
+%
+%//when the user has indicated extrusion:
+%G92 E{y}
+%\end{lstlisting}
+	 
+
+
+\section{Conclusions}
+The conclusions to this report are split between a conclusion
+and evaluation of the project's implementation, and on the use of automation
+to aid PCB manufacture and population.
+
+\subsection{Project implementation}
 A recurring theme during the project has been that while all of the machine
 aims were attainable, it took more time than was expected to improve
 the processes to be user-friendly and reliable. In hindsight it may
@@ -1211,7 +1461,75 @@ and testing this is expected to improve dramatically.
 The novel spindle design has far surpassed the design expectations, and it
 would be worthwhile to characterise its performance in more demanding applications,
 however this is outside the scope of the current project.
+The steps taken to produce GCODE (e.g. running pcb2gcode) will always need a PC, but once the GCODE has been produced it is possible for the machine to read this from connected storage.
 
+\section{Future Work}
+This section contains envisioned improvements to the machine that were not implemented due to time constraints.
+
+\subsection{Automated inspection}
+When producing circuit boards there is always a danger of poor solder 
+connections or short circuits between pins. These are not difficult issues
+to fix, but they are difficult to identify. If they are not spotted
+before the circuit board is powered on, such faults are liable to cause
+anything from intermittent operation to destruction of one or more
+components on the board. It is possible to check for such errors manually
+with a magnifying glass or microscope, but it is very time-consuming.
+
+USB microscope are inexpensive (less than \pounds 10) and have sufficient
+resolution to spot poor connections. If mounted as a tool on the machine,
+it would be possible to slowly scan the microscope around to generate
+a very high resolution image of the board. At the very least this may
+make checking for errors manually easier by allowing the user to check
+the board more comfortably on a large computer screen. More interestingly,
+it may be possible to detect short circuits automatically. Both solder 
+and copper are highly reflective compared to PCB material (usually FR4 which
+is a dark beige). It may well be possible to effectively "subtract" the
+GERBER design file from a high resolution image of the board to leave
+only undesired solder. 
+
+
+\subsection{Double-sided boards}
+It is common to use double sided PCBs in order to achieve more compact circuits. The machine will not currently have the ability to process such boards, although this would be possible in a later version.
+
+\subsubsection{Challenges}
+There are a number of challenges associated with working with dual sided boards:
+
+\begin{enumerate}
+	\item	Clamping the PCB to the bed of the machine is more complex with the second side of a double sided board. The components that have
+			already been populated will not allow the board to sit flat and level.
+	\item	The PCB material is a moderately good conductor of heat. When the second side of the board is heated to melt the solder paste, there
+			is a danger that components on the bottom will be loosened and fall off.
+	\item	Both sides of the board must be precisely aligned so that any through-holes or vias line up.
+	\item	Any vias that are required will add considerable complexity. Commercially they are manufactured in a multi-stage chemical process
+			which is not feasible for the hobbyist.
+\end{enumerate}
+
+\subsubsection{Envisioned solutions}
+
+\begin{enumerate}
+	\item	As isolation routing places the greatest stresses on the board mounts, it is unlikely that the reverse side of the board can be manufactured
+			after the first side has been populated with components. Therefore the isolation routing should be carried out on both sides first. Any holes
+			through the board should also be drilled, and cutting the board out also (leaving tabs to hold it in place). When this has been done, the
+			rest of the manufacturing process can be continued with less secure mounting from the board edges.
+	\item	Melting solder on one side of the board while leaving the other side solid will require active cooling of the bottom of the board. Commercially
+			components are often glued so that all the solder paste can be reflowed in one process, but the application of adhesive adds a complex extra
+			process to the machine which should be avoided.
+	\item	Alignment may be achieved by the use of a small USB microscope. The user would be able to see an image of the board, and select datum points (for
+			example the center of a pad). Once the board was flipped, the same datum points could be located. From this, a transformation matrix can simply
+			be computed and applied to the coordinates of the GCODE.
+	\item	A reasonable substitute for vias is to drill a hole through the board, place a short piece of wire into it and solder both sides to the copper.
+			It is likely that the only practical way to achieve this is manually once the board has been manufactured. The ability to perform light milling
+			operations with the machine could be used to mill the ends of the wire much closer to the surface of the PCB than could be achieved with wire cutters.
+			In this way it is likely that thermal vias under components could be achieved (Vias used for the purpose of heatsinking are placed under the thermal
+			tab of an SMD component to conduct heat to copper on the reverse side of the board).
+\end{enumerate}
+
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=160mm]{resources/finished.jpg}
+\caption{Finished wooden version of the machine.}
+\label{fig:finished}
+\end{figure}
 
 \newpage
 \appendix
